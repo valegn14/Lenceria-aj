@@ -10,7 +10,7 @@ export function SolarOverview() {
         </h2>
         
         <div className="grid md:grid-cols-3 gap-8 mb-12">
-          <div className="bg-yellow-200 p-6 rounded-xl shadow-md">
+          <div className="bg-amber-200 p-6 rounded-xl shadow-md">
             <Sun className="h-12 w-12 text-yellow-500 mb-4" />
             <h3 className="text-xl font-semibold mb-3">How It Works</h3>
             <p className="text-gray-600">
