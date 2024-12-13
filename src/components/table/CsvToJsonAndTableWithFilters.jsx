@@ -106,7 +106,7 @@ const CsvToJsonAndTableWithFilters = React.memo(() => {
   }, [jsonData]);
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen flex">
+    <div className="p-6 min-h-screen flex">
       {/* Barra lateral de filtros */}
       <div className="w-1/4 bg-white p-4 shadow-lg rounded-lg">
         <h2 className="text-lg font-bold mb-4 text-gray-700">Filtros</h2>

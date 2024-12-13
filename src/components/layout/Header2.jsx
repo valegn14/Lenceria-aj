@@ -1,73 +1,90 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useState } from "react";
 
 export default function Header2() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   return (
-    <header className="bg-gradient-to-b from-sky-500 to-cyan-950 shadow-lg">
-      <div className="container  mx-auto mt-0 px-4 py-6">
-        <div className="flex items-center mx-auto justify-between ">
-          {/* <Link to="/" className="flex items-center space-x-3 "> */}
-          {/* <!-- Icono o Logo --> */}
-          
-
-
-          {/* Título del sitio */}
-          {/* <h1 className="text-2xl font-bold"> EcoEnergy Insights</h1> */}
-          {/* </Link> */}
-          <h1 className="text-2xl text-white  hover:text-black font-bold">
-            {" "}
-            EcoEnergy Insights
-          </h1>
-          {/* Botón de inicio de sesión */}
-          {/* ``          <Link to="/login" className="text-white hover:text-gray-300">
-            Iniciar Sesión
-          </Link>`` */}
-
-          {/* Navegación */}
-          <nav >
-            <ul className="flex space-x-6 text-xl text-slate-50 font-bold ">
-            <li className="hover:text-black ">
-                {/* Opcion 0 : table */}
-                <Link
-                 to="/table"
+    <>
+      <header className="bg-gradient-to-b from-emerald-600 to-emerald-300 shadow-lg  text-white">
+        <div className="container  mx-auto mt-0 px-4 py-4">
+          <div className="flex items-center mx-auto justify-between ">
+            <Link to="/" className="flex items-center space-x-3">
+              <svg
+                fill="yellow"
+                filter="drop-shadow(5px 5px 10px rgba(0, 0, 0, 0.5))"
+                width="50px"
+                height="50px"
+                viewBox="0 0 1024 1024"
+                xmlns="http://www.w3.org/2000/svg"
+                class="icon"
+              >
+                <path d="M848 359.3H627.7L825.8 109c4.1-5.3.4-13-6.3-13H436c-2.8 0-5.5 1.5-6.9 4L170 547.5c-3.1 5.3.7 12 6.9 12h174.4l-89.4 357.6c-1.9 7.8 7.5 13.3 13.3 7.7L853.5 373c5.2-4.9 1.7-13.7-5.5-13.7z" />
+              </svg>
+              <h1 className="text-2xl font-bold hover:text-black ">
+                EcoEnergy Insights
+              </h1>
+            </Link>
+            <nav>
+              <ul className=" hidden sm:flex space-x-6 text-xl">
+                <li className="hover:text-[#2b01e7]">
+                  <Link to="/table">Table</Link>
+                </li>
+                <li className="hover:text-[#2b01e7]">
+                  <Link to="/Overview">overview</Link>
+                </li>
+                {/* pasamos los colores en hex (paletadecolores.online)*/}
+                <li className="hover:text-[#2b01e7]">
+                  <Link to="/Calculator">calculator</Link>
+                </li>
+                <li className="hover:text-[#2b01e7]">
+                  <Link to="/Dashboard">dashboard</Link>
+                </li>
+              </ul>
+              <button
+                className="sm:hidden focus:outline-none"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+              >
+                <svg
+                  className="w-10 h-10"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                Table
-                </Link>
-                {/* Overview */}
-              </li>
-              <li className="hover:text-black ">
-                {/* Opcion 1 : Overview */}
-                <Link
-                 to="/overview"
-                >
-                Overview
-                </Link>
-                {/* Overview */}
-              </li>
-
-              {/* PAsamos los colores en formato hex */}
-              <li className="hover:text-[#43e6bd]">
-                {/* Opcion 2 : Calculator */}
-                <Link
-                 to="/calculator"
-                >
-                Calculator
-                </Link>
-                {/* Calculator */}
-              </li>
-
-              <li className="hover:text-red-600 ">
-                {/* Opcion 3 : Dashboard */}
-                <Link
-                 to="/dashboard"
-                >
-                 Dashboard
-                </Link>
-                {/* Dashboard */}
-              </li>
-            </ul>
-          </nav>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d={
+                      isMenuOpen
+                        ? "M6 18L18 6M6 6l12 12"
+                        : "M4 6h16M4 12h16m-7 6h7"
+                    }
+                  />
+                </svg>
+                {isMenuOpen && (
+                  <div className="sm:hidden absolute top-0 right-16 z-50 bg-gradient-to-b rounded-xl px-4 py-4">
+                    <ul className="text-xl text-center text-white">
+                      <li className="hover:text-[#2b01e7] hover:font-bold">
+                        <Link to="/table">Table</Link>
+                      </li>
+                      <li className="hover:text-[#2b01e7] hover:font-bold">
+                        <Link to="/Overview">overview</Link>
+                      </li>
+                      <li className="hover:text-[#2b01e7] hover:font-bold">
+                        <Link to="/Calculator">calculator</Link>
+                      </li>
+                      <li className="hover:text-[#2b01e7] hover:font-bold">
+                        <Link to="/Dashboard">dashboard</Link>
+                      </li>
+                    </ul>
+                  </div>
+                )}
+              </button>
+            </nav>
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+    </>
   );
 }

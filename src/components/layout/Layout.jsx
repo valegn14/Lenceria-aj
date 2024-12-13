@@ -1,8 +1,6 @@
 import Footer2 from "./Footer2";
 import Header2 from "./Header2";
 
-
-
 export default function Layout({ children }) {
   return (
     <div className="flex flex-col min-h-screen ">

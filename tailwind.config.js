@@ -7,7 +7,7 @@ export default {
   theme: {
     extend: {
       backgroundImage:{
-        'main-bg': "url('src/components/layout/back-ground.jpg')"
+        'main-bg': "url(public/images.webp)"
       }
     },
   },

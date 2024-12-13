@@ -19,7 +19,7 @@ export function EnergyCalculator() {
         <div className="max-w-2xl mx-auto">
           <div className="bg-white rounded-2xl shadow-xl p-8">
             <div className="flex items-center gap-3 mb-6">
-              <Calculator className="h-8 w-8 text-sky-500" />
+              <Calculator className="h-8 w-8 text-emerald-700" />
               <h2 className="text-3xl font-bold text-gray-800">Energy Calculator</h2>
             </div>
 
@@ -40,7 +40,7 @@ export function EnergyCalculator() {
 
               <button
                 onClick={handleCalculate}
-                className="w-full bg-sky-500 text-white py-3 rounded-lg hover:bg-black transition-colors flex items-center justify-center gap-2"
+                className="w-full bg-emerald-400 text-white py-3 rounded-lg hover:bg-black transition-colors flex items-center justify-center gap-2"
               >
                 <Zap className="h-5 w-5" />
                 Calculate Renewable Share
