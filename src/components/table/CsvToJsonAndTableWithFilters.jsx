@@ -105,6 +105,8 @@ const CsvToJsonAndTableWithFilters = React.memo(() => {
     return [...new Set(jsonData.map((row) => row["entity"]))].filter(Boolean);
   }, [jsonData]);
 
+  
+
   return (
     <div className="p-6 min-h-screen flex">
       {/* Barra lateral de filtros */}
