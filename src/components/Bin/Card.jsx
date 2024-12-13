@@ -14,9 +14,6 @@ const Card = () => {
         <a href="#" className="text-teal-600 hover:text-teal-800">Acción del Footer</a>
       </footer>
       <CsvToJsonAndTable2/>
-      
-
-
     </div>
   );
 };

@@ -4,6 +4,7 @@ import Layout from "./components/layout/Layout";
 import  Dashboard  from "./components/dashboard/Dashboard";
 import Overview from "./pages/OverView";
 import Calculator from "./pages/Calculator";
+import Card from "./components/Bin/Card";
 import CsvToJsonAndTableWithAdvancedFilters from "./components/table/CsvToJsonAndTableWithFilters";
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
             <Route path="/overview" element={<Overview />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/calculator" element={<Calculator />} />
+            <Route path="/" element={<Card/>} />
           </Routes>
         </Layout>
       </Router>
