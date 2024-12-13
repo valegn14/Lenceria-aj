@@ -5,11 +5,10 @@ import CapacityLineChart from "../components/dashboard/charts/LineChart";
 // import Dashboard from "../components/dashboard/Dashboard";
 // import {Dashboard} from "../components/dashboard/Dashboard"
 
-
 const Dashboard2 = () => {
-  return (
-    <>
-      {/* <div className="max-w-lg mx-auto mt-10 bg-white rounded-lg shadow-lg overflow-hidden">
+    return (
+        <>
+            {/* <div className="max-w-lg mx-auto mt-10 bg-white rounded-lg shadow-lg overflow-hidden">
         <header className="bg-gray-100 px-5 py-3 border-b">
           <h1 className="text-2xl font-bold text-gray-800">Dashboard</h1>
           <h2 className="text-gray-800 text-lg">Header del Card</h2>
@@ -26,12 +25,12 @@ const Dashboard2 = () => {
           </a>
         </footer>
       </div> */}
-      {/* <Dashboard/> */}
-      {/* <CapacityLineChart/> */}
-        <ConsumptionAreaChart/>
-        <EnergyBarChart/>
-    </>
-  );
+            {/* <Dashboard/> */}
+            {/* <CapacityLineChart/> */}
+            <ConsumptionAreaChart />
+            <EnergyBarChart />
+        </>
+    );
 };
 
-export default  Dashboard2 ;
+export default Dashboard2;
