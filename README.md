@@ -1,8 +1,18 @@
-# React + Vite
+# 🌞 Energías Renovables - Información sobre Energía Solar 🌱
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este proyecto es una aplicación web desarrollada con **React** y estilizada con **Tailwind CSS**. Proporciona información educativa sobre las **energías renovables**, con énfasis en la **energía solar**, sus beneficios y su importancia para el medio ambiente.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Características
+
+-   📚 **Información detallada** sobre energía solar y otros tipos de energías renovables.
+-   💡 **Diseño moderno y responsive** con Tailwind CSS.
+-   🌍 **Secciones interactivas** para explorar los beneficios y aplicaciones de las energías limpias.
+-   ✅ Implementación de **componentes reutilizables** en React.
+-   📊 **Ilustraciones graficos e imágenes** representativas para una mejor experiencia visual.
+
+## 📒 Colaboradores
+
+-VALENTINA GALVIS NIETO
+-JHONNIER FELIPE AGUIRRE
