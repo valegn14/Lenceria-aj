@@ -1,27 +1,25 @@
 import React from "react";
 import CsvToJsonAndTable2 from "./CsvToJsonAndTable2";
-import WindTurbineImage from "./molinos.jpg"; // Importa la imagen
-import BiomasaImage from "./biomasa.jpg"; // Importa la imagen
-import GeotermicaImage from "./geotermica.jpg"; // Importa la imagen
-import solarImage from "./solar.jpg"; // Importa la imagen
+// Importa las imagenes
+import WindTurbineImage from "./molinos.jpg";
+import BiomasaImage from "./biomasa.jpg";
+import GeotermicaImage from "./geotermica.jpg";
+import solarImage from "./solar.jpg";
 
 const Card = () => {
     return (
-        // <div className='max-w-g mx-auto mt-10 bg-white rounded-lg shadow-lg overflow-hidden'>
         <section className='py-16 bg-white'>
             <div className='container mx-auto px-4'>
-                {/* Título Principal */}
                 <h2 className='text-4xl font-bold text-gray-800 mb-8 text-center'>
                     Solar Energy: Powering a Sustainable Future
                 </h2>
-
-                {/* Nueva Sección: Energía Eólica */}
+                {/* Sección: Energía solar */}
                 <div className='space-y-8  w-3/4 mx-auto'>
                     <div className='flex flex-col md:flex-row items-center bg-[#EBF3E8] rounded-2xl p-8 shadow-lg shadow-[#A1D6B2]'>
                         {/* Imagen */}
                         <img
                             src={solarImage}
-                            alt='Energía Eólica'
+                            alt='Energía solar'
                             className='w-full md:w-1/5 rounded-lg mb-6 md:mb-0 md:mr-8'
                         />
                         {/* Texto */}
