@@ -4,7 +4,10 @@ import Layout from "./components/layout/Layout";
 import  Dashboard  from "./components/dashboard/Dashboard";
 import Overview from "./pages/OverView";
 import Calculator from "./pages/Calculator";
-import Card from "./components/Bin/Card";
+// import Card from "./components/Bin/Card";
+import Card from "./database/cards";
+
+
 import CsvToJsonAndTableWithAdvancedFilters from "./components/table/CsvToJsonAndTableWithFilters";
 
 function App() {

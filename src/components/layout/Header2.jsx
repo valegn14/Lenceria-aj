@@ -5,8 +5,8 @@ export default function Header2() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     return (
         <>
-            <header className='bg-gradient-to-b from-[#62825D] to-[#9EDF9C] shadow-lg  text-white'>
-                <div className='container  mx-auto mt-0 px-4 py-4'>
+<header className='bg-gradient-to-b from-[#8B005D] to-[#D94F95] shadow-lg text-white'>
+<div className='container  mx-auto mt-0 px-4 py-4'>
                     <div className='flex items-center mx-auto justify-between '>
                         <Link to='/' className='flex items-center space-x-3'>
                             <svg
@@ -16,27 +16,27 @@ export default function Header2() {
                                 height='50px'
                                 viewBox='0 0 1024 1024'
                                 xmlns='http://www.w3.org/2000/svg'
-                                class='icon'>
+                                className='icon'>
                                 <path d='M848 359.3H627.7L825.8 109c4.1-5.3.4-13-6.3-13H436c-2.8 0-5.5 1.5-6.9 4L170 547.5c-3.1 5.3.7 12 6.9 12h174.4l-89.4 357.6c-1.9 7.8 7.5 13.3 13.3 7.7L853.5 373c5.2-4.9 1.7-13.7-5.5-13.7z' />
                             </svg>
                             <h1 className='text-2xl font-bold hover:text-black '>
-                                EcoEnergy
+                            Lenceria_aj
                             </h1>
                         </Link>
                         <nav>
                             <ul className=' hidden sm:flex space-x-6 text-xl'>
                                 <li className='hover:text-[#2b01e7]'>
-                                    <Link to='/table'>Table</Link>
+                                    <Link to='/table'>Productos</Link>
                                 </li>
                                 <li className='hover:text-[#2b01e7]'>
-                                    <Link to='/Overview'>overview</Link>
+                                    <Link to='/Overview'>Carrito</Link>
                                 </li>
                                 {/* pasamos los colores en hex (paletadecolores.online)*/}
                                 <li className='hover:text-[#2b01e7]'>
-                                    <Link to='/Calculator'>calculator</Link>
+                                    <Link to='/Calculator'>Contactanos</Link>
                                 </li>
                                 <li className='hover:text-[#2b01e7]'>
-                                    <Link to='/Dashboard'>dashboard</Link>
+                                    <Link to='/Dashboard'>Visitanos</Link>
                                 </li>
                             </ul>
                             <button

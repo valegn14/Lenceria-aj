@@ -6,9 +6,9 @@ export default {
   ],
   theme: {
     extend: {
-      backgroundImage:{
-        'main-bg': "url(public/images.webp)"
-      }
+      // backgroundImage:{
+      //   'main-bg': "url(public/images.webp)"
+      // }
     },
   },
   plugins: [],
