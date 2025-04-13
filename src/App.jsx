@@ -6,6 +6,7 @@ import Overview from "./pages/OverView";
 import Calculator from "./pages/Calculator";
 // import Card from "./components/Bin/Card";
 import Card from "./database/cards";
+import DetalleProducto from "./database/DetalleProducto"; // ajusta según tu estructura
 
 
 import CsvToJsonAndTableWithAdvancedFilters from "./components/table/CsvToJsonAndTableWithFilters";
@@ -20,7 +21,10 @@ function App() {
             <Route path="/overview" element={<Overview />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/calculator" element={<Calculator />} />
-            <Route path="/" element={<Card/>} />
+            {/* //aqui se muestran los productos */}
+            <Route path="/" element={<Card/>} />  
+            <Route path="/:slug" element={<DetalleProducto />} />
+
           </Routes>
         </Layout>
       </Router>

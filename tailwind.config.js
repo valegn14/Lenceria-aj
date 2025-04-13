@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+import defaultTheme from 'tailwindcss/defaultTheme';
+
 export default {
   content: [
     "./index.html",
@@ -6,11 +8,13 @@ export default {
   ],
   theme: {
     extend: {
-      // backgroundImage:{
-      //   'main-bg': "url(public/images.webp)"
-      // }
+      fontFamily: {
+        poppins: ['Poppins', ...defaultTheme.fontFamily.sans],
+      },
+      colors: {
+        crema: "#F5F1D6",
+      },
     },
   },
   plugins: [],
 }
-

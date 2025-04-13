@@ -5,7 +5,7 @@ export default function Header2() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     return (
         <>
-<header className='bg-gradient-to-b from-[#8B005D] to-[#D94F95] shadow-lg text-white'>
+<header className='bg-gradient-to-b from-[#FFFFFFs] to-[#FFFFFF] shadow-lg text-pink-900'>
 <div className='container  mx-auto mt-0 px-4 py-4'>
                     <div className='flex items-center mx-auto justify-between '>
                         <Link to='/' className='flex items-center space-x-3'>
@@ -28,9 +28,8 @@ export default function Header2() {
                                 <li className='hover:text-[#2b01e7]'>
                                     <Link to='/table'>Productos</Link>
                                 </li>
-                                <li className='hover:text-[#2b01e7]'>
-                                    <Link to='/Overview'>Carrito</Link>
-                                </li>
+                                
+
                                 {/* pasamos los colores en hex (paletadecolores.online)*/}
                                 <li className='hover:text-[#2b01e7]'>
                                     <Link to='/Calculator'>Contactanos</Link>
@@ -38,6 +37,11 @@ export default function Header2() {
                                 <li className='hover:text-[#2b01e7]'>
                                     <Link to='/Dashboard'>Visitanos</Link>
                                 </li>
+                                <li >
+  <Link to='/Overview'>
+    <img src="src\components\layout\carrito.png" alt="Carrito" className="w-6 h-6" />
+  </Link>
+</li>
                             </ul>
                             <button
                                 className='sm:hidden focus:outline-none'
