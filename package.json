@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.1",
+    "@heroicons/react": "^2.2.0",
     "@tanstack/react-table": "^8.13.2",
     "chart.js": "^4.4.7",
     "lucide-react": "^0.464.0",

@@ -4,9 +4,9 @@ Este proyecto es una aplicación web desarrollada con **React** y estilizada con
 
 ---
 
-## 🚀 Características
+## 🚀 QUE INSTALAR DE REACT
 
--   📚 **Información detallada** sobre energía solar y otros tipos de energías renovables.
+-   📚 **npm install @headlessui/react** 
 -   💡 **Diseño moderno y responsive** con Tailwind CSS.
 -   🌍 **Secciones interactivas** para explorar los beneficios y aplicaciones de las energías limpias.
 -   ✅ Implementación de **componentes reutilizables** en React.

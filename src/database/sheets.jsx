@@ -26,7 +26,14 @@ export async function cargarProductosDesdeSheets() {
     });
 
     const values = response.result.values;
-
+    function convertirLinkDrive(url) {
+      const match = url.match(/\/file\/d\/(.*?)\//);
+      if (match && match[1]) {
+        return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+      }
+      return url;
+    }
+    
     if (!values || values.length === 0) return [];
 
     const rows = values.slice(1); // Saltamos encabezados
@@ -36,8 +43,9 @@ export async function cargarProductosDesdeSheets() {
       nombre: row[1] || '',
       precio: row[2] || '',
       descripcion: row[3] || '',
-      imagen: row[4] || '',
+      imagen: convertirLinkDrive(row[4] || ''),
     }));
+    
 
     return productos;
 
