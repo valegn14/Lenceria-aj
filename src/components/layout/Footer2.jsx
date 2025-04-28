@@ -36,11 +36,11 @@ export default function Footer2() {
                         {/* Redes Sociales */}
                         <div>
                             <h2 className="text-lg font-semibold mb-4">Síguenos</h2>
-                            <div className="flex space-x-4">
+                            {/* <div className="flex space-x-4">
                                 <a href="#" className="hover:scale-110 transition"><img src="/icons/facebook.png" alt="Facebook" className="w-6 h-6" /></a>
                                 <a href="#" className="hover:scale-110 transition"><img src="/icons/instagram.png" alt="Instagram" className="w-6 h-6" /></a>
                                 <a href="#" className="hover:scale-110 transition"><img src="/icons/tiktok.png" alt="TikTok" className="w-6 h-6" /></a>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
 

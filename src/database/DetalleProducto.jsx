@@ -1,12 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { cargarProductosDesdeSheets } from "./sheets";
+// import { CartContext } from "../components/solar/CartContext";
+import { useCart } from '../components/solar/CartContext';
 
 const DetalleProducto = () => {
   const { slug } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
   const [producto, setProducto] = useState(location.state || null);
+  const { addToCart } = useCart();
+
+  // const { addToCart } = useContext(CartContext);
+  const [selectedSize, setSelectedSize] = useState(null);
 
   const idSlug = slug?.split("-")[0];
 
@@ -20,6 +26,19 @@ const DetalleProducto = () => {
     };
     cargar();
   }, [producto, idSlug]);
+
+  const handleAddToCart = () => {
+    if (producto.tallas && !selectedSize) {
+      alert("Por favor selecciona una talla");
+      return;
+    }
+    
+    addToCart({
+      ...producto,
+      selectedSize,
+      quantity: 1
+    });
+  };
 
   if (!producto) return <p className="text-center mt-10 text-xl text-gray-600">Cargando producto...</p>;
 
@@ -53,7 +72,7 @@ const DetalleProducto = () => {
                 <p className="mt-2 text-gray-600">{producto.descripcion}</p>
               </div>
 
-              {/* Tallas (opcional) */}
+              {/* Tallas */}
               {producto.tallas && (
                 <div className="mb-8">
                   <h3 className="text-sm font-medium text-gray-900">Tallas disponibles</h3>
@@ -61,7 +80,10 @@ const DetalleProducto = () => {
                     {producto.tallas.split(',').map(talla => (
                       <button 
                         key={talla}
-                        className="px-4 py-2 border rounded-md hover:bg-gray-100 focus:ring-2 focus:ring-pink-500"
+                        onClick={() => setSelectedSize(talla.trim())}
+                        className={`px-4 py-2 border rounded-md hover:bg-gray-100 focus:ring-2 focus:ring-pink-500 ${
+                          selectedSize === talla.trim() ? 'bg-pink-100 border-pink-500' : ''
+                        }`}
                       >
                         {talla.trim()}
                       </button>
@@ -74,6 +96,7 @@ const DetalleProducto = () => {
             {/* Botones de acción */}
             <div className="mt-auto space-y-4 pt-6">
               <button
+                onClick={handleAddToCart}
                 className="w-full bg-pink-600 hover:bg-pink-700 text-white py-3 px-6 rounded-lg font-medium transition duration-300 shadow-md hover:shadow-lg"
               >
                 Agregar al carrito
@@ -89,10 +112,9 @@ const DetalleProducto = () => {
           </div>
         </div>
 
-        {/* Sección de productos relacionados (opcional) */}
+        {/* Sección de productos relacionados */}
         <div className="mt-16">
           <h3 className="text-2xl font-bold text-gray-900 mb-8">Productos similares</h3>
-          {/* Aquí podrías añadir un carrusel o grid de productos relacionados */}
         </div>
       </div>
     </div>

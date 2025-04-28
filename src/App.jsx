@@ -7,6 +7,7 @@ import Calculator from "./pages/Calculator";
 // import Card from "./components/Bin/Card";
 import Card from "./database/cards";
 import DetalleProducto from "./database/DetalleProducto"; // ajusta según tu estructura
+import { CartProvider } from './components/solar/CartContext';
 
 
 import CsvToJsonAndTableWithAdvancedFilters from "./components/table/CsvToJsonAndTableWithFilters";
@@ -14,6 +15,7 @@ import CsvToJsonAndTableWithAdvancedFilters from "./components/table/CsvToJsonAn
 function App() {
   return (
     <div className="italic">
+      <CartProvider>
       <Router>
         <Layout className="flex-grow flex-col min-h-screen">
           <Routes>
@@ -26,8 +28,10 @@ function App() {
             <Route path="/:slug" element={<DetalleProducto />} />
 
           </Routes>
+         
         </Layout>
       </Router>
+      </CartProvider>
     </div>
   );
 }
