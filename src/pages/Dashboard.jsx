@@ -27,6 +27,8 @@ const Dashboard2 = () => {
       </div> */}
             {/* <Dashboard/> */}
             {/* <CapacityLineChart/> */}
+            
+            
             <ConsumptionAreaChart />
             <EnergyBarChart />
         </>

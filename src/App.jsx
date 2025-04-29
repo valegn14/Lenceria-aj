@@ -19,7 +19,7 @@ function App() {
       <Router>
         <Layout className="flex-grow flex-col min-h-screen">
           <Routes>
-            <Route path="/table" element={<CsvToJsonAndTableWithAdvancedFilters />} />
+            {/* <Route path="/table" element={<CsvToJsonAndTableWithAdvancedFilters />} /> */}
             {/* <Route path="/" element={<Overview />} /> */}
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/calculator" element={<Calculator />} />

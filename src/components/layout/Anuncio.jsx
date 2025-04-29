@@ -4,6 +4,7 @@ const frases = [
   "Descuentos imperdibles",
   "Envíos gratis después de 120mil pesos",
   "¡Somos mayoristas!",
+  "Pide tu asesoria"
 ];
 
 const Anuncio = () => {
@@ -44,7 +45,7 @@ const Anuncio = () => {
   };
 
   return (
-    <div className="w-full bg-pink-100 text-pink-900 overflow-hidden relative h-10 flex items-center justify-center">
+    <div className="w-full bg-pink-200 text-pink-900 overflow-hidden relative h-10 flex items-center justify-center">
 <div
   className={`absolute transition-all duration-1000 ease-in-out whitespace-nowrap text-sm sm:text-base font-poppins font-semibold ${getTranslateClass()}`}
   key={indice}
@@ -56,21 +57,4 @@ const Anuncio = () => {
 };
 
 export default Anuncio;
-
-
-// import React from "react";
-// import "./Anuncio.css"; // Asegúrate de tener este archivo CSS en la misma carpeta
-// const Anuncio = () => {
-//   return (
-//     // <div className="bg-blue-600 text-white py-2">
-//       <div className="marquee-container">
-//         <div className="marquee">
-//           Descuentos imperdibles | Envíos gratis después de 120mil pesos | ¡Somos mayoristas!
-//         </div>
-//       </div>
-//     // </div>
-//   );
-// };
-
-// export default Anuncio;
 
