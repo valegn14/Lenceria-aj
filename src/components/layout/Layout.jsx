@@ -1,4 +1,3 @@
-
 import Footer2 from "./Footer2";
 import Header2 from "./Header2";
 import Anuncio from "./Anuncio";

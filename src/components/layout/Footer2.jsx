@@ -1,8 +1,8 @@
 export default function Footer2() {
     return (
         <>
-            <footer className="bg-gradient-to-t from-[#B76E79] to-[#E8A0B6] text-white shadow-lg w-full">
-                <div className="container mx-auto px-6 py-12">
+            <footer className="bg-gradient-to-b from-pink-400 to-amber-200 text-white shadow-lg w-full">
+                <div className="container mx-auto px-4 py-4">
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 text-sm">
                         {/* Información */}
                         <div>
@@ -43,10 +43,9 @@ export default function Footer2() {
                             </div> */}
                         </div>
                     </div>
-
-                    <div className="mt-12 text-center text-white/80 text-sm">
-                        © 2024 Tienda de Ropa. Todos los derechos reservados.
-                    </div>
+                </div>
+                <div className="mt-1 text-center text-black/80 text-sm">
+                    © 2024 Tienda de Ropa. Todos los derechos reservados.
                 </div>
             </footer>
         </>

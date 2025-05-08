@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 
-export function EnergyCalculator() {
+const Contacto = () => {
   return (
     <section className="py-16 bg-transparent" id="calculator">
       <div className="container mx-auto px-4">
@@ -14,4 +14,6 @@ export function EnergyCalculator() {
       </div>
     </section>
   );
-}
+};
+
+export default Contacto;

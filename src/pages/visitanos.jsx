@@ -1,6 +1,6 @@
 import React from "react";
 
-const Dashboard = () => {
+const Visitanos = () => {
     return (
         <div className='p-10 min-h-screen bg-gray-100 flex items-center justify-center'>
             <div className='bg-white p-10 rounded-2xl shadow-2xl max-w-xl w-full text-center'>
@@ -25,4 +25,4 @@ const Dashboard = () => {
     );
 };
 
-export default Dashboard;
+export default Visitanos;
