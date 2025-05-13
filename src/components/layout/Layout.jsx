@@ -9,8 +9,8 @@ export default function Layout({ children }) {
   return (
     <div className="flex flex-col min-h-screen ">
       <Anuncio />
-
       <Header2 />
+      
       <main className="flex-grow h-full bg-main-bg bg-cover bg-center bg-no-repeat m-0 p-0">
         {children}
       </main>

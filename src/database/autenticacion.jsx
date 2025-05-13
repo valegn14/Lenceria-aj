@@ -1,4 +1,3 @@
-
 // TODO(developer): Set to client ID and API key from the Developer Console
 const CLIENT_ID = '957800054579-hqkmggo4moap81r08e2mq1stktedvdqt.apps.googleusercontent.com';
 const API_KEY = 'AIzaSyCo51QnHOkeax1-tMGcmIS4Ygo2-qr1qd8';

@@ -9,7 +9,7 @@ export default function Header2() {
 
   return (
     <>
-      <header className="bg-gradient-to-b from-pink-400 to-amber-200 shadow-lg text-pink-900">
+      <header className="bg-gradient-to-l from-pink-400 to-amber-200 shadow-lg text-pink-900">
         <div className="container mx-auto mt-0 px-4 py-4">
           <div className="flex items-center mx-auto justify-between">
             <Link to="/" className="flex items-center space-x-3">
