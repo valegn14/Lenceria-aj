@@ -17,6 +17,7 @@ const Inicio = () => {
     className="w-full h-full object-cover"
   />
 </div>
+<h2 className="text-center text-2xl mb-4">Encuentra todo tipo de juguetes</h2>
         <Card />
       </div>
   );

@@ -1,7 +1,7 @@
 // sheets.jsx
 const API_KEY = 'AIzaSyCo51QnHOkeax1-tMGcmIS4Ygo2-qr1qd8';
 const SHEET_ID = '1amL7XhJcrlQSg9nvwWuOGlYY9G1pfJuXTsTEezHUCRw';
-const RANGE = 'Hoja 1!A:E';
+const RANGE = 'Hoja 1!A:F';
 
 export async function cargarProductosDesdeSheets() {
   try {
@@ -42,8 +42,10 @@ export async function cargarProductosDesdeSheets() {
       id: row[0] || '',
       nombre: row[1] || '',
       precio: row[2] || '',
-      descripcion: row[3] || '',
-      imagen: convertirLinkDrive(row[4] || ''),
+      rebaja: row[3] || '',
+
+      descripcion: row[4] || '',
+      imagen: convertirLinkDrive(row[5] || ''),
     }));
     
 

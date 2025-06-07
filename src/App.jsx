@@ -1,7 +1,7 @@
 import { BrowserRouter as Router,Route, Routes } from "react-router-dom";
 import "./App.css";
 import Layout from "./components/layout/Layout";
-import Visitanos from "./pages/visitanos";
+import Promociones from "./pages/promociones";
 import Inicio from "./pages/inicio";
 
 // import Overview from "./pages/OverView";
@@ -20,7 +20,7 @@ function App() {
         <Layout className="flex-grow bg-red-500 flex-col min-h-screen">
           <Routes>
 
-            <Route path="/ubicacion" element={<Visitanos />} />
+            <Route path="/promociones" element={<Promociones />} />
             <Route path="/contacto" element={<Contacto />} />
             {/* //aqui se muestran los productos */}
             {/* <Route path="/" element={<Card/>} />   */}
