@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 
 const frases = [
   "Descuentos imperdibles",
-  "Envíos gratis después de 120mil pesos",
   "¡Somos mayoristas!",
   "Pide tu asesoria"
 ];

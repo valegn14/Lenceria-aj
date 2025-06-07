@@ -1,6 +1,6 @@
 import Footer2 from "./Footer2";
 import Header2 from "./Header2";
-import Anuncio from "./Anuncio";
+// import Anuncio from "./Anuncio";
 
 import { useLocation } from "react-router-dom";
 export default function Layout({ children }) {
@@ -8,10 +8,14 @@ export default function Layout({ children }) {
 
   return (
     <div className="flex flex-col min-h-screen ">
-      <Anuncio />
+     
       <Header2 />
+      {/* <Anuncio /> */}
+
+
+
       
-      <main className="flex-grow h-full bg-main-bg bg-cover bg-center bg-no-repeat m-0 p-0">
+      <main className="flex-grow bg-main-bg bg-cover bg-center bg-pink-100 bg-no-repeat m-0 p-0 ">
         {children}
       </main>
 

@@ -1,7 +1,7 @@
 export default function Footer2() {
     return (
         <>
-            <footer className="bg-gradient-to-l from-pink-400 to-amber-200 text-white shadow-lg w-full">
+            <footer className="bg-gradient-to-l bg-pink-900/40 text-white shadow-lg w-full">
                 <div className="container mx-auto px-4 py-4">
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 text-sm">
                         {/* Información */}
