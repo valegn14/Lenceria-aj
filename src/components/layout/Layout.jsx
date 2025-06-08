@@ -15,7 +15,7 @@ export default function Layout({ children }) {
 
 
       
-      <main className="flex-grow bg-main-bg bg-cover bg-center bg-pink-100 bg-no-repeat m-0 p-0 ">
+      <main className="flex-grow bg-main-bg bg-cover bg-center  bg-no-repeat m-0 p-0 ">
         {children}
       </main>
 

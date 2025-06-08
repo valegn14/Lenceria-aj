@@ -17,7 +17,7 @@ function App() {
     <div className="italic">
       <CartProvider>
       <Router>
-        <Layout className="flex-grow bg-red-500 flex-col min-h-screen">
+        <Layout className="flex-grow  flex-col min-h-screen">
           <Routes>
 
             <Route path="/promociones" element={<Promociones />} />

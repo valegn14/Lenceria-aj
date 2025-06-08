@@ -69,7 +69,7 @@ const Card = ({ onlyPromos = false, productos: propProductos }) => {
             }
           >
             {/* Imagen */}
-            <div className="relative h-64 bg-gray-100">
+            <div className="relative loading=lazy h-64 bg-gray-100">
               <img
                 src={producto.imagen}
                 alt={producto.nombre}
