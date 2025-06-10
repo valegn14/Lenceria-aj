@@ -28,11 +28,13 @@ const Icons = {
       <path strokeLinecap="round" strokeLinejoin="round" d="M14.752 11.168l-6.518-3.759A1 1 0 007 8.248v7.504a1 1 0 001.234.97l6.518-1.89a1 1 0 00.748-.97v-3.656a1 1 0 00-.748-.97z" />
     </svg>
   ),
+  
   Promociones: (
-    <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 inline-block mr-1" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01L12 2z" />
-    </svg>
-  ),
+  <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 inline-block mr-1" viewBox="0 0 24 24" fill="#FFD700">
+    <path d="M12 2C10 5 6 7 6 13c0 3.31 2.69 6 6 6s6-2.69 6-6c0-2.5-1.5-4-3-5.5C14.5 6 13 4 12 2z" />
+  </svg>
+),
+
   Populares: (
     <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 inline-block mr-1" fill="currentColor" viewBox="0 0 20 20">
       <path d="M9.049 2.927C9.349 2.09 10.65 2.09 10.951 2.927l1.286 3.997a1 1 0 00.95.69h4.21c.969 0 1.371 1.24.588 1.81l-3.405 2.472a1 1 0 00-.364 1.118l1.287 3.997c.3.828-.755 1.519-1.54 1.118l-3.405-2.472a1 1 0 00-1.176 0l-3.405 2.472c-.784.401-1.84-.29-1.54-1.118l1.287-3.997a1 1 0 00-.364-1.118L2.225 9.424c-.783-.57-.38-1.81.588-1.81h4.21a1 1 0 00.95-.69l1.286-3.997z" />

@@ -58,62 +58,63 @@ const Card = ({ onlyPromos = false, productos: propProductos }) => {
   );
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {productos.map((producto, idx) => (
-          <div
-            key={idx}
-            className="group relative cursor-pointer bg-white rounded-none overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300"
-            onClick={() =>
-              navigate(`/${slugify(producto.id, producto.nombre)}`, { state: producto })
-            }
-          >
-            {/* Imagen */}
-            <div className="relative loading=lazy h-64 bg-gray-100">
-              <img
-                src={producto.imagen}
-                alt={producto.nombre}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-              />
+  <div className="w-full max-w-screen-2xl mx-auto px-2 sm:px-4  py-8">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+      {productos.map((producto, idx) => (
+        <div
+          key={idx}
+          className="group relative cursor-pointer bg-white overflow-hidden  shadow-md hover:shadow-xl transition-shadow duration-300"
+          onClick={() =>
+            navigate(`/${slugify(producto.id, producto.nombre)}`, { state: producto })
+          }
+        >
+          {/* Imagen */}
+          <div className="relative bg-gray-100 aspect-[4/3]">
+            <img
+              src={producto.imagen}
+              alt={producto.nombre}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              loading="lazy"
+            />
 
-              {/* Botón Agregar al carrito */}
-              <button
-                onClick={e => {
-                  e.stopPropagation();
-                  addToCart({
-                    ...producto,
-                    quantity: 1,
-                    selectedSize: producto.selectedSize || null
-                  });
-                }}
-                className="
-                  absolute bottom-0 left-0 right-0
-                  w-full py-2
-                  bg-pink-500 text-white text-center font-medium
-                  opacity-0 group-hover:opacity-100
-                  transition-opacity duration-300
-                  rounded-none
-                "
-              >
-                Agregar al carrito
-              </button>
-            </div>
-
-            {/* Contenido */}
-            <div className="p-4">
-              <h3 className="text-lg font-semibold text-gray-800 mb-1">
-                {producto.nombre}
-              </h3>
-              <p className="text-pink-600 font-medium">${producto.precio}</p>
-              <p className="text-sm text-gray-600 mt-2 line-clamp-2">
-                {producto.descripcion}
-              </p>
-            </div>
+            {/* Botón Agregar al carrito */}
+            <button
+              onClick={e => {
+                e.stopPropagation();
+                addToCart({
+                  ...producto,
+                  quantity: 1,
+                  selectedSize: producto.selectedSize || null
+                });
+              }}
+              className="
+                absolute bottom-0 left-0 right-0
+                w-full py-2
+                bg-pink-500 text-white text-center font-medium
+                opacity-0 group-hover:opacity-100
+                transition-opacity duration-300
+              "
+            >
+              Agregar al carrito
+            </button>
           </div>
-        ))}
-      </div>
+
+          {/* Contenido */}
+          <div className="p-3 sm:p-4">
+            <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-1">
+              {producto.nombre}
+            </h3>
+            <p className="text-pink-600 font-medium text-sm sm:text-base">${producto.precio}</p>
+            <p className="text-sm text-gray-600 mt-2 line-clamp-2">
+              {producto.descripcion}
+            </p>
+          </div>
+        </div>
+      ))}
     </div>
-  );
+  </div>
+);
+
 };
 
 export default Card;
