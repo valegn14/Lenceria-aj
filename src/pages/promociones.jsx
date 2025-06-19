@@ -1,33 +1,19 @@
-import React, { useEffect, useState } from "react";
-import Card from "../database/cards";        // ajusta ruta si es necesario
+import React from "react";
+import Card from "../database/cards";
 
 const Promociones = () => (
-  <div>
-    <h2 className="text-center text-2xl mb-4">
-      Encuentra promociones imperdibles
-    </h2>
+  <div className="w-full">
+    <div className="text-center mb-4 sm:mb-6 lg:mb-8 px-4">
+      <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-gray-800 leading-tight">
+        Encuentra promociones imperdibles
+      </h2>
+      <p className="text-sm sm:text-base text-gray-600 mt-2">
+        Descuentos especiales en productos seleccionados
+      </p>
+    </div>
     {/* Sólo mostrará productos con rebaja > 0 */}
     <Card onlyPromos />
   </div>
 );
 
 export default Promociones;
-
-
-
-// // src/pages/inicio.jsx
-// import React from "react";
-// import Card from "../database/cards"; // ajusta la ruta a donde esté tu Card.jsx
-// // import banner from "./pinteres3.png"; // ruta a tu imagen
-
-// const Promociones = () => {
-//   return (
-//       <div >
-     
-// <h2 className="text-center text-2xl mb-4">Encuentra promociones imperdibles</h2>
-//         <Card />
-//       </div>
-//   );
-// };
-
-// export default Promociones;

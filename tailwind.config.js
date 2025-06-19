@@ -14,6 +14,10 @@ export default {
       colors: {
         crema: "#F5F1D6",
       },
+      screens: {
+        'xs': '475px',
+        ...defaultTheme.screens,
+      },
     },
   },
   plugins: [],
