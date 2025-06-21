@@ -41,7 +41,7 @@ const Icons = {
 };
 
 const links = [
-  { to: "/", label: "Juega" },
+  { to: "/Juega", label: "Juega" },
   { to: "/Promociones", label: "Promociones" },
   { to: "/contacto", label: "Populares" }
 ];

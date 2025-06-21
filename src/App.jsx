@@ -3,7 +3,7 @@ import "./App.css";
 import Layout from "./components/layout/Layout";
 import Promociones from "./pages/promociones";
 import Inicio from "./pages/inicio";
-
+import Juega from "./pages/juega";
 // import Overview from "./pages/OverView";
 import Contacto from "./pages/contacto";
 // import Card from "./components/Bin/Card";
@@ -22,6 +22,8 @@ function App() {
 
             <Route path="/promociones" element={<Promociones />} />
             <Route path="/contacto" element={<Contacto />} />
+                        <Route path="/Juega" element={<Juega />} />
+
             {/* //aqui se muestran los productos */}
             {/* <Route path="/" element={<Card/>} />   */}
             <Route path="/" element={<Inicio />} />  
