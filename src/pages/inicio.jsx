@@ -21,7 +21,7 @@ const Inicio = () => {
         {/* Barra de búsqueda con icono de lupa dentro del input */}
         <div className="flex justify-center">
           <div className="relative w-full max-w-md">
-            <span className="absolute left-3 top-1/2 transform -translate-y-1/2 pink-500 pointer-events-none">
+            <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5"
