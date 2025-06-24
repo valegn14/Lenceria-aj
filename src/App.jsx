@@ -6,6 +6,7 @@ import Inicio from "./pages/inicio";
 import Juega from "./pages/juega";
 // import Overview from "./pages/OverView";
 import Contacto from "./pages/contacto";
+import Combos from "./pages/Combos";
 // import Card from "./components/Bin/Card";
 // import Card from "./database/cards";
 import DetalleProducto from "./database/DetalleProducto"; // ajusta según tu estructura
@@ -17,12 +18,13 @@ function App() {
     <div className="italic">
       <CartProvider>
       <Router>
-        <Layout className="flex-grow  flex-col min-h-screen">
+        <Layout className="flex-grow  flex-col min-h-screen ">
           <Routes>
 
             <Route path="/promociones" element={<Promociones />} />
             <Route path="/contacto" element={<Contacto />} />
                         <Route path="/Juega" element={<Juega />} />
+            <Route path="/Combos" element={<Combos />} />
 
             {/* //aqui se muestran los productos */}
             {/* <Route path="/" element={<Card/>} />   */}
