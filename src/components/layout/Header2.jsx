@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import SolarOverview from "../solar/SolarOverview";
 import logo from "/public/logo_lenceria.png";
 
-// Componente para la marca (logo + título)
 function Brand() {
   return (
     <Link to="/" className="flex items-center space-x-2 flex-shrink-0">
