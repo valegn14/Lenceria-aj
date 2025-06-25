@@ -166,3 +166,171 @@ export async function cargarCombosDesdeSheets() {
     throw error;
   }
 }
+
+const RANGEJUGUETES = 'Hoja 2!A:F';
+
+export async function cargarJuguetesDesdeSheets() {
+  try {
+    // Asegúrate de que el cliente esté cargado antes de usarlo
+    await new Promise((resolve, reject) => {
+      gapi.load('client', async () => {
+        try {
+          await gapi.client.init({
+            apiKey: API_KEY,
+            discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
+          });
+          resolve();
+        } catch (err) {
+          reject(err);
+        }
+      });
+    });
+
+    const response = await gapi.client.sheets.spreadsheets.values.get({
+      spreadsheetId: SHEET_ID,
+      range: RANGEJUGUETES,
+    });
+
+    const values = response.result.values;
+    function convertirLinkDrive(url) {
+      const match = url.match(/\/file\/d\/(.*?)\//);
+      if (match && match[1]) {
+        return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+      }
+      return url;
+    }
+    
+    if (!values || values.length === 0) return [];
+
+    const rows = values.slice(1); // Saltamos encabezados
+
+    const Juguetes = rows.map(row => ({
+      id: row[0] || '',
+      nombre: row[1] || '',
+      precio: row[2] || '',
+      rebaja: row[3] || '',
+
+      descripcion: row[4] || '',
+      imagen: convertirLinkDrive(row[5] || ''),
+    }));
+    
+
+    return Juguetes;
+
+  } catch (error) {
+    console.error('Error al cargar Juguetes:', error);
+    throw error;
+  }
+}
+
+const RANGELENCERIA = 'Hoja 5!A:F';
+
+export async function cargarLenceriaDesdeSheets() {
+  try {
+    // Asegúrate de que el cliente esté cargado antes de usarlo
+    await new Promise((resolve, reject) => {
+      gapi.load('client', async () => {
+        try {
+          await gapi.client.init({
+            apiKey: API_KEY,
+            discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
+          });
+          resolve();
+        } catch (err) {
+          reject(err);
+        }
+      });
+    });
+
+    const response = await gapi.client.sheets.spreadsheets.values.get({
+      spreadsheetId: SHEET_ID,
+      range: RANGELENCERIA,
+    });
+
+    const values = response.result.values;
+    function convertirLinkDrive(url) {
+      const match = url.match(/\/file\/d\/(.*?)\//);
+      if (match && match[1]) {
+        return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+      }
+      return url;
+    }
+    
+    if (!values || values.length === 0) return [];
+
+    const rows = values.slice(1); // Saltamos encabezados
+
+    const Juguetes = rows.map(row => ({
+      id: row[0] || '',
+      nombre: row[1] || '',
+      precio: row[2] || '',
+      rebaja: row[3] || '',
+
+      descripcion: row[4] || '',
+      imagen: convertirLinkDrive(row[5] || ''),
+    }));
+    
+
+    return Juguetes;
+
+  } catch (error) {
+    console.error('Error al cargar Juguetes:', error);
+    throw error;
+  }
+}
+
+const RANGELubricantes = 'Hoja 6!A:F';
+
+export async function cargarLubricantesDesdeSheets() {
+  try {
+    // Asegúrate de que el cliente esté cargado antes de usarlo
+    await new Promise((resolve, reject) => {
+      gapi.load('client', async () => {
+        try {
+          await gapi.client.init({
+            apiKey: API_KEY,
+            discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
+          });
+          resolve();
+        } catch (err) {
+          reject(err);
+        }
+      });
+    });
+
+    const response = await gapi.client.sheets.spreadsheets.values.get({
+      spreadsheetId: SHEET_ID,
+      range: RANGELubricantes,
+    });
+
+    const values = response.result.values;
+    function convertirLinkDrive(url) {
+      const match = url.match(/\/file\/d\/(.*?)\//);
+      if (match && match[1]) {
+        return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+      }
+      return url;
+    }
+    
+    if (!values || values.length === 0) return [];
+
+    const rows = values.slice(1); // Saltamos encabezados
+
+    const Lubricantes = rows.map(row => ({
+      id: row[0] || '',
+      nombre: row[1] || '',
+      precio: row[2] || '',
+      rebaja: row[3] || '',
+
+      descripcion: row[4] || '',
+      imagen: convertirLinkDrive(row[5] || ''),
+    }));
+    
+
+    return Lubricantes;
+
+  } catch (error) {
+    console.error('Error al cargar Lubricantes:', error);
+    throw error;
+  }
+}

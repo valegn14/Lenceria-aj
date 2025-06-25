@@ -16,21 +16,21 @@ const promocionesImg = "https://images.unsplash.com/photo-1556228720-195a672e8a0
 const categories = [
   {
     name: "Lencería",
-    route: "/categoria/lenceria",
+    route: "/lenceria",
     image: lenceriaImg,
     description: "Elegancia que despierta los sentidos",
     color: "from-rose-900/60 to-pink-900/60"
   },
   {
     name: "Juguetes",
-    route: "/categoria/juguetes",
+    route: "/juguetes",
     image: juguetesImg,
     description: "Placeres que sorprenden",
     color: "from-purple-900/60 to-indigo-900/60"
   },
   {
     name: "Lubricantes",
-    route: "/categoria/lubricantes",
+    route: "/lubricantes",
     image: lubricantesImg,
     description: "Suavidad que intensifica",
     color: "from-blue-900/60 to-teal-900/60"

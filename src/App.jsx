@@ -4,6 +4,10 @@ import Layout from "./components/layout/Layout";
 import Promociones from "./pages/promociones";
 import Inicio from "./pages/inicio";
 import Juega from "./pages/juega";
+import Juguetes from "./pages/juguetes";
+import Lenceria from "./pages/lenceria";
+import Lubricantes from "./pages/lubricantes";
+
 // import Overview from "./pages/OverView";
 import Contacto from "./pages/contacto";
 import Combos from "./pages/Combos";
@@ -25,6 +29,10 @@ function App() {
             <Route path="/contacto" element={<Contacto />} />
                         <Route path="/Juega" element={<Juega />} />
             <Route path="/Combos" element={<Combos />} />
+            <Route path="/juguetes" element={<Juguetes />} />
+            <Route path="/lenceria" element={<Lenceria />} />
+            <Route path="/lubricantes" element={<Lubricantes />} />
+
 
             {/* //aqui se muestran los productos */}
             {/* <Route path="/" element={<Card/>} />   */}

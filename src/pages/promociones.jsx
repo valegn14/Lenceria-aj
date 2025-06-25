@@ -16,7 +16,7 @@ const Promociones = () => {
     <div className="w-full bg-gradient-to-b from-white to-rose-50 py-12 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto">
         {/* Encabezado animado */}
-        <div className={`text-center mb-10 transition-all duration-500 ${isScrolled ? "scale-95" : "scale-100"}`}>
+        {/* <div className={`text-center mb-10 transition-all duration-500 ${isScrolled ? "scale-95" : "scale-100"}`}>
           <div className="inline-block relative mb-6">
             <h2 className="text-3xl sm:text-4l md:text-5xl font-bold text-rose-800 leading-tight relative z-10">
               Promociones Exclusivas
@@ -33,7 +33,7 @@ const Promociones = () => {
         
           
           </div>
-        </div>
+        </div> */}
         
         {/* Contador de ofertas */}
         <div className="bg-gradient-to-r from-rose-100 to-pink-100 rounded-xl p-6 mb-12 border border-rose-200 shadow-sm max-w-4xl mx-auto">
