@@ -17,7 +17,7 @@ export default function SolarOverview({ open, setOpen }) {
   const navigate = useNavigate();
 
   const generarMensajeWhatsApp = () => {
-    let mensaje = '🛒 *Resumen de mi compra:*%0A';
+    let mensaje = '🛍️ *Recogida en tienda:*%0A';
     cartItems.forEach((item, index) => {
       mensaje += `%0A${index + 1}. ${item.nombre}`;
       if (item.selectedSize) mensaje += ` (Talla: ${item.selectedSize})`;
