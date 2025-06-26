@@ -1,5 +1,7 @@
 'use client'
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useCart } from './CartContext';
@@ -12,6 +14,7 @@ export default function SolarOverview({ open, setOpen }) {
     cartTotal,
     cartCount 
   } = useCart();
+  const navigate = useNavigate();
 
   const generarMensajeWhatsApp = () => {
     let mensaje = '🛒 *Resumen de mi compra:*%0A';
@@ -196,18 +199,20 @@ export default function SolarOverview({ open, setOpen }) {
 
     {/* Botones horizontales */}
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-      <a
-        href={generarMensajeWhatsApp2()}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex items-center justify-center rounded-xl border border-transparent bg-pink-600 px-4 py-4 sm:py-3 text-base sm:text-sm font-medium text-white shadow-lg hover:bg-pink-700 transition-colors w-full"
-      >
-        {/* Icono de casita */}
-        <svg className="w-5 h-5 sm:w-4 sm:h-4 mr-2 sm:mr-1.5" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-        </svg>
-        <span className="text-sm sm:text-xs">Pedir domicilio</span>
-      </a>
+<button
+  onClick={() => {
+    setOpen(false);     // Opcional: cierra el carrito antes de redirigir
+    navigate('/domicilio');
+  }}
+  className="flex items-center justify-center rounded-xl border border-transparent bg-pink-600 px-4 py-4 sm:py-3 text-base sm:text-sm font-medium text-white shadow-lg hover:bg-pink-700 transition-colors w-full"
+>
+  {/* Icono de casita */}
+  <svg className="w-5 h-5 sm:w-4 sm:h-4 mr-2 sm:mr-1.5" fill="currentColor" viewBox="0 0 24 24">
+    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+  </svg>
+  <span className="text-sm sm:text-xs">Pedir domicilio</span>
+</button>
+
       
       <a
         href={generarMensajeWhatsApp()}
@@ -239,8 +244,6 @@ export default function SolarOverview({ open, setOpen }) {
     </div>
   </div>
 )}
-
-                
               </div>
             </DialogPanel>
           </div>

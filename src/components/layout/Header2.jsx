@@ -171,9 +171,9 @@ function SideMenu({ isOpen, onClose, onCartClick, cartCount }) {
 
         {/* Footer del menú */}
         <div className="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-pink-100 to-transparent">
-          <div className="text-center text-sm text-gray-600 italic">
+          {/* <div className="text-center text-sm text-gray-600 italic">
             Descubre tu placer interior
-          </div>
+          </div> */}
           <div className="mt-4 flex justify-center space-x-4">
             <a href="#" className="text-pink-500 hover:text-pink-700 transition-colors">
               <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">

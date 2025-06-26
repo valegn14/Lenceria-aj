@@ -12,6 +12,7 @@ import Contacto from "./pages/contacto";
 import Combos from "./pages/Combos";
 import DetalleProducto from "./database/DetalleProducto";
 import { CartProvider } from './components/solar/CartContext';
+import Domicilio from "./pages/domicilio";
 
 function App() {
   return (
@@ -26,6 +27,8 @@ function App() {
             <Route path="/Combos" element={<Combos />} />
             <Route path="/juguetes" element={<Juguetes />} />
             <Route path="/lenceria" element={<Lenceria />} />
+                        <Route path="/domicilio" element={<Domicilio />} />
+
             <Route path="/lubricantes" element={<Lubricantes />} />
             <Route path="/:slug" element={<DetalleProducto />} />
           </Routes>
