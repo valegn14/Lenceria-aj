@@ -1,34 +1,10 @@
-// import React from "react";
-
-// const Juguetes = () => {
-//   return (
-//     <section className="py-8 sm:py-12 lg:py-16 bg-transparent px-4 sm:px-6 lg:px-8" id="calculator">
-//       <div className="container mx-auto">   
-//         <h2 className="text-3xl sm:text-4xl font-bold text-center mb-8">
-//           Explora Nuestros Juguetes
-//         </h2>
-       
-//       </div>
-//     </section>
-//   );
-// };
-
-// export default  Juguetes;
-
-
-
-// Juguetes.jsx
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { cargarJuguetesDesdeSheets } from "../database/sheets";
 import { useCart } from "../components/solar/CartContext";
 
-// Utilidad para convertir string en forma comparable (sin acentos y en minúscula)
 const normalizarTexto = (texto) =>
-  texto
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
+  texto.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
 const slugify = (id, nombre) =>
   `${id}-${normalizarTexto(nombre).replace(/\s+/g, "-").replace(/[^\w\-]+/g, "")}`;
@@ -77,8 +53,8 @@ const Juguetes = ({ onlyPromos = false, productos: propProductos, searchTerm = "
     return (
       <div className="min-h-[50vh] flex items-center justify-center px-4">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pink-500 mb-4"></div>
-          <p className="text-lg text-gray-600">Descubriendo tus placeres...</p>
+          <div className="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-fuchsia-500 mb-6"></div>
+          <p className="text-lg sm:text-xl text-gray-900">Descubriendo tus placeres...</p>
         </div>
       </div>
     );
@@ -104,33 +80,30 @@ const Juguetes = ({ onlyPromos = false, productos: propProductos, searchTerm = "
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
           {productosFiltrados.map((producto, idx) => (
             <div
               key={idx}
-              className="group relative cursor-pointer bg-white overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-1.5"
+              className="group relative cursor-pointer bg-white overflow-hidden rounded-xl border border-gray-200 hover:border-fuchsia-500 transition-all duration-300 hover:shadow-lg"
               onClick={() =>
                 navigate(`/${slugify(producto.id, producto.nombre)}`, { state: producto })
               }
             >
-              {/* Contenedor principal con efecto sensual */}
-              <div className="relative aspect-square overflow-hidden rounded-t-xl bg-gradient-to-br from-pink-50 to-purple-50">
+              <div className="relative aspect-square overflow-hidden bg-gray-50">
                 <div className="relative h-full w-full">
                   <img
                     src={producto.imagen}
                     alt={producto.nombre}
-                    className="w-full h-full object-contain transition-all duration-500 group-hover:scale-105"
+                    className="w-full h-full object-contain"
                     loading="lazy"
                   />
-                  
-                  {/* Etiqueta de descuento sensual */}
+
                   {producto.rebaja && Number(producto.rebaja) > 0 && (
-                    <div className="absolute top-3 left-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md z-10">
+                    <div className="absolute top-3 left-3 bg-pink-500 text-white text-xs sm:text-sm font-bold px-3 py-1 rounded-full">
                       -{producto.rebaja}%
                     </div>
                   )}
-                  
-                  {/* Botón de carrito sensual */}
+
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -140,44 +113,33 @@ const Juguetes = ({ onlyPromos = false, productos: propProductos, searchTerm = "
                         selectedSize: producto.selectedSize || null,
                       });
                     }}
-                    className="
-                      absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-10
-                      w-11/12 py-3
-                      bg-gradient-to-r from-pink-500 to-purple-600 text-white text-center font-medium text-sm
-                      rounded-lg
-                      opacity-0 group-hover:translate-y-3 group-hover:opacity-100
-                      transition-all duration-400
-                      hover:from-pink-600 hover:to-purple-700
-                      shadow-lg
-                      z-20
-                    "
+                    className="hidden md:block absolute top-3 right-3 w-10 h-10 bg-white text-fuchsia-500 border border-fuchsia-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-fuchsia-500 hover:text-white flex items-center justify-center"
+                    aria-label="Agregar al carrito"
                   >
-                    Agregar al carrito
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
                   </button>
-                  
-                  {/* Overlay sensual */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 </div>
               </div>
 
-              {/* Información del producto con diseño elegante */}
-              <div className="p-4 relative z-10 bg-white">
-                <h3 className="text-base lg:text-lg font-medium text-gray-800 mb-2 group-hover:text-pink-600 transition-colors line-clamp-2 leading-snug">
+              <div className="p-4 sm:p-5">
+                <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2 line-clamp-2 leading-snug min-h-[2.5rem] sm:min-h-[3rem]">
                   {producto.nombre}
                 </h3>
-                
+
                 <div className="flex justify-between items-center mb-3">
                   <div className="flex items-center gap-2">
-                    <p className="text-pink-600 font-bold text-lg">
+                    <p className="text-lg sm:text-xl font-bold text-pink-800">
                       ${producto.precio}
                     </p>
                     {producto.rebaja && Number(producto.rebaja) > 0 && (
-                      <p className="text-gray-400 line-through text-sm">
+                      <p className="text-gray-400 line-through text-sm sm:text-base">
                         ${(parseFloat(producto.precio) / (1 - Number(producto.rebaja) / 100)).toFixed(0)}
                       </p>
                     )}
                   </div>
-                  
+
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -187,34 +149,33 @@ const Juguetes = ({ onlyPromos = false, productos: propProductos, searchTerm = "
                         selectedSize: producto.selectedSize || null,
                       });
                     }}
-                    className="md:hidden p-2 rounded-full bg-pink-100 hover:bg-pink-200 transition-colors"
+                    className="md:hidden w-8 h-8 rounded-full border border-fuchsia-500 text-fuchsia-500 hover:bg-fuchsia-500 hover:text-white flex items-center justify-center transition-colors duration-200"
                     aria-label="Agregar al carrito"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-pink-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                     </svg>
                   </button>
                 </div>
-                
-                <p className="text-sm text-gray-600 line-clamp-3 leading-relaxed min-h-[3.5rem]">
+
+                <p className="text-sm sm:text-base text-gray-600 line-clamp-3 leading-relaxed min-h-[4rem] sm:min-h-[4.5rem] mb-4">
                   {producto.descripcion}
                 </p>
-                
-                {/* Detalle decorativo sensual */}
-                <div className="mt-3 flex justify-between items-center">
-                  <div className="flex">
-                    {[...Array(5)].map((_, i) => (
-                      <svg key={i} xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                    ))}
-                  </div>
-                  <span className="text-xs text-gray-500">4.8</span>
-                </div>
+
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    addToCart({
+                      ...producto,
+                      quantity: 1,
+                      selectedSize: producto.selectedSize || null,
+                    });
+                  }}
+                  className="md:hidden w-full py-3 bg-pink-700 text-white text-center font-medium rounded-lg hover:bg-pink-800 transition-colors duration-200"
+                >
+                  Agregar al carrito
+                </button>
               </div>
-              
-              {/* Efecto de borde sensual al pasar el mouse */}
-              <div className="absolute inset-0 border-2 border-transparent group-hover:border-pink-300 rounded-xl pointer-events-none transition-all duration-500"></div>
             </div>
           ))}
         </div>

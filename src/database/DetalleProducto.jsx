@@ -209,7 +209,7 @@ const DetalleProducto = () => {
                   
                   <button
                     onClick={() => navigate("/promociones")}
-                    className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white py-3 px-6 rounded-xl font-medium transition-all duration-300"
+                    className="w-full bg-pink-500 hover:from-purple-600 hover:to-pink-600 text-white py-3 px-6 rounded-xl font-medium transition-all duration-300"
                   >
                     Ver promociones
                   </button>
