@@ -332,7 +332,7 @@ const Juega = () => {
               </p>
               
               <p className="text-gray-600 mb-8">
-                Tu descuento será aplicado al finalizar tu compra. 
+                 
                 ¡Aprovecha esta oferta especial!
               </p>
               
@@ -348,16 +348,16 @@ const Juega = () => {
                 </button>
               </div>
               
-              <div className="mt-6">
-                <div className="flex items-center justify-center space-x-4">
-                  <div className="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16" />
-                  <div className="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16" />
-                  <div className="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16" />
-                </div>
-                <p className="text-sm text-gray-500 mt-4">
+              {/* <div className="mt-6"> */}
+                {/* <div className="flex items-center justify-center space-x-4"> */}
+                  {/* <div className="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16" /> */}
+                  {/* <div className="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16" /> */}
+                  {/* <div className="bg-gray-200 border-2 border-dashed rounded-xl w-16 h-16" /> */}
+                {/* </div> */}
+                {/* <p className="text-sm text-gray-500 mt-4">
                   Comparte tu premio en redes sociales
                 </p>
-              </div>
+              </div> */}
             </motion.div>
           </motion.div>
         )}
