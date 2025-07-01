@@ -15,6 +15,15 @@ const Promociones = () => {
   return (
     <div className="w-full bg-gradient-to-b from-white to-rose-50 py-12 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto">
+            <button
+          onClick={() => navigate(-1)}
+          className="flex items-center text-pink-600 hover:text-pink-800 mb-6 transition-colors"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          Volver
+        </button>
         {/* Encabezado animado */}
         {/* <div className={`text-center mb-10 transition-all duration-500 ${isScrolled ? "scale-95" : "scale-100"}`}>
           <div className="inline-block relative mb-6">

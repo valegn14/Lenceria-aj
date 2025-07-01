@@ -128,7 +128,7 @@ export async function cargarJuguetesDesdeSheets() {
     await ensureGapiLoaded();
     const response = await gapi.client.sheets.spreadsheets.values.get({
       spreadsheetId: SHEET_ID,
-      range: 'Hoja 2!A:F',
+      range: 'Juguetes!A:F',
     });
 
     const values = response.result.values;
@@ -154,7 +154,7 @@ export async function cargarLenceriaDesdeSheets() {
     await ensureGapiLoaded();
     const response = await gapi.client.sheets.spreadsheets.values.get({
       spreadsheetId: SHEET_ID,
-      range: 'Hoja 5!A:F',
+      range: 'Lenceria!A:F',
     });
 
     const values = response.result.values;
@@ -180,7 +180,7 @@ export async function cargarLubricantesDesdeSheets() {
     await ensureGapiLoaded();
     const response = await gapi.client.sheets.spreadsheets.values.get({
       spreadsheetId: SHEET_ID,
-      range: 'Hoja 6!A:F',
+      range: 'Lubricantes!A:F',
     });
 
     const values = response.result.values;

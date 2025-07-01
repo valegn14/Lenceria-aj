@@ -54,8 +54,10 @@ const Lenceria = ({ onlyPromos = false, productos: propProductos, searchTerm = "
 
   if (loading)
     return (
+  
       <div className="min-h-[50vh] flex items-center justify-center px-4">
         <div className="text-center">
+          
           <div className="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-fuchsia-500 mb-6"></div>
           <p className="text-lg sm:text-xl text-gray-900">Descubriendo tus placeres...</p>
         </div>
@@ -71,6 +73,15 @@ const Lenceria = ({ onlyPromos = false, productos: propProductos, searchTerm = "
 
   return (
     <div className="w-full px-4 py-8">
+          <button
+          onClick={() => navigate(-1)}
+          className="flex items-center text-pink-600 hover:text-pink-800 mb-6 transition-colors"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          Volver
+        </button>
       {productosFiltrados.length === 0 ? (
         <div className="text-center py-16">
           <div className="mx-auto w-24 h-24 bg-pink-100 rounded-full flex items-center justify-center mb-6">

@@ -19,7 +19,7 @@ const Card = ({ onlyPromos = false, productos: propProductos, searchTerm = "" })
   const [loading, setLoading] = useState(!propProductos);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [productsPerPage] = useState(16);
+  const [productsPerPage] = useState(8);
   const productsGridRef = useRef(null); // Ref para el contenedor de productos
   
   const navigate = useNavigate();

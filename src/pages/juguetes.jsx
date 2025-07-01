@@ -68,6 +68,15 @@ const Juguetes = ({ onlyPromos = false, productos: propProductos, searchTerm = "
 
   return (
     <div className="w-full max-w-screen-2xl mx-auto px-4 py-8">
+          <button
+          onClick={() => navigate(-1)}
+          className="flex items-center text-pink-600 hover:text-pink-800 mb-6 transition-colors"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          Volver
+        </button>
       {productosFiltrados.length === 0 ? (
         <div className="text-center py-16">
           <div className="mx-auto w-20 h-20 bg-pink-100 rounded-full flex items-center justify-center mb-4">
