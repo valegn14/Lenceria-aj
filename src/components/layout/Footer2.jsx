@@ -23,7 +23,7 @@ export default function Footer2() {
                     </div>
 
                     {/* Ayuda */}
-                    <div className="text-center sm:text-left">
+                    {/* <div className="text-center sm:text-left">
                         <h2 className="text-lg lg:text-xl font-semibold mb-4 lg:mb-6">Ayuda</h2>
                         <ul className="space-y-3">
                             <li><a href="#" className="hover:text-pink-300 text-sm lg:text-base transition-colors">Preguntas Frecuentes</a></li>
@@ -31,7 +31,7 @@ export default function Footer2() {
                             <li><a href="#" className="hover:text-pink-300 text-sm lg:text-base transition-colors">Términos y Condiciones</a></li>
                             <li><a href="#" className="hover:text-pink-300 text-sm lg:text-base transition-colors">Privacidad</a></li>
                         </ul>
-                    </div>
+                    </div> */}
 
                     {/* Contacto */}
                     <div className="text-center sm:text-left">
@@ -72,8 +72,8 @@ export default function Footer2() {
             
             <div className="border-t border-pink-300/20 mt-8 pt-6 text-center text-white/80 text-sm">
                 <div className="container mx-auto px-4">
-                    <p>© 2024 Lencería AJ. Todos los derechos reservados.</p>
-                    <p className="mt-2 text-xs">Productos para adultos. Venta prohibida a menores de edad.</p>
+                    <p>¿Quieres tu catálogo digital?</p>
+                    <p className="mt-2 text-xs">Contáctanos 3113630754</p>
                 </div>
             </div>
         </footer>
