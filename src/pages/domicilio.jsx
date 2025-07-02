@@ -73,7 +73,6 @@ const Domicilio = () => {
     
     // Detalles del pedido
     mensaje += '*Detalles del pedido:*\n';
-    mensaje += `⏱️ Entrega: ${formData.horaEntrega === "inmediata" ? "Lo antes posible" : `Programada para ${formData.fechaEntrega} a las ${formData.horaEspecifica}`}\n`;
     mensaje += `💳 Método de pago: ${formData.metodoPago === "efectivo" ? "Efectivo" : "Transferencia bancaria"}\n\n`;
 
     // Productos
