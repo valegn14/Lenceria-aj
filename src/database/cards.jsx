@@ -40,7 +40,7 @@ const Card = ({ onlyPromos = false, productos: propProductos, searchTerm = "" })
           : data;
         setProductos(lista);
       } catch (err) {
-        setError("Error al cargar productos");
+        setError("Error al cargar productoos");
       } finally {
         setLoading(false);
       }

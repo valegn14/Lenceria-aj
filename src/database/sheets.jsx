@@ -2,35 +2,65 @@
 const API_KEY = 'AIzaSyCo51QnHOkeax1-tMGcmIS4Ygo2-qr1qd8';
 const SHEET_ID = '1amL7XhJcrlQSg9nvwWuOGlYY9G1pfJuXTsTEezHUCRw';
 
-// 1) Asegura que gapi esté cargado e inicializado (inyección dinámica)
-async function ensureGapiLoaded() {
-  // Si window.gapi no existe, inyectamos el script y esperamos su carga
-  if (typeof window.gapi === 'undefined') {
-    await new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      script.src = 'https://apis.google.com/js/api.js';
-      script.onload = () => resolve();
-      script.onerror = () => reject(new Error('No se pudo cargar gapi'));
-      document.body.appendChild(script);
-    });
+/**
+ * Inyecta dinámicamente el script de gapi y espera a que `gapi.load` esté disponible.
+ */
+async function injectGapiScript() {
+  if (typeof window.gapi !== 'undefined' && typeof window.gapi.load === 'function') {
+    return; // ya está cargado y tiene load
   }
+  await new Promise((resolve, reject) => {
+    const existing = document.querySelector('script[src*="apis.google.com/js/api.js"]');
+    if (existing) {
+      // si ya existe, esperar un poco a que defina load
+      return setTimeout(() => {
+        if (window.gapi && typeof window.gapi.load === 'function') resolve();
+        else reject(new Error('gapi.load no está disponible'));
+      }, 100);
+    }
+    const script = document.createElement('script');
+    script.src = 'https://apis.google.com/js/api.js';
+    script.async = true;
+    script.defer = true;
+    script.onload = () => {
+      // dar un breve margen para inicialización interna
+      setTimeout(() => {
+        if (window.gapi && typeof window.gapi.load === 'function') resolve();
+        else reject(new Error('gapi.load no está disponible tras carga'));
+      }, 50);
+    };
+    script.onerror = () => reject(new Error('No se pudo cargar gapi'));
+    document.body.appendChild(script);
+  });
+}
 
-  // Carga del módulo 'client'
+/**
+ * Inicializa el cliente gapi con Sheets API.
+ */
+async function initGapiClient() {
   await new Promise((resolve, reject) => {
     window.gapi.load('client', {
       callback: resolve,
       onerror: () => reject(new Error('gapi.client no pudo inicializarse')),
     });
   });
-
-  // Inicialización del cliente con API Key y discoveryDocs
   await window.gapi.client.init({
     apiKey: API_KEY,
     discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
   });
 }
 
-// 2) Función genérica para leer cualquier rango de la hoja
+/**
+ * Asegura que gapi y su cliente estén listos.
+ */
+async function ensureGapiLoaded() {
+  await injectGapiScript();
+  await initGapiClient();
+}
+
+/**
+ * Lee un rango genérico de Google Sheets.
+ */
 async function leerRango(range) {
   await ensureGapiLoaded();
   const response = await window.gapi.client.sheets.spreadsheets.values.get({
@@ -40,13 +70,15 @@ async function leerRango(range) {
   return response.result.values || [];
 }
 
-// 3) Utilidad para convertir links de Drive a preview
+/**
+ * Convierte URLs de Drive a links embed.
+ */
 function convertirLinkDrive(url) {
   const match = url.match(/\/file\/d\/(.*?)\//);
   return match ? `https://drive.google.com/uc?export=view&id=${match[1]}` : url;
 }
 
-// 4) Funciones específicas de carga para cada hoja
+// Funciones específicas de carga:
 export async function cargarProductosDesdeSheets() {
   try {
     const values = await leerRango('Hoja 1!A:F');
@@ -70,14 +102,8 @@ export async function cargarDatosJuegoDesdeSheets() {
     const values = await leerRango('Hoja 3!A:B');
     if (values.length <= 1) return [];
     return values.slice(1)
-      .map(row => {
-        const porcentaje = Number(row[0] || '');
-        return {
-          porcentaje: isNaN(porcentaje) ? 0 : porcentaje,
-          codigo:     (row[1] || '').toString().trim(),
-        };
-      })
-      .filter(entry => entry.codigo !== '');
+      .map(row => ({ porcentaje: Number(row[0]) || 0, codigo: (row[1] || '').trim() }))
+      .filter(e => e.codigo !== '');
   } catch (error) {
     console.error('Error al cargar datos de juego:', error);
     throw error;
@@ -88,24 +114,14 @@ export async function cargarCombosDesdeSheets() {
   try {
     const values = await leerRango('Combos!A:E');
     if (values.length <= 1) return [];
-    const rows = values.slice(1);
-    const combosMap = {};
-
-    rows.forEach(row => {
-      const id          = row[0];
-      const nombre      = row[1];
-      const precio      = row[2];
-      const descripcion = row[3];
-      const imagen      = row[4];
-
-      if (!combosMap[id]) {
-        combosMap[id] = { id, productos: [], precio: precio || '', descripcion: descripcion || '', imagenes: [] };
-      }
-      if (nombre) combosMap[id].productos.push(nombre);
-      if (imagen) combosMap[id].imagenes.push(imagen);
+    const map = {};
+    values.slice(1).forEach(row => {
+      const [id, nombre, precio, descr, img] = row;
+      if (!map[id]) map[id] = { id, productos: [], precio: precio||'', descripcion: descr||'', imagenes: [] };
+      if (nombre) map[id].productos.push(nombre);
+      if (img)    map[id].imagenes.push(img);
     });
-
-    return Object.values(combosMap);
+    return Object.values(map);
   } catch (error) {
     console.error('Error al cargar combos:', error);
     throw error;
