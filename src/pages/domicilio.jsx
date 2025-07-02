@@ -105,7 +105,10 @@ const Domicilio = () => {
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-10">
           <button 
-            onClick={() => router.back()} 
+            onClick={() => {
+                onCartClick();
+                onClose();
+              }}
             className="flex items-center text-pink-600 hover:text-pink-700 mb-4"
           >
             <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
