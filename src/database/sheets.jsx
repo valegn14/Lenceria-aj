@@ -183,7 +183,6 @@ export async function cargarLubricantesDesdeSheets() {
 }
 
 
-
 // // Función que asegura que gapi esté listo
 // async function ensureGapiLoaded() {
 //   if (!window.gapi || !gapi.load) {

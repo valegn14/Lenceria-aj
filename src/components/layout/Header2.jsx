@@ -74,14 +74,14 @@ function SideMenu({ isOpen, onClose, onCartClick, cartCount }) {
     const handleKey = (e) => {
       if (e.key === "Escape" && isOpen) onClose();
     };
-    
+
     // Prevent body scroll when menu is open
     if (isOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
     }
-    
+
     window.addEventListener("keydown", handleKey);
     return () => {
       window.removeEventListener("keydown", handleKey);
@@ -180,7 +180,7 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showCart, setShowCart] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  
+
   // Mock cart count - replace with actual cart context
   const cartCount = 0;
 
@@ -195,13 +195,12 @@ export default function Header() {
   return (
     <>
       <header
-        className={`fixed w-full top-0 left-0 z-40 transition-all duration-300 ${
-          scrolled
+        className={`fixed w-full top-0 left-0 z-40 transition-all duration-300 ${scrolled
             ? "bg-white/95 backdrop-blur-md shadow-lg py-3"
             : "bg-gradient-to-r from-pink-50 to-purple-50 py-4"
-        }`}
+          }`}
       >
-        <div className="container mx-auto px-4 flex items-center justify-between h-16">
+        <div className="container mx-auto px-2 flex items-center justify-between h-16">
           {/* Menu Button */}
           <button
             className="focus:outline-none p-3 hover:bg-pink-100 rounded-full transition-colors"
@@ -213,8 +212,19 @@ export default function Header() {
           </button>
 
           {/* Logo - Centered */}
-          <div className="flex-1 flex justify-center">
+          <div className=" flex justify-center">
             <Brand />
+          </div>
+
+          {/* buscador */}
+          <div>
+            <input
+              type="text"
+              placeholder="🔍Buscar producto..."
+              //value={busqueda} //el contenido se sincroniza con usestate
+              onChange={e => setBusqueda(e.target.value)}
+              className="p-5 border border-pink-300 rounded-md w-full"
+            />
           </div>
 
           {/* Cart Button */}
