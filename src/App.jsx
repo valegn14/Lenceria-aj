@@ -18,21 +18,18 @@ function App() {
   return (
     <CartProvider>
       <Router>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<Inicio />} />
-            <Route path="/promociones" element={<Promociones />} />
-            <Route path="/contacto" element={<Contacto />} />
-            <Route path="/Juega" element={<Juega />} />
-            <Route path="/Combos" element={<Combos />} />
-            <Route path="/juguetes" element={<Juguetes />} />
-            <Route path="/lenceria" element={<Lenceria />} />
-                        <Route path="/domicilio" element={<Domicilio />} />
-
-            <Route path="/lubricantes" element={<Lubricantes />} />
-            <Route path="/:slug" element={<DetalleProducto />} />
-          </Routes>
-        </Layout>
+        <Routes>
+          <Route path="/" element={<Layout><Inicio /></Layout>} />
+          <Route path="/promociones" element={<Layout><Promociones /></Layout>} />
+          <Route path="/contacto" element={<Layout><Contacto /></Layout>} />
+          <Route path="/juega" element={<Layout><Juega /></Layout>} />
+          <Route path="/combos" element={<Layout><Combos /></Layout>} />
+          <Route path="/juguetes" element={<Layout><Juguetes /></Layout>} />
+          <Route path="/lenceria" element={<Layout><Lenceria /></Layout>} />
+          <Route path="/lubricantes" element={<Layout><Lubricantes /></Layout>} />
+          <Route path="/domicilio" element={<Layout><Domicilio /></Layout>} />
+          <Route path="/:slug" element={<Layout><DetalleProducto /></Layout>} />
+        </Routes>
       </Router>
     </CartProvider>
   );

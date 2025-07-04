@@ -238,9 +238,9 @@ const categories = [
   },
 ];
 
-const Inicio = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+const Inicio = ({ searchTerm }) => {
   const [hoveredCategory, setHoveredCategory] = useState(null);
+
 
   return (
     <div className="w-full bg-gradient-to-b from-pink-50 to-purple-50 min-h-screen">

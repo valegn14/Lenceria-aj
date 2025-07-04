@@ -176,7 +176,7 @@ function SideMenu({ isOpen, onClose, onCartClick, cartCount }) {
   );
 }
 
-export default function Header() {
+export default function Header({ setSearchTerm }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showCart, setShowCart] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -221,9 +221,9 @@ export default function Header() {
             <input
               type="text"
               placeholder="🔍Buscar producto..."
-              //value={busqueda} //el contenido se sincroniza con usestate
-              onChange={e => setBusqueda(e.target.value)}
               className="p-5 border border-pink-300 rounded-md w-full"
+              //value={busqueda} //el contenido se sincroniza con usestate
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
 
