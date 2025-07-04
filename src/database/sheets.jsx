@@ -182,6 +182,56 @@ export async function cargarLubricantesDesdeSheets() {
   }
 }
 
+// const HOJAS = [
+//   { nombre: 'Hoja1', rango: 'Hoja1!A2:C' },
+//   { nombre: 'Hoja2', rango: 'Hoja2!A2:C' },
+//   { nombre: 'Hoja3', rango: 'Hoja3!A2:C' }
+// ];
+
+// export async function cargarDatosDesdeSheets() {
+//   try {
+//     await new Promise((resolve, reject) => {
+//       gapi.load('client', async () => {
+//         try {
+//           await gapi.client.init({
+//             apiKey: API_KEY,
+//             discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
+//           });
+//           resolve();
+//         } catch (err) {
+//           reject(err);
+//         }
+//       });
+//     });
+
+//     let todosLosDatos = [];
+
+//     for (const hoja of HOJAS) {
+//       const response = await gapi.client.sheets.spreadsheets.values.get({
+//         spreadsheetId: SHEET_ID,
+//         range: hoja.rango,
+//       });
+
+//       const values = response.result.values || [];
+
+//       const datos = values.map(row => ({
+//         id: row[0],
+//         nombre: row[1],
+//         nota: row[2],
+//         hoja: hoja.nombre // ➕ aquí añadimos la hoja de origen
+//       }));
+
+//       todosLosDatos = [...todosLosDatos, ...datos];
+//     }
+
+//     return todosLosDatos;
+
+//   } catch (error) {
+//     console.error("Error al cargar datos:", error);
+//     return [];
+//   }
+// }
+
 
 // // Función que asegura que gapi esté listo
 // async function ensureGapiLoaded() {

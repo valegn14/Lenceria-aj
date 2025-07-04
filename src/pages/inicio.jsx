@@ -266,33 +266,6 @@ const Inicio = () => {
         </div>
       </div>
 
-      {/* Buscador */}
-      {/* <div className="px-4 sm:px-6 lg:px-8 mb-8">
-        <div className="max-w-2xl mx-auto">
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 text-gray-400"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2" fill="none" />
-                <line x1="16.5" y1="16.5" x2="21" y2="21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-              </svg>
-            </div>
-            <input
-              type="text"
-              placeholder="Buscar productos..."
-              value={searchTerm}
-              onChange={e => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-4 text-base border-2 border-pink-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent shadow-lg bg-white/90 backdrop-blur-sm transition-all duration-300"
-            />
-          </div>
-        </div>
-      </div> */}
-
       {/* Categorías */}
       <div className="px-4 sm:px-6 lg:px-8 mb-12">
         <div className="max-w-7xl mx-auto">
@@ -349,7 +322,7 @@ const Inicio = () => {
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-8">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif font-light text-gray-800 mb-4">
-            Juguetes
+            PRODUCTOS
           </h2>
           <div className="w-24 h-1 bg-gradient-to-r from-pink-400 to-purple-500 mx-auto"></div>
             </div>

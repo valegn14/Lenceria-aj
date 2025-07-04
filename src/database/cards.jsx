@@ -13,6 +13,7 @@ const normalizarTexto = (texto) =>
 const slugify = (id, nombre) =>
   `${id}-${normalizarTexto(nombre).replace(/\s+/g, "-").replace(/[^\w\-]+/g, "")}`;
 
+
 const Card = ({ onlyPromos = false, productos: propProductos, searchTerm = "" }) => {
   const [productos, setProductos] = useState(propProductos || []);
   const [productosFiltrados, setProductosFiltrados] = useState([]);
@@ -123,7 +124,7 @@ const Card = ({ onlyPromos = false, productos: propProductos, searchTerm = "" })
                 key={idx}
                 className="group relative cursor-pointer bg-white overflow-hidden rounded-xl border border-gray-200 hover:border-fuchsia-500 transition-all duration-300 hover:shadow-lg"
                 onClick={() =>
-                  navigate(`/${slugify(producto.id, producto.nombre)}`, { state: producto })
+                  navigate(`/${slugify(producto.id, producto.nombre)}`, { state: producto }) 
                 }
               >
                 {/* Imagen */}
