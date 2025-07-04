@@ -188,7 +188,7 @@ export async function cargarLubricantesDesdeSheets() {
 //   { nombre: 'Hoja3', rango: 'Hoja3!A2:C' }
 // ];
 
-// export async function cargarDatosDesdeSheets() {
+// export async function cargarProductosDesdeSheets() {
 //   try {
 //     await new Promise((resolve, reject) => {
 //       gapi.load('client', async () => {
@@ -215,9 +215,12 @@ export async function cargarLubricantesDesdeSheets() {
 //       const values = response.result.values || [];
 
 //       const datos = values.map(row => ({
-//         id: row[0],
-//         nombre: row[1],
-//         nota: row[2],
+//         id:          row[0] || '',
+      // nombre:      row[1] || '',
+      // precio:      row[2] || '',
+      // rebaja:      row[3] || '',
+      // descripcion: row[4] || '',
+      // imagen:      convertirLinkDrive(row[5] || ''),
 //         hoja: hoja.nombre // ➕ aquí añadimos la hoja de origen
 //       }));
 
