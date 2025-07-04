@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import SolarOverview from "../solar/SolarOverview";
 import logo from "/public/logo_lenceria.png";
+import { useCart } from "../solar/CartContext";
 
 function Brand() {
   return (
@@ -53,7 +54,7 @@ const CartIcon = ({ itemCount }) => (
       />
     </svg>
     {itemCount > 0 && (
-      <span className="absolute -top-2 -right-2 bg-pink-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center font-bold animate-pulse">
+      <span className="absolute -top-2 -right-2 bg-pink-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center font-bold ">
         {itemCount > 99 ? '99+' : itemCount}
       </span>
     )}
@@ -182,7 +183,9 @@ export default function Header({ setSearchTerm }) {
   const [scrolled, setScrolled] = useState(false);
 
   // Mock cart count - replace with actual cart context
-  const cartCount = 0;
+  const { cartItems } = useCart();
+  // Sumar cantidades de todos los productos
+  const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -196,8 +199,8 @@ export default function Header({ setSearchTerm }) {
     <>
       <header
         className={`fixed w-full top-0 left-0 z-40 transition-all duration-300 ${scrolled
-            ? "bg-white/95 backdrop-blur-md shadow-lg py-3"
-            : "bg-gradient-to-r from-pink-50 to-purple-50 py-4"
+          ? "bg-white/95 backdrop-blur-md shadow-lg py-3"
+          : "bg-gradient-to-r from-pink-50 to-purple-50 py-4"
           }`}
       >
         <div className="container mx-auto px-2 flex items-center justify-between h-16">
