@@ -40,8 +40,10 @@ const categories = [
   },
 ];
 
-const Inicio = () => {
+
+const Inicio = ({ searchTerm }) => {
   const [hoveredCategory, setHoveredCategory] = useState(null);
+
 
   return (
     <div className="w-full bg-gradient-to-b from-pink-50 to-purple-50 min-h-screen">
@@ -118,19 +120,21 @@ const Inicio = () => {
         </div>
       </div>
 
-      {/* Productos destacados */}
-      <div className="px-4 sm:px-6 lg:px-8 mb-16">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif font-light text-gray-800 mb-4">
-              Juguetes
-            </h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-pink-400 to-purple-500 mx-auto"></div>
+
+        {/* Productos destacados */}
+        <div className="px-4 sm:px-6 lg:px-8 mb-16">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-8">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif font-light text-gray-800 mb-4">
+            PRODUCTOS
+          </h2>
+          <div className="w-24 h-1 bg-gradient-to-r from-pink-400 to-purple-500 mx-auto"></div>
+            </div>
+            <Card searchTerm={searchTerm} />
           </div>
 <Juguetes onlyPromos={false} desdeInicio={true} />
         </div>
       </div>
-    </div>
   );
 };
 

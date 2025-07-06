@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react"; 
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { cargarProductosDesdeSheets } from "./sheets";
 import { useCart } from "../components/solar/CartContext";
@@ -16,13 +16,13 @@ const slugify = (id, nombre) =>
 const Card = ({ onlyPromos = false, productos: propProductos, searchTerm = "" }) => {
   const [productos, setProductos] = useState(propProductos || []);
   const [productosFiltrados, setProductosFiltrados] = useState([]);
-  const [loading, setLoading] = useState(!propProductos);
+  const [loading, setLoading] = useState(!propProductos); //spinner cargando
   const [error, setError] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1); //paginacion
   const [productsPerPage] = useState(8);
   const productsGridRef = useRef(null); // Ref para el contenedor de productos
-  
-  const navigate = useNavigate();
+  //scrool a los productos
+  const navigate = useNavigate(); //detalle producto
   const { addToCart } = useCart();
 
   useEffect(() => {
@@ -63,7 +63,7 @@ const Card = ({ onlyPromos = false, productos: propProductos, searchTerm = "" })
     if (productsGridRef.current) {
       // Calcula posición relativa para un scroll más preciso
       const topPosition = productsGridRef.current.getBoundingClientRect().top + window.scrollY - 100;
-      
+
       window.scrollTo({
         top: topPosition,
         behavior: "smooth"
@@ -101,7 +101,7 @@ const Card = ({ onlyPromos = false, productos: propProductos, searchTerm = "" })
       </div>
     );
 
-  return (
+  return ( //Dibuja la cuadrícula de productos (tarjetas).
     <div className="w-full">
       {productosFiltrados.length === 0 ? (
         <div className="text-center py-16">
@@ -122,9 +122,10 @@ const Card = ({ onlyPromos = false, productos: propProductos, searchTerm = "" })
               <div
                 key={idx}
                 className="group relative cursor-pointer bg-white overflow-hidden rounded-xl border border-gray-200 hover:border-fuchsia-500 transition-all duration-300 hover:shadow-lg"
-                onClick={() =>
-                  navigate(`/${slugify(producto.id, producto.nombre)}`, { state: producto })
-                }
+                onClick={() => {
+                  window.scrollTo({ top: 0, behavior: "auto" }); // 👈 fuerza scroll arriba antes de navegar
+                  navigate(`/${slugify(producto.id, producto.nombre)}`, { state: producto });
+                }}
               >
                 {/* Imagen */}
                 <div className="relative aspect-square overflow-hidden bg-gray-50">
@@ -225,11 +226,10 @@ const Card = ({ onlyPromos = false, productos: propProductos, searchTerm = "" })
               <button
                 onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
-                className={`px-4 py-2 rounded-lg ${
-                  currentPage === 1 
-                    ? 'bg-gray-200 cursor-not-allowed' 
+                className={`px-4 py-2 rounded-lg ${currentPage === 1
+                    ? 'bg-gray-200 cursor-not-allowed'
                     : 'bg-pink-600 hover:bg-pink-700 text-white'
-                }`}
+                  }`}
               >
                 Anterior
               </button>
@@ -238,11 +238,10 @@ const Card = ({ onlyPromos = false, productos: propProductos, searchTerm = "" })
                 <button
                   key={num}
                   onClick={() => setCurrentPage(num + 1)}
-                  className={`w-10 h-10 rounded-full ${
-                    currentPage === num + 1
+                  className={`w-10 h-10 rounded-full ${currentPage === num + 1
                       ? 'bg-pink-600 text-white'
                       : 'bg-gray-200 hover:bg-gray-300'
-                  }`}
+                    }`}
                 >
                   {num + 1}
                 </button>
@@ -251,11 +250,10 @@ const Card = ({ onlyPromos = false, productos: propProductos, searchTerm = "" })
               <button
                 onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                 disabled={currentPage === totalPages}
-                className={`px-4 py-2 rounded-lg ${
-                  currentPage === totalPages
+                className={`px-4 py-2 rounded-lg ${currentPage === totalPages
                     ? 'bg-gray-200 cursor-not-allowed'
                     : 'bg-pink-600 hover:bg-pink-700 text-white'
-                }`}
+                  }`}
               >
                 Siguiente
               </button>
