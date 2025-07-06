@@ -7,34 +7,44 @@ const SHEET_ID = '1amL7XhJcrlQSg9nvwWuOGlYY9G1pfJuXTsTEezHUCRw';
  * Si la librería gapi ya está cargada y su función load() existe, no hace nada.
  */
 async function injectGapiScript() {
+  // Si ya está completamente cargado
   if (typeof window.gapi !== 'undefined' && typeof window.gapi.load === 'function') {
-    return; // ya está cargado y tiene load
+    return;
   }
-  await new Promise((resolve, reject) => { //Busca si el script de Google ya fue inyectado. Si sí, espera un rato a que se active.
-    const existing = document.querySelector('script[src*="apis.google.com/js/api.js"]');
-    if (existing) {
-      // si ya existe, esperar un poco a que defina load
-      return setTimeout(() => {
-        if (window.gapi && typeof window.gapi.load === 'function') resolve();
-        else reject(new Error('gapi.load no está disponible'));
-      }, 100);
-    }
-    //Si no encuentra el script, lo crea y lo agrega al DOM para cargar la librería de Google.
-    const script = document.createElement('script');
-    script.src = 'https://apis.google.com/js/api.js';
-    script.async = true;
-    script.defer = true;
-    script.onload = () => { //Cuando termina de cargar, espera 50ms y verifica que gapi.load() exista. Si no, error.
-      // dar un breve margen para inicialización interna
-      setTimeout(() => {
-        if (window.gapi && typeof window.gapi.load === 'function') resolve();
-        else reject(new Error('gapi.load no está disponible tras carga'));
-      }, 50);
+
+  return new Promise((resolve, reject) => {
+    const MAX_RETRIES = 5;
+    let retries = 0;
+
+    const checkGapi = () => {
+      if (typeof window.gapi !== 'undefined' && typeof window.gapi.load === 'function') {
+        resolve();
+      } else if (retries < MAX_RETRIES) {
+        retries++;
+        setTimeout(checkGapi, 300);
+      } else {
+        reject(new Error('gapi.load no está disponible tras reintentos'));
+      }
     };
-    script.onerror = () => reject(new Error('No se pudo cargar gapi'));
-    document.body.appendChild(script);
+
+    const existingScript = document.querySelector('script[src*="apis.google.com/js/api.js"]');
+    
+    if (existingScript) {
+      // Script ya existe: verificar periódicamente
+      checkGapi();
+    } else {
+      // Crear nuevo script
+      const script = document.createElement('script');
+      script.src = 'https://apis.google.com/js/api.js';
+      script.async = true;
+      script.defer = true;
+      script.onload = () => checkGapi();
+      script.onerror = () => reject(new Error('Error de red al cargar gapi'));
+      document.head.appendChild(script);
+    }
   });
 }
+
 
 /**
  * Inicializa el cliente gapi con Sheets API.
