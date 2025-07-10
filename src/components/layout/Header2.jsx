@@ -221,9 +221,9 @@ export default function Header({ setSearchTerm }) {
       >
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
-            {/* Menú button - visible en mobile */}
+            {/* Menú button - visible en todos los dispositivos */}
             <button
-              className="md:hidden focus:outline-none p-2 hover:bg-pink-100 rounded-full transition-colors"
+              className="focus:outline-none p-2 hover:bg-pink-100 rounded-full transition-colors"
               aria-label="Abrir menú"
               onClick={() => setIsMenuOpen(true)}
             >
@@ -231,7 +231,7 @@ export default function Header({ setSearchTerm }) {
             </button>
 
             {/* Logo - centrado */}
-            <div className="flex-1 flex justify-center md:justify-start">
+            <div className="flex-1 flex justify-center md:justify-start md:ml-4">
               <Brand />
             </div>
 
