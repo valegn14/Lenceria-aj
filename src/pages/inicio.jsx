@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import banner from "./pinteres3.png";
 import Juguetes from "./juguetes"; // Asegúrate de ajustar esta ruta
+import Card from "../database/cards"; // Asegúrate de ajustar esta ruta
 
 // Imágenes sensuales para categorías
 const lenceriaImg = "https://i.pinimg.com/736x/3e/9a/21/3e9a213fba360f4fefbe8b85e4f1be24.jpg";
@@ -125,13 +126,13 @@ const Inicio = ({ searchTerm }) => {
         <div className="px-4 sm:px-6 lg:px-8 mb-16">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-8">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif font-light text-gray-800 mb-4">
+          <h3 className="text-2xl sm:text-3xl md:text-4xl font-serif font-light text-gray-800 mb-4">
             PRODUCTOS
-          </h2>
+          </h3>
           <div className="w-24 h-1 bg-gradient-to-r from-pink-400 to-purple-500 mx-auto"></div>
             </div>
-            {/* <Card searchTerm={searchTerm} /> */}
-            <Juguetes onlyPromos={false} desdeInicio={true} />
+            <Card searchTerm={searchTerm} />
+            {/* <Juguetes onlyPromos={false} desdeInicio={true} /> */}
 
           </div>
         </div>
