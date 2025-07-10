@@ -1,5 +1,7 @@
 'use client'
 import React, { useState } from "react";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
+
 import { useCart } from "../components/solar/CartContext";
 const Domicilio = () => {
 //   const router = useRouter();
@@ -18,6 +20,7 @@ const Domicilio = () => {
     horaEspecifica: ""
   });
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -103,16 +106,17 @@ const Domicilio = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
+     <button
+          onClick={() => navigate(-1)}
+          className="flex items-center text-pink-600 hover:text-pink-800 mb-6 transition-colors"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          Volver
+        </button>
         <div className="text-center mb-10">
-          <button 
-            onClick={() => router.back()} 
-            className="flex items-center text-pink-600 hover:text-pink-700 mb-4"
-          >
-            <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Volver al carrito
-          </button>
+ 
           
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Solicitar Domicilio</h1>
           <p className="text-gray-600">Completa la información para recibir tu pedido</p>

@@ -59,7 +59,7 @@ const Inicio = ({ searchTerm }) => {
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
             <div className="absolute bottom-6 left-6 right-6 text-white">
               <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 drop-shadow-lg">
-                Bienvenida al Placer
+                Bienvenidos al Placer
               </h1>
               <p className="text-sm sm:text-base md:text-lg opacity-90 drop-shadow-md">
                 Descubre una experiencia única de sensualidad y elegancia

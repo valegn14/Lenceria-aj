@@ -13,11 +13,13 @@ import Combos from "./pages/Combos";
 import DetalleProducto from "./database/DetalleProducto";
 import { CartProvider } from './components/solar/CartContext';
 import Domicilio from "./pages/domicilio";
-
+import ScrollToTop from "./pages/ScrollToTop";
 function App() {
   return (
     <CartProvider>
       <Router>
+              <ScrollToTop />
+
         <Routes>
           <Route path="/" element={<Layout><Inicio /></Layout>} />
           <Route path="/promociones" element={<Layout><Promociones /></Layout>} />
