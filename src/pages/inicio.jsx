@@ -131,7 +131,7 @@ const Inicio = ({ searchTerm }) => {
           </h3>
           <div className="w-24 h-1 bg-gradient-to-r from-pink-400 to-purple-500 mx-auto"></div>
             </div>
-            <Card searchTerm={searchTerm} />
+            <Card  />
             {/* <Juguetes onlyPromos={false} desdeInicio={true} /> */}
 
           </div>
