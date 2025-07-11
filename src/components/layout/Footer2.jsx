@@ -13,7 +13,7 @@ export default function Footer2() {
 
                     {/* Enlaces rápidos */}
                     <div className="text-center sm:text-left">
-                        <h2 className="text-lg lg:text-xl font-semibold mb-4 lg:mb-6">Enlaces Rápidos</h2>
+                        <h2 className="text-lg lg:text-xl font-semibold mb-4 lg:mb-6">Navega</h2>
                         <ul className="space-y-3">
                             <li><a href="/lenceria" className="hover:text-pink-300 text-sm lg:text-base transition-colors">Lencería</a></li>
                             <li><a href="/juguetes" className="hover:text-pink-300 text-sm lg:text-base transition-colors">Juguetes</a></li>
@@ -22,23 +22,13 @@ export default function Footer2() {
                         </ul>
                     </div>
 
-                    {/* Ayuda */}
-                    {/* <div className="text-center sm:text-left">
-                        <h2 className="text-lg lg:text-xl font-semibold mb-4 lg:mb-6">Ayuda</h2>
-                        <ul className="space-y-3">
-                            <li><a href="#" className="hover:text-pink-300 text-sm lg:text-base transition-colors">Preguntas Frecuentes</a></li>
-                            <li><a href="#" className="hover:text-pink-300 text-sm lg:text-base transition-colors">Política de Devoluciones</a></li>
-                            <li><a href="#" className="hover:text-pink-300 text-sm lg:text-base transition-colors">Términos y Condiciones</a></li>
-                            <li><a href="#" className="hover:text-pink-300 text-sm lg:text-base transition-colors">Privacidad</a></li>
-                        </ul>
-                    </div> */}
 
                     {/* Contacto */}
                     <div className="text-center sm:text-left">
                         <h2 className="text-lg lg:text-xl font-semibold mb-4 lg:mb-6">Contáctanos</h2>
                         <ul className="space-y-3">
                             <li className="text-sm lg:text-base">Email: contacto@lenceriaaj.com</li>
-                            <li className="text-sm lg:text-base">Tel: +57 311 363 0754</li>
+                            <li className="text-sm lg:text-base">Tel: +57 324 5859853</li>
                             <li className="text-sm lg:text-base">Horario: Lun-Sáb 9AM-8PM</li>
                         </ul>
                         

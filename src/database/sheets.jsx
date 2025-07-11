@@ -212,3 +212,30 @@ export async function cargarLubricantesDesdeSheets() {
     throw error;
   }
 }
+export async function cargarPromocionesDesdeSheets() {
+  try {
+    const [lenceria, juguetes, lubricantes] = await Promise.all([
+      cargarLenceriaDesdeSheets(),
+      cargarJuguetesDesdeSheets(),
+      cargarLubricantesDesdeSheets()
+    ]);
+
+    // Filtrar productos con rebaja > 0
+    const conRebaja = (producto) => Number(producto.rebaja) > 0;
+
+    // Etiquetar la categoría si deseas mostrarla luego
+    const marcarCategoria = (productos, categoria) =>
+      productos.filter(conRebaja).map(p => ({ ...p, categoria }));
+
+    const promociones = [
+      ...marcarCategoria(lenceria, 'Lencería'),
+      ...marcarCategoria(juguetes, 'Juguetes'),
+      ...marcarCategoria(lubricantes, 'Lubricantes')
+    ];
+
+    return promociones;
+  } catch (error) {
+    console.error('Error al cargar promociones:', error);
+    throw error;
+  }
+}
