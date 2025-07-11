@@ -16,18 +16,33 @@ export default function SolarOverview({ open, setOpen }) {
   } = useCart();
   const navigate = useNavigate();
 
-  const generarMensajeWhatsApp = () => {
-    let mensaje = '🛍️ *Recogida en tienda:*%0A';
-    cartItems.forEach((item, index) => {
-      mensaje += `%0A${index + 1}. ${item.nombre}`;
-      if (item.selectedSize) mensaje += ` (Talla: ${item.selectedSize})`;
-      mensaje += `%0A   Cantidad: ${item.quantity}`;
-      mensaje += `%0A   Precio unitario: $${item.precio}`;
-      mensaje += `%0A   Subtotal: $${item.precio * item.quantity}%0A`;
-    });
-    mensaje += `%0A*Total:* $${cartTotal}`;
-    return `https://wa.me/573113630754?text=${mensaje}`;
-  };
+const generarMensajeWhatsApp = () => {
+  const lineas = [
+    '🛍️ *Pedido para recoger en tienda*',
+    ...cartItems.map(item => `➡️ ${item.nombre} (${item.quantity}x) $${item.precio * item.quantity}`),
+    `*Total: $${cartTotal}*`,`Dirección: Carrera 20 #27-33`,
+  ];
+  
+  // Une con %0A y codifica el resto
+  const textoParaCodificar = lineas.join('\n');
+  const textoCodificado = encodeURIComponent(textoParaCodificar)
+    .replace(/%0A/g, '%0A') // Asegura que los saltos de línea se mantengan
+    .replace(/%20/g, ' ');   // Opcional: reemplaza espacios codificados por espacios normales
+
+  return `https://wa.me/573113630754?text=${textoCodificado}`;
+};
+  // const generarMensajeWhatsApp = () => {
+  //   let mensaje = '🛍️ *Recogida en tienda:*%0A';
+  //   cartItems.forEach((item, index) => {
+  //     mensaje += `%0A${index + 1}. ${item.nombre}`;
+  //     if (item.selectedSize) mensaje += ` (Talla: ${item.selectedSize})`;
+  //     mensaje += `%0A   Cantidad: ${item.quantity}`;
+  //     mensaje += `%0A   Precio unitario: $${item.precio}`;
+  //     mensaje += `%0A   Subtotal: $${item.precio * item.quantity}%0A`;
+  //   });
+  //   mensaje += `%0A*Total:* $${cartTotal}`;
+  //   return `https://wa.me/573113630754?text=${mensaje}`;
+  // };
 
   const generarMensajeWhatsApp2 = () => {
     let mensaje = '🛒 *Hola quiero un domicilio:*%0A';

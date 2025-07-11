@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import banner from "./pinteres3.png";
-import Juguetes from "./juguetes"; // Asegúrate de ajustar esta ruta
-import Card from "../database/cards"; // Asegúrate de ajustar esta ruta
+import { cargarLenceriaDesdeSheets } from "../database/sheets";
+import Lenceria from "./lenceria"; // ajusta la ruta si es diferente
+import Juguetes from "./juguetes"; // ajusta la ruta si es diferente
+import { cargarJuguetesDesdeSheets, cargarLubricantesDesdeSheets } from "../database/sheets";
+import Lubricantes from "./lubricantes"; // ajusta la ruta si es diferente
 
 // Imágenes sensuales para categorías
 const lenceriaImg = "https://i.pinimg.com/736x/3e/9a/21/3e9a213fba360f4fefbe8b85e4f1be24.jpg";
@@ -41,10 +44,26 @@ const categories = [
   },
 ];
 
-
 const Inicio = ({ searchTerm }) => {
   const [hoveredCategory, setHoveredCategory] = useState(null);
-
+ const [productosLenceria, setProductosLenceria] = useState([]);
+  const [productosJuguetes, setProductosJuguetes] = useState([]);
+  const [productosLubricantes, setProductosLubricantes] = useState([]);
+  useEffect(() => {
+    const cargar = async () => {
+      try {
+        const data = await cargarLenceriaDesdeSheets();
+          const juguetes = await cargarJuguetesDesdeSheets();
+        const lubricantes = await cargarLubricantesDesdeSheets();
+        setProductosLenceria(data.slice(0, 4)); // Solo los primeros 4 productos
+        setProductosJuguetes(juguetes.slice(0, 4));
+        setProductosLubricantes(lubricantes.slice(0, 4));
+      } catch (error) {
+        console.error("Error al cargar productos de lencería:", error);
+      }
+    };
+    cargar();
+  }, []);
 
   return (
     <div className="w-full bg-gradient-to-b from-pink-50 to-purple-50 min-h-screen">
@@ -121,22 +140,52 @@ const Inicio = ({ searchTerm }) => {
         </div>
       </div>
 
+     {/* Sección Productos destacados */}
+      <div className="px-4 sm:px-6 lg:px-8 mb-16">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-8">
+            <h3 className="text-2xl sm:text-3xl md:text-4xl font-serif font-light text-gray-800 mb-4">
+              DESTACADOS
+            </h3>
+            <div className="w-24 h-1 bg-gradient-to-r from-pink-400 to-purple-500 mx-auto"></div>
+          </div>
 
-        {/* Productos destacados */}
-        <div className="px-4 sm:px-6 lg:px-8 mb-16">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center mb-8">
-          <h3 className="text-2xl sm:text-3xl md:text-4xl font-serif font-light text-gray-800 mb-4">
-            PRODUCTOS
-          </h3>
-          <div className="w-24 h-1 bg-gradient-to-r from-pink-400 to-purple-500 mx-auto"></div>
-            </div>
-            <Card  />
-            {/* <Juguetes onlyPromos={false} desdeInicio={true} /> */}
+        
 
+          {/* Juguetes */}
+<Juguetes productos={productosJuguetes} mostrarBotonVolver={false} searchTerm="" />
+          <div className="mt-6 text-center mb-10">
+            <Link
+              to="/juguetes"
+              className="inline-block bg-purple-600 text-white px-6 py-2 rounded-full text-sm sm:text-base font-medium shadow-md hover:bg-purple-700 transition"
+            >
+              Ver más juguetes
+            </Link>
+          </div>
+            {/* Lencería */}
+<Lenceria productos={productosLenceria} mostrarBotonVolver={false} searchTerm="" />
+          <div className="mt-6 text-center mb-10">
+            <Link
+              to="/lenceria"
+              className="inline-block bg-pink-600 text-white px-6 py-2 rounded-full text-sm sm:text-base font-medium shadow-md hover:bg-pink-700 transition"
+            >
+              Ver más lencería
+            </Link>
+          </div>
+
+          {/* Lubricantes */}
+<Lubricantes productos={productosLubricantes} mostrarBotonVolver={false} searchTerm="" />
+          <div className="mt-6 text-center">
+            <Link
+              to="/lubricantes"
+              className="inline-block bg-blue-600 text-white px-6 py-2 rounded-full text-sm sm:text-base font-medium shadow-md hover:bg-blue-700 transition"
+            >
+              Ver más lubricantes
+            </Link>
           </div>
         </div>
       </div>
+    </div>
   );
 };
 

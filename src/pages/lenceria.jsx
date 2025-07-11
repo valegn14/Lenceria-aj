@@ -12,7 +12,7 @@ const normalizarTexto = (texto) =>
 const slugify = (id, nombre) =>
   `${id}-${normalizarTexto(nombre).replace(/\s+/g, "-").replace(/[^\w\-]+/g, "")}`;
 
-const Lenceria = ({ onlyPromos = false, productos: propProductos, searchTerm = "" }) => {
+const Lenceria = ({ onlyPromos = false, productos: propProductos, searchTerm = "",mostrarBotonVolver = true }) => {
   const [productos, setProductos] = useState(propProductos || []);
   const [productosFiltrados, setProductosFiltrados] = useState([]);
   const [loading, setLoading] = useState(!propProductos);
@@ -42,13 +42,18 @@ const Lenceria = ({ onlyPromos = false, productos: propProductos, searchTerm = "
     cargar();
   }, [onlyPromos, propProductos]);
 
-  useEffect(() => {
-    const term = normalizarTexto(searchTerm);
-    const filtrados = productos.filter((producto) =>
-      normalizarTexto(producto.nombre).includes(term)
-    );
-    setProductosFiltrados(filtrados);
-  }, [searchTerm, productos]);
+useEffect(() => {
+  if (!searchTerm) {
+    setProductosFiltrados(productos);
+    return;
+  }
+
+  const term = normalizarTexto(searchTerm);
+  const filtrados = productos.filter((producto) =>
+    normalizarTexto(producto.nombre).includes(term)
+  );
+  setProductosFiltrados(filtrados);
+}, [searchTerm, productos]);
 
   if (loading)
     return (
@@ -69,16 +74,18 @@ const Lenceria = ({ onlyPromos = false, productos: propProductos, searchTerm = "
 
   return (
     <div className="w-full px-4 py-8">
-      <button
-        onClick={() => navigate(-1)}
-        className="flex items-center text-pink-600 hover:text-pink-800 mb-6 transition-colors"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-        </svg>
-        Volver
-      </button>
-      
+{mostrarBotonVolver !== false && (
+  <button
+    onClick={() => navigate(-1)}
+    className="flex items-center text-pink-600 hover:text-pink-800 mb-6 transition-colors"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+    </svg>
+    Volver
+  </button>
+)}
+
       {productosFiltrados.length === 0 ? (
         <div className="text-center py-16">
           <div className="mx-auto w-24 h-24 bg-pink-100 rounded-full flex items-center justify-center mb-6">
@@ -126,33 +133,87 @@ const Lenceria = ({ onlyPromos = false, productos: propProductos, searchTerm = "
                   )}
 
                   {producto.stock > 0 && (
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        addToCart({
-                          ...producto,
-                          quantity: 1,
-                          selectedSize: producto.selectedSize || null,
-                        });
-                      }}
-                      className="hidden md:flex absolute top-2 right-2 w-12 h-12 bg-white text-pink-600 border border-pink-600 rounded-full opacity-100 transition duration-300 hover:bg-pink-700 hover:text-white hover:scale-105 shadow-md items-center justify-center"
-                      aria-label="Agregar al carrito"
-                    >
-                      <svg 
-                        xmlns="http://www.w3.org/2000/svg" 
-                        className="h-6 w-6" 
-                        fill="none" 
-                        viewBox="0 0 24 24" 
-                        stroke="currentColor" 
-                        strokeWidth={2}
-                      >
-                        <path 
-                          strokeLinecap="round" 
-                          strokeLinejoin="round" 
-                          d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" 
-                        />
-                      </svg>
-                    </button>
+                 <button
+  onClick={(e) => {
+    e.stopPropagation();
+    addToCart({
+      ...producto,
+      quantity: 1,
+      selectedSize: producto.selectedSize || null,
+    });
+    
+    const button = e.currentTarget;
+    const originalContent = button.innerHTML;
+    
+    // Cambiar a icono de confirmación
+    button.innerHTML = `
+      <svg 
+        xmlns="http://www.w3.org/2000/svg" 
+        class="h-6 w-6" 
+        fill="none" 
+        viewBox="0 0 24 24" 
+        stroke="currentColor" 
+        strokeWidth="2"
+      >
+        <path 
+          strokeLinecap="round" 
+          strokeLinejoin="round" 
+          d="M5 13l4 4L19 7" 
+        />
+      </svg>
+    `;
+    
+    // Cambiar clases para estilo de confirmación
+    button.classList.remove(
+      'bg-white', 
+      'text-pink-600', 
+      'border-pink-600',
+      'hover:bg-pink-700',
+      'hover:text-white'
+    );
+    button.classList.add(
+      'bg-green-500',
+      'text-white',
+      'border-green-500',
+      'cursor-not-allowed'
+    );
+    
+    // Restaurar después de 2 segundos
+    setTimeout(() => {
+      button.innerHTML = originalContent;
+      button.classList.remove(
+        'bg-green-500',
+        'text-white',
+        'border-green-500',
+        'cursor-not-allowed'
+      );
+      button.classList.add(
+        'bg-white', 
+        'text-pink-600', 
+        'border-pink-600',
+        'hover:bg-pink-700',
+        'hover:text-white'
+      );
+    }, 2000);
+  }}
+  className="hidden md:flex absolute top-2 right-2 w-12 h-12 bg-white text-pink-600 border border-pink-600 rounded-full opacity-100 transition duration-300 hover:bg-pink-700 hover:text-white hover:scale-105 shadow-md items-center justify-center"
+  aria-label="Agregar al carrito"
+>
+  <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    className="h-6 w-6" 
+    fill="none" 
+    viewBox="0 0 24 24" 
+    stroke="currentColor" 
+    strokeWidth={2}
+  >
+    <path 
+      strokeLinecap="round" 
+      strokeLinejoin="round" 
+      d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" 
+    />
+  </svg>
+</button>
                   )}
                 </div>
               </div>
@@ -180,19 +241,36 @@ const Lenceria = ({ onlyPromos = false, productos: propProductos, searchTerm = "
                 </p>
 
                 {producto.stock > 0 ? (
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      addToCart({
-                        ...producto,
-                        quantity: 1,
-                        selectedSize: producto.selectedSize || null,
-                      });
-                    }}
-                    className="md:hidden w-full py-2 sm:py-3 bg-pink-700 text-white text-center text-sm sm:text-base font-medium rounded-lg hover:bg-pink-800 transition duration-200"
-                  >
-                    Agregar al carrito
-                  </button>
+                 <button
+  onClick={(e) => {
+    e.stopPropagation();
+    addToCart({ ...producto, quantity: 1 });
+    
+    const button = e.currentTarget;
+    const originalText = button.innerHTML;
+    
+    button.innerHTML = `
+      <span class="flex items-center justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+        Agregado
+      </span>
+    `;
+    
+    button.classList.remove('bg-pink-700', 'hover:bg-pink-800');
+    button.classList.add('bg-green-600', 'cursor-not-allowed');
+    
+    setTimeout(() => {
+      button.innerHTML = originalText;
+      button.classList.remove('bg-green-600', 'cursor-not-allowed');
+      button.classList.add('bg-pink-700', 'hover:bg-pink-800');
+    }, 2000);
+  }}
+  className="md:hidden w-full py-2 sm:py-3 bg-pink-700 text-white text-center text-sm sm:text-base font-medium rounded-lg hover:bg-pink-800 transition duration-200"
+>
+  Agregar al carrito
+</button>
                 ) : (
                   <button
                     disabled

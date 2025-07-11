@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { cargarCombosDesdeSheets } from "../database/sheets";
 import { useCart } from "../components/solar/CartContext";
@@ -20,12 +19,20 @@ const Combos = () => {
     cargarCombos();
   }, []);
 
-  const handleAddToCart = (e, combo) => {
+  const handleAddToCart = (e, combo, comboIndex) => {
     e.stopPropagation();
+    
+    // Generar nombre y seleccionar imagen
+    const comboName = `Combo #${combo.id || (comboIndex + 1)}`;
+    const comboImage = combo.imagenes[0]; // Primera imagen del combo
+
     addToCart({
       ...combo,
+      id: combo.id || `combo-${comboIndex}`, // Asegurar ID único
+      nombre: comboName,
+      imagen: comboImage,
       quantity: 1,
-      isCombo: true, // Agregamos esta propiedad para identificar que es un combo
+      isCombo: true,
     });
     
     // Feedback visual
@@ -92,7 +99,7 @@ const Combos = () => {
                       </p>
                     )}
                   </div>
-                  <div className="bg-gradient-to-r from-rose-500 to-fuchsia-500 text-white font-bold py-2 px-4 rounded-full text-xl shadow-md">
+                  <div className="bg-pink-600 text-white font-bold py-2 px-4 rounded-full text-xl shadow-md">
                     ${combo.precio}
                   </div>
                 </div>
@@ -145,7 +152,7 @@ const Combos = () => {
                 
                 {/* Botón de acción */}
                 <button 
-                  onClick={(e) => handleAddToCart(e, combo)}
+                  onClick={(e) => handleAddToCart(e, combo, comboIndex)}
                   className="w-full bg-gradient-to-r from-rose-500 to-fuchsia-500 hover:from-rose-600 hover:to-fuchsia-600 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-[1.02] shadow-md hover:shadow-lg flex items-center justify-center group"
                 >
                   <span>Agregar al carrito</span>
@@ -163,6 +170,7 @@ const Combos = () => {
 };
 
 export default Combos;
+
 // import React, { useEffect, useState } from "react";
 // import { cargarCombosDesdeSheets } from "../database/sheets";
 
