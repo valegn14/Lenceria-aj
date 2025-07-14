@@ -91,7 +91,7 @@ const Domicilio = () => {
     // Total
     mensaje += `\n*Total a pagar:* $${cartTotal}`;
 
-    return `https://wa.me/573113630754?text=${encodeURIComponent(mensaje)}`;
+    return `https://wa.me/573245859853?text=${encodeURIComponent(mensaje)}`;
   };
 
   const handleSubmit = (e) => {
@@ -415,7 +415,7 @@ const Domicilio = () => {
         </div>
         
         <div className="mt-8 text-center text-gray-600 text-sm">
-          <p>¿Necesitas ayuda? Llámanos al <a href="tel:+573113630754" className="text-pink-600 hover:underline">+57 311 363 0754</a></p>
+          <p>¿Necesitas ayuda? Llámanos al <a href="tel:+573245859853" className="text-pink-600 hover:underline">+57 311 363 0754</a></p>
           <p className="mt-1">Horario de atención: Lunes a Sábado 9am - 7pm</p>
         </div>
       </div>

@@ -145,7 +145,7 @@ const Inicio = ({ searchTerm }) => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-8">
             <h3 className="text-2xl sm:text-3xl md:text-4xl font-serif font-light text-gray-800 mb-4">
-              DESTACADOS
+              DESTACADOS 
             </h3>
             <div className="w-24 h-1 bg-gradient-to-r from-pink-400 to-purple-500 mx-auto"></div>
           </div>

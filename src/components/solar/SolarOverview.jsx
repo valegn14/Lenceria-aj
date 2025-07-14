@@ -29,20 +29,9 @@ const generarMensajeWhatsApp = () => {
     .replace(/%0A/g, '%0A') // Asegura que los saltos de línea se mantengan
     .replace(/%20/g, ' ');   // Opcional: reemplaza espacios codificados por espacios normales
 
-  return `https://wa.me/573113630754?text=${textoCodificado}`;
+  return `https://wa.me/573245859853?text=${textoCodificado}`;
 };
-  // const generarMensajeWhatsApp = () => {
-  //   let mensaje = '🛍️ *Recogida en tienda:*%0A';
-  //   cartItems.forEach((item, index) => {
-  //     mensaje += `%0A${index + 1}. ${item.nombre}`;
-  //     if (item.selectedSize) mensaje += ` (Talla: ${item.selectedSize})`;
-  //     mensaje += `%0A   Cantidad: ${item.quantity}`;
-  //     mensaje += `%0A   Precio unitario: $${item.precio}`;
-  //     mensaje += `%0A   Subtotal: $${item.precio * item.quantity}%0A`;
-  //   });
-  //   mensaje += `%0A*Total:* $${cartTotal}`;
-  //   return `https://wa.me/573113630754?text=${mensaje}`;
-  // };
+
 
   const generarMensajeWhatsApp2 = () => {
     let mensaje = '🛒 *Hola quiero un domicilio:*%0A';
@@ -54,7 +43,7 @@ const generarMensajeWhatsApp = () => {
       mensaje += `%0A   Subtotal: $${item.precio * item.quantity}%0A`;
     });
     mensaje += `%0A*Total:* $${cartTotal}`;
-    return `https://wa.me/573113630754?text=${mensaje}`;
+    return `https://wa.me/573245859853?text=${mensaje}`;
   };
 
   return (
@@ -67,10 +56,11 @@ const generarMensajeWhatsApp = () => {
         <div className="absolute inset-0 overflow-hidden">
           {/* Ajuste para móviles: ocupa toda la pantalla en móvil, sidebar en desktop */}
           <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-0 sm:pl-6 lg:pl-10">
-            <DialogPanel
-              transition
-              className="pointer-events-auto w-screen max-w-full sm:max-w-md lg:max-w-lg transform transition duration-500 ease-in-out data-closed:translate-x-full sm:duration-700"
-            >
+     <DialogPanel
+  transition
+  className="pointer-events-auto w-[90%] sm:w-full max-w-md sm:max-w-md lg:max-w-lg transform transition duration-500 ease-in-out data-closed:translate-x-full sm:duration-700"
+>
+
               <div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
                 {/* Header mejorado para móviles */}
                 <div className="flex-shrink-0 px-4 sm:px-6 py-4 sm:py-6 bg-gradient-to-r from-pink-50 to-purple-50 border-b border-pink-200">
@@ -219,7 +209,7 @@ const generarMensajeWhatsApp = () => {
     setOpen(false);     // Opcional: cierra el carrito antes de redirigir
     navigate('/domicilio');
   }}
-  className="flex items-center justify-center rounded-xl border border-transparent bg-pink-600 px-4 py-4 sm:py-3 text-base sm:text-sm font-medium text-white shadow-lg hover:bg-pink-700 transition-colors w-full"
+  className="flex items-center justify-center rounded-xl border border-transparent bg-[#BC6E87] px-4 py-4 sm:py-3 text-base sm:text-sm font-medium text-white shadow-lg hover:bg-pink-700 transition-colors w-full"
 >
   {/* Icono de casita */}
   <svg className="w-5 h-5 sm:w-4 sm:h-4 mr-2 sm:mr-1.5" fill="currentColor" viewBox="0 0 24 24">
@@ -233,14 +223,14 @@ const generarMensajeWhatsApp = () => {
         href={generarMensajeWhatsApp()}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center justify-center rounded-xl border-2 border-green-500 bg-green-500 px-4 py-4 sm:py-3 text-base sm:text-sm font-medium text-white shadow-lg hover:bg-green-600 transition-colors w-full"
+        className="flex items-center justify-center rounded-xl border border-transparent bg-[#BC6E87] px-4 py-4 sm:py-3 text-base sm:text-sm font-medium text-white shadow-lg hover:bg-pink-700 transition-colors w-full"
       >
-        {/* Icono de tienda */}
-        <svg className="w-5 h-5 sm:w-4 sm:h-4 mr-2 sm:mr-1.5" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3zm5 13h-2v2h2v-2zm0-2h-2v2h2v-2z"/>
-          <path d="M7 14h2v6H7v-6zm8-1h2v7h-2v-7zM7 12h2v2H7v-2z"/>
-        </svg>
-        <span className="text-sm sm:text-xs">Recoger en tienda</span>
+       {/* Icono de ubicación */}
+<svg className="w-5 h-5 sm:w-4 sm:h-4 mr-2 sm:mr-1.5" fill="currentColor" viewBox="0 0 24 24">
+  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z" />
+</svg>
+<span className="text-sm sm:text-xs">Recoger en tienda</span>
+
       </a>
     </div>
     
