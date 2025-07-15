@@ -58,7 +58,9 @@ const generarMensajeWhatsApp = () => {
           <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-0 sm:pl-6 lg:pl-10">
      <DialogPanel
   transition
-  className="pointer-events-auto w-[90%] sm:w-full max-w-md sm:max-w-md lg:max-w-lg transform transition duration-500 ease-in-out data-closed:translate-x-full sm:duration-700"
+                className="pointer-events-auto w-screen max-w-full sm:max-w-md lg:max-w-lg transform transition duration-500 ease-in-out data-closed:translate-x-full sm:duration-700"
+
+  // className="pointer-events-auto w-[90%] sm:w-full max-w-md sm:max-w-md lg:max-w-lg transform transition duration-500 ease-in-out data-closed:translate-x-full sm:duration-700"
 >
 
               <div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">

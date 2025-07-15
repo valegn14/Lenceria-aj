@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import banner from "./pinteres3.png";
+import banner from "../assets/pinteres3.png";
 import { cargarLenceriaDesdeSheets } from "../database/sheets";
 import Lenceria from "./lenceria"; // ajusta la ruta si es diferente
 import Juguetes from "./juguetes"; // ajusta la ruta si es diferente
