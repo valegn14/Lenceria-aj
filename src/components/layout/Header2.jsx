@@ -4,6 +4,15 @@ import SolarOverview from "../solar/SolarOverview";
 import logo from "/public/logo_lenceria.png";
 import { useCart } from "../solar/CartContext";
 
+import IconJ from "./juguete.png";
+import IconV from './ubicacion.png';
+import IconPromo from './promo.png';
+import IconCombos from './combo.png';
+import IconLenceria from './lenceria.png';
+import IconLubricantes from './lubricante.png';
+import IconCart from './carrito.png';
+
+
 function Brand() {
   return (
     <Link to="/" className="flex items-center space-x-2 flex-shrink-0">
@@ -85,13 +94,15 @@ const CartIcon = ({ itemCount }) => (
 );
 
 const menuLinks = [
-  { to: "/Juega", label: "Juega", icon: "🎲" },
-  { to: "/Promociones", label: "Promociones", icon: "🎁" },
-  { to: "/Combos", label: "Combos", icon: "🔥" },
-  { to: "/lenceria", label: "Lencería", icon: "👙" },
-  { to: "/juguetes", label: "Juguetes", icon: "🎀" },
-  { to: "/lubricantes", label: "Lubricantes", icon: "💧" },
+    { to: "/juguetes", label: "Juguetes", icon: IconJ },
+  { to: "/lubricantes", label: "Lubricantes", icon: IconLubricantes },
+  { to: "/lenceria", label: "Lencería", icon: IconLenceria },
+
+  { to: "/Promociones", label: "Promociones", icon: IconPromo },
+  { to: "/Combos", label: "Combos", icon: IconCombos },
+  { to: "/Visitanos", label: "Visitanos", icon: IconV },
 ];
+
 
 function SideMenu({ isOpen, onClose, onCartClick, cartCount }) {
   useEffect(() => {
@@ -156,9 +167,12 @@ function SideMenu({ isOpen, onClose, onCartClick, cartCount }) {
                 onClick={onClose}
                 className="flex items-center py-4 px-4 hover:bg-pink-100 rounded-xl transition-all duration-200 group"
               >
-                <span className="text-2xl mr-4 group-hover:scale-110 transition-transform">
-                  {icon}
-                </span>
+               <img
+  src={icon}
+  alt={label}
+  className="w-7 h-7 mr-4 group-hover:scale-110 transition-transform"
+/>
+
                 <span className="font-medium text-lg tracking-wider group-hover:text-pink-700">
                   {label}
                 </span>
@@ -174,9 +188,12 @@ function SideMenu({ isOpen, onClose, onCartClick, cartCount }) {
               }}
               className="flex items-center w-full py-4 px-4 hover:bg-pink-100 rounded-xl transition-all duration-200 group"
             >
-              <span className="text-2xl mr-4 group-hover:scale-110 transition-transform">
-                🛒
-              </span>
+             <img
+  src={IconCart}
+  alt="Carrito"
+  className="w-7 h-7 mr-4 group-hover:scale-110 transition-transform"
+/>
+
               <span className="font-medium text-lg tracking-wider group-hover:text-pink-700 flex-1 text-left">
                 Carrito
               </span>
