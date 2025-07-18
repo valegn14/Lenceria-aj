@@ -45,21 +45,26 @@ const categories = [
 ];
 
 const Inicio = ({ searchTerm }) => {
-  const [hoveredCategory, setHoveredCategory] = useState(null);
- const [productosLenceria, setProductosLenceria] = useState([]);
+  const [productosLenceria, setProductosLenceria] = useState([]);
   const [productosJuguetes, setProductosJuguetes] = useState([]);
   const [productosLubricantes, setProductosLubricantes] = useState([]);
+  const [loadingProductos, setLoadingProductos] = useState(true);
+
   useEffect(() => {
     const cargar = async () => {
       try {
-        const data = await cargarLenceriaDesdeSheets();
-          const juguetes = await cargarJuguetesDesdeSheets();
-        const lubricantes = await cargarLubricantesDesdeSheets();
-        setProductosLenceria(data.slice(0, 4)); // Solo los primeros 4 productos
+        const [lice, juguetes, lubricantes] = await Promise.all([
+          cargarLenceriaDesdeSheets(),
+          cargarJuguetesDesdeSheets(),
+          cargarLubricantesDesdeSheets()
+        ]);
+        setProductosLenceria(lice.slice(0, 4)); // Solo los primeros 4 productos
         setProductosJuguetes(juguetes.slice(0, 4));
         setProductosLubricantes(lubricantes.slice(0, 4));
       } catch (error) {
-        console.error("Error al cargar productos de lencería:", error);
+        console.error("Error al cargar productos:", error);
+      } finally {
+        setLoadingProductos(false);
       }
     };
     cargar();
@@ -70,7 +75,7 @@ const Inicio = ({ searchTerm }) => {
       {/* Hero Banner */}
       <div className="w-full sm:px-6 lg:px-8 mb-8">
         <div className="max-w-7xl mx-auto">
-          <div className="relative w-full h-48 sm:h-64 md:h-80 lg:h-96 overflow-hidden  shadow-xl">
+          <div className="relative w-full h-48 sm:h-64 md:h-80 lg:h-96 overflow-hidden shadow-xl">
             <img
               src={banner}
               alt="Banner de inicio"
@@ -100,13 +105,11 @@ const Inicio = ({ searchTerm }) => {
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-            {categories.map((cat, idx) => (
+            {categories.map((cat) => (
               <Link
                 to={cat.route}
                 key={cat.name}
                 className="group relative overflow-hidden rounded-2xl shadow-lg transform transition-all duration-500 hover:shadow-2xl hover:-translate-y-2"
-                onMouseEnter={() => setHoveredCategory(idx)}
-                onMouseLeave={() => setHoveredCategory(null)}
               >
                 <div className="relative h-40 sm:h-56 lg:h-56 w-full">
                   <img
@@ -114,12 +117,11 @@ const Inicio = ({ searchTerm }) => {
                     alt={cat.name}
                     className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
                   />
-                  <div className={`absolute inset-0 bg-gradient-to-b ${cat.color} opacity-70 group-hover:opacity-80 transition-opacity duration-500`}></div>
+                  <div className={`absolute inset-0 bg-gradient-to-b ${cat.color} opacity-70 group-hover:opacity-80 transition-opacity duration-500`} />
                   <div className="absolute top-4 right-4 w-12 h-12 rounded-full border-2 border-white/30 flex items-center justify-center transform transition-transform duration-700 group-hover:rotate-45">
-                    <div className="w-6 h-6 rounded-full border border-white/40"></div>
+                    <div className="w-6 h-6 rounded-full border border-white/40" />
                   </div>
                 </div>
-
                 <div className="absolute inset-0 flex flex-col justify-end p-6 text-white">
                   <h3 className="text-lg sm:text-xl font-serif font-light mb-2 transform transition-transform duration-500 group-hover:translate-y-0">
                     {cat.name}
@@ -140,49 +142,57 @@ const Inicio = ({ searchTerm }) => {
         </div>
       </div>
 
-     {/* Sección Productos destacados */}
+      {/* Sección Productos destacados */}
       <div className="px-4 sm:px-6 lg:px-8 mb-16">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-8">
             <h3 className="text-2xl sm:text-3xl md:text-4xl font-serif font-light text-gray-800 mb-4">
-              DESTACADOS 
+              DESTACADOS
             </h3>
             <div className="w-24 h-1 bg-gradient-to-r from-pink-400 to-purple-500 mx-auto"></div>
           </div>
 
-        
-
-          {/* Juguetes */}
-<Juguetes productos={productosJuguetes} mostrarBotonVolver={false} searchTerm="" />
-          <div className="mt-6 text-center mb-10">
-            <Link
-              to="/juguetes"
-              className="inline-block bg-purple-600 text-white px-6 py-2 rounded-full text-sm sm:text-base font-medium shadow-md hover:bg-purple-700 transition"
-            >
-              Ver más juguetes
-            </Link>
-          </div>
-            {/* Lencería */}
-<Lenceria productos={productosLenceria} mostrarBotonVolver={false} searchTerm="" />
-          <div className="mt-6 text-center mb-10">
-            <Link
-              to="/lenceria"
-              className="inline-block bg-pink-600 text-white px-6 py-2 rounded-full text-sm sm:text-base font-medium shadow-md hover:bg-pink-700 transition"
-            >
-              Ver más lencería
-            </Link>
-          </div>
-
-          {/* Lubricantes */}
-<Lubricantes productos={productosLubricantes} mostrarBotonVolver={false} searchTerm="" />
-          <div className="mt-6 text-center">
-            <Link
-              to="/lubricantes"
-              className="inline-block bg-blue-600 text-white px-6 py-2 rounded-full text-sm sm:text-base font-medium shadow-md hover:bg-blue-700 transition"
-            >
-              Ver más lubricantes
-            </Link>
-          </div>
+          {loadingProductos ? (
+            <div className="min-h-[50vh] flex items-center justify-center px-4">
+              <div className="text-center">
+                <div className="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-fuchsia-500 mb-6"></div>
+                <p className="text-lg sm:text-xl text-gray-900">Descubriendo tus placeres...</p>
+              </div>
+            </div>
+          ) : (
+            <>
+              {/* Juguetes */}
+              <Juguetes productos={productosJuguetes} mostrarBotonVolver={false} searchTerm="" />
+              <div className="mt-6 text-center mb-10">
+                <Link
+                  to="/juguetes"
+                  className="inline-block bg-purple-600 text-white px-6 py-2 rounded-full text-sm sm:text-base font-medium shadow-md hover:bg-purple-700 transition"
+                >
+                  Ver más juguetes
+                </Link>
+              </div>
+              {/* Lencería */}
+              <Lenceria productos={productosLenceria} mostrarBotonVolver={false} searchTerm="" />
+              <div className="mt-6 text-center mb-10">
+                <Link
+                  to="/lenceria"
+                  className="inline-block bg-pink-600 text-white px-6 py-2 rounded-full text-sm sm:text-base font-medium shadow-md hover:bg-pink-700 transition"
+                >
+                  Ver más lencería
+                </Link>
+              </div>
+              {/* Lubricantes */}
+              <Lubricantes productos={productosLubricantes} mostrarBotonVolver={false} searchTerm="" />
+              <div className="mt-6 text-center">
+                <Link
+                  to="/lubricantes"
+                  className="inline-block bg-blue-600 text-white px-6 py-2 rounded-full text-sm sm:text-base font-medium shadow-md hover:bg-blue-700 transition"
+                >
+                  Ver más lubricantes
+                </Link>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

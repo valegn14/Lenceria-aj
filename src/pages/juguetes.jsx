@@ -12,13 +12,14 @@ const slugify = (id, nombre) =>
 const Juguetes = ({ onlyPromos = false, productos: propProductos, searchTerm = "", mostrarBotonVolver = true  }) => {
   const [productos, setProductos] = useState(propProductos || []);
   const [productosFiltrados, setProductosFiltrados] = useState([]);
-  const [loading, setLoading] = useState(!propProductos);
-  const [error, setError] = useState(null);
+ const [loading, setLoading] = useState(
+    !propProductos || propProductos.length === 0
+  );  const [error, setError] = useState(null);
   const navigate = useNavigate();
   const { addToCart } = useCart();
 
   useEffect(() => {
-    if (propProductos) {
+    if (propProductos && propProductos.length > 0) {
       setProductos(propProductos);
       setLoading(false);
       return;
@@ -39,7 +40,7 @@ const Juguetes = ({ onlyPromos = false, productos: propProductos, searchTerm = "
     };
 
     cargar();
-  }, [onlyPromos, propProductos]);
+  }, [ propProductos]);
 
   useEffect(() => {
     const term = normalizarTexto(searchTerm);
