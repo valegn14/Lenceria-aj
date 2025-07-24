@@ -100,7 +100,19 @@ const generarMensajeWhatsApp = () => {
                           </svg>
                         </div>
                         <h3 className="text-xl sm:text-2xl font-medium text-gray-900 mb-3">Tu carrito está vacío</h3>
-                        <p className="text-base sm:text-lg text-gray-500">Agrega algunos productos para comenzar</p>
+                        
+<button
+  onClick={() => {
+    setOpen(false); // Opcional: cierra el modal del carrito
+    navigate('/');  // Redirige al inicio
+  }}
+  className="bg-pink-600 hover:bg-pink-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-300"
+>
+  Explorar productos
+</button>
+                        {/* <p className="text-base sm:text-lg text-gray-500">Agrega algunos productos para comenzar</p> */}
+
+
                       </div>
                     ) : (
                       <ul role="list" className="-my-4 sm:-my-6 divide-y divide-gray-200">

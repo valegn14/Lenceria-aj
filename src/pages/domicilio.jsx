@@ -363,6 +363,20 @@ const Domicilio = () => {
                             Transferencia bancaria
                           </label>
                         </div>
+                         <div className="flex items-center">
+                          <input
+                            type="radio"
+                            id="Sistecredito"
+                            name="metodoPago"
+                            value="Crédito"
+                            checked={formData.metodoPago === "Crédito"}
+                            onChange={handleChange}
+                            className="h-4 w-4 text-pink-600 focus:ring-pink-500 border-gray-300"
+                          />
+                          <label htmlFor="Sistecredito" className="ml-3 block text-sm font-medium text-gray-700">
+                            Crédito
+                          </label>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -415,7 +429,7 @@ const Domicilio = () => {
         </div>
         
         <div className="mt-8 text-center text-gray-600 text-sm">
-          <p>¿Necesitas ayuda? Llámanos al <a href="tel:+573245859853" className="text-pink-600 hover:underline">+57 311 363 0754</a></p>
+          <p>¿Necesitas ayuda? Llámanos al <a href="tel:+573245859853" className="text-pink-600 hover:underline">3245859853</a></p>
           <p className="mt-1">Horario de atención: Lunes a Sábado 9am - 7pm</p>
         </div>
       </div>
