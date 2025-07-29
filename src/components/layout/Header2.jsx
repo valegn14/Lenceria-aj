@@ -99,8 +99,9 @@ const menuLinks = [
   { to: "/lubricantes", label: "Lubricantes", icon: IconLubricantes },
   { to: "/lenceria", label: "Lencería", icon: IconLenceria },
   { to: "/Promociones", label: "Promociones", icon: IconPromo },
-  { to: "/Combos", label: "Combos", icon: IconCombos },
-  { to: "/Visitanos", label: "Visitanos", icon: IconV },
+  { to: "/Combos", label: "Combos", icon: IconCombos }
+  // ,
+  // { to: "/Visitanos", label: "Visitanos", icon: IconV },
 ];
 
 function SideMenu({ isOpen, onClose, onCartClick, cartCount }) {
