@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import SolarOverview from "../solar/SolarOverview";
+import SolarOverview from "../solar/carrito";
 import logo from "/public/logo_lenceria.png";
 import { useCart } from "../solar/CartContext";
 
@@ -167,7 +167,7 @@ function SideMenu({ isOpen, onClose, onCartClick, cartCount }) {
                 onClick={onClose}
                 className="flex items-center py-4 px-4 hover:bg-pink-100 rounded-xl transition-all duration-200 group"
               >
-               <img
+                <img
                   src={icon}
                   alt={label}
                   className="w-7 h-7 mr-4 group-hover:scale-110 transition-transform"
@@ -188,7 +188,7 @@ function SideMenu({ isOpen, onClose, onCartClick, cartCount }) {
               }}
               className="flex items-center w-full py-4 px-4 hover:bg-pink-100 rounded-xl transition-all duration-200 group"
             >
-             <img
+              <img
                 src={IconCart}
                 alt="Carrito"
                 className="w-7 h-7 mr-4 group-hover:scale-110 transition-transform"
@@ -210,10 +210,10 @@ function SideMenu({ isOpen, onClose, onCartClick, cartCount }) {
   );
 }
 
-export default function Header({ setSearchTerm }) {
+export default function Header({ setSearchTerm, setShowMobileSearch }) {
+  const [page, setpage] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showCart, setShowCart] = useState(false);
-  const [showMobileSearch, setShowMobileSearch] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   const { cartItems } = useCart();
@@ -230,11 +230,10 @@ export default function Header({ setSearchTerm }) {
   return (
     <>
       <header
-        className={`fixed w-full top-0 left-0 z-40 transition-all duration-300 ${
-          scrolled
-            ? "bg-white/95 backdrop-blur-md shadow-lg py-2"
-            : "bg-gradient-to-r from-pink-50 to-purple-50 py-3 md:py-4"
-        }`}
+        className={`fixed w-full top-0 left-0 z-40 transition-all duration-300 ${scrolled
+          ? "bg-white/95 backdrop-blur-md shadow-lg py-2"
+          : "bg-gradient-to-r from-pink-50 to-purple-50 py-3 md:py-4"
+          }`}
       >
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
@@ -271,22 +270,26 @@ export default function Header({ setSearchTerm }) {
                 </ul>
               </nav>
             </div>
-
-            {/* Barra de búsqueda para PC */}
-            {/* <div className="hidden md:flex flex-1 max-w-md mx-4">
-              <input
-                type="text"
-                placeholder="🔍 Buscar productos..."
-                className="w-full p-2 border border-pink-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div> */}
-
-            {/* Right side icons */}
+            {/* ----------------------------------------------------------------------------- */}
+            {/* buscador */}
+            {page && (
+              <div className="hidden lg:block  py-2 ">
+                <input
+                  type="text"
+                  placeholder="Buscar productos..."
+                  className="w-full p-3 border border-pink-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  autoFocus
+                />
+              </div>
+            )}
             <div className="flex items-center space-x-2">
               {/* Search icon - mobile */}
-              <div className="md:hidden">
-                <SearchIcon onClick={() => setShowMobileSearch(!showMobileSearch)} />
+              <div>
+                <SearchIcon onClick={() => {
+                  setpage(!page);
+                  setShowMobileSearch(page);
+                }} />
               </div>
 
               {/* Cart button */}
@@ -299,9 +302,8 @@ export default function Header({ setSearchTerm }) {
               </button>
             </div>
           </div>
-
           {/* Mobile search - aparece al hacer click en la lupa */}
-          {showMobileSearch && (
+          {page && (
             <div className="md:hidden py-2">
               <input
                 type="text"
@@ -316,7 +318,7 @@ export default function Header({ setSearchTerm }) {
       </header>
 
       {/*  Spacer for fixed header */}
-      <div className={`h-16 ${showMobileSearch ? 'md:h-16' : 'md:h-20'} ${scrolled ? '!md:h-16' : ''}`}></div>
+      <div className={`h-16 ${page ? 'md:h-16' : 'md:h-20'} ${scrolled ? '!md:h-16' : ''}`}></div>
 
       {/* Side Menu */}
       <SideMenu

@@ -59,7 +59,7 @@ const InstagramEmbed = ({ html }) => {
   );
 };
 
-const Inicio = ({ searchTerm }) => {
+const Inicio = ({ showMobileSearch }) => {
   const [productosLenceria, setProductosLenceria]   = useState([]);
   const [productosJuguetes, setProductosJuguetes]   = useState([]);
   const [productosLubricantes, setProductosLubricantes] = useState([]);
@@ -101,6 +101,8 @@ const Inicio = ({ searchTerm }) => {
 
 
   return (
+    <>
+     {showMobileSearch ? (
     <div className="w-full bg-gradient-to-b from-pink-50 to-purple-50 min-h-screen">
       {/* Hero Banner */}
 <div className="w-full mb-8">
@@ -227,6 +229,13 @@ const Inicio = ({ searchTerm }) => {
         </div>
       </div>
     </div>
+    ):(
+      <>
+      <div className= "w-screen h-screen">hola</div>
+      <div>hola</div>
+      </>
+    )}
+    </>
   );
 };
 
