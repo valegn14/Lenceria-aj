@@ -11,6 +11,7 @@ import Lenceria from "./pages/lenceria";
 import Lubricantes from "./pages/lubricantes";
 import Contacto from "./pages/contacto";
 import Combos from "./pages/Combos";
+import Visitanos from "./pages/visitanos";
 import DetalleProducto from "./database/DetalleProducto";
 import { CartProvider } from './components/solar/CartContext';
 import Domicilio from "./pages/domicilio";
@@ -27,7 +28,7 @@ function App() {
           <Route path="/contacto" element={<Layout><Contacto /></Layout>} />
           <Route path="/juega" element={<Layout><Juega /></Layout>} />
           <Route path="/combos" element={<Layout><Combos /></Layout>} />
-          <Route path="/filtroInicio" element={<Layout><FiltroInicio /></Layout>} />
+          <Route path="/Visitanos" element={<Layout><Visitanos /></Layout>} />
           <Route path="/juguetes" element={<Layout><Juguetes /></Layout>} />
           <Route path="/lenceria" element={<Layout><Lenceria /></Layout>} />
           <Route path="/lubricantes" element={<Layout><Lubricantes /></Layout>} />

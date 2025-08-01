@@ -99,9 +99,8 @@ const menuLinks = [
   { to: "/lubricantes", label: "Lubricantes", icon: IconLubricantes },
   { to: "/lenceria", label: "Lencería", icon: IconLenceria },
   { to: "/Promociones", label: "Promociones", icon: IconPromo },
-  { to: "/Combos", label: "Combos", icon: IconCombos }
-  // ,
-  // { to: "/Visitanos", label: "Visitanos", icon: IconV },
+  { to: "/Combos", label: "Combos", icon: IconCombos },
+  { to: "/Visitanos", label: "Visitanos", icon: IconV },
 ];
 
 function SideMenu({ isOpen, onClose, onCartClick, cartCount }) {
@@ -172,7 +171,6 @@ function SideMenu({ isOpen, onClose, onCartClick, cartCount }) {
                   alt={label}
                   className="w-7 h-7 mr-4 group-hover:scale-110 transition-transform"
                 />
-
                 <span className="font-medium text-lg tracking-wider group-hover:text-pink-700">
                   {label}
                 </span>
@@ -255,9 +253,7 @@ export default function Header({ setSearchTerm, setShowMobileSearch }) {
               {/* Enlaces de navegación - solo en PC */}
               <nav className="hidden md:flex items-center md:ml-16"> {/* Reducido margen izquierdo */}
                 <ul className="flex space-x-9"> {/* Aumentado espacio entre enlaces */}
-                  {menuLinks
-                    .filter(link => link.label !== "Visitanos")
-                    .map(({ to, label }) => (
+                  {menuLinks.map(({ to, label }) => (
                       <li key={to}>
                         <Link
                           to={to}

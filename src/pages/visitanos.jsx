@@ -1,4 +1,28 @@
 import React from "react";
+import { useEffect } from "react";
+
+function Mapa() {
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyASPV_Kiudq4V1bk9GYZp6cALGZyPttIew&callback=initMap`;
+    script.async = true;
+    script.defer = true;
+    document.body.appendChild(script);
+
+    window.initMap = () => {
+      new window.google.maps.Map(document.getElementById("map"), {
+        center: { lat: 5.0693383156345755,  lng: -75.51413961785336 },
+        zoom: 20,
+      });
+    };
+  }, []);
+
+  return (
+    <div>
+      <div id="map" style={{ height: "400px", width: "100%" }}></div>
+    </div>
+  );
+}
 
 const Visitanos = () => {
     return (
@@ -20,6 +44,7 @@ const Visitanos = () => {
                 <p className='text-lg text-gray-700'>
                     ¡Estamos para ayudarte! No dudes en comunicarte con nosotros.
                 </p>
+                <Mapa/>
             </div>
         </div>
     );
