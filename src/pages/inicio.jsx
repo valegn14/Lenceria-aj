@@ -6,6 +6,7 @@ import { cargarLenceriaDesdeSheets, cargarJuguetesDesdeSheets, cargarLubricantes
 import Lenceria from "./lenceria";
 import Juguetes from "./juguetes";
 import Lubricantes from "./lubricantes";
+import FiltroInicio from "./filtroInicio";
 
 // Definición de categorías (no olvides esto)
 const categories = [
@@ -59,7 +60,7 @@ const InstagramEmbed = ({ html }) => {
   );
 };
 
-const Inicio = ({ showMobileSearch }) => {
+const Inicio = ({ searchTerm, showMobileSearch }) => {
   const [productosLenceria, setProductosLenceria]   = useState([]);
   const [productosJuguetes, setProductosJuguetes]   = useState([]);
   const [productosLubricantes, setProductosLubricantes] = useState([]);
@@ -230,10 +231,7 @@ const Inicio = ({ showMobileSearch }) => {
       </div>
     </div>
     ):(
-      <>
-      <div className= "w-screen h-screen">hola</div>
-      <div>hola</div>
-      </>
+      <FiltroInicio searchTerm={searchTerm}/>
     )}
     </>
   );

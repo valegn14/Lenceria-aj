@@ -289,6 +289,7 @@ export default function Header({ setSearchTerm, setShowMobileSearch }) {
                 <SearchIcon onClick={() => {
                   setpage(!page);
                   setShowMobileSearch(page);
+                  setSearchTerm("");
                 }} />
               </div>
 

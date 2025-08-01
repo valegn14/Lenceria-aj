@@ -5,6 +5,7 @@ import Layout from "./components/layout/Layout";
 import Promociones from "./pages/promociones";
 import Inicio from "./pages/inicio";
 import Juega from "./pages/juega";
+import FiltroInicio from "./pages/filtroInicio";
 import Juguetes from "./pages/juguetes";
 import Lenceria from "./pages/lenceria";
 import Lubricantes from "./pages/lubricantes";
@@ -26,6 +27,7 @@ function App() {
           <Route path="/contacto" element={<Layout><Contacto /></Layout>} />
           <Route path="/juega" element={<Layout><Juega /></Layout>} />
           <Route path="/combos" element={<Layout><Combos /></Layout>} />
+          <Route path="/filtroInicio" element={<Layout><FiltroInicio /></Layout>} />
           <Route path="/juguetes" element={<Layout><Juguetes /></Layout>} />
           <Route path="/lenceria" element={<Layout><Lenceria /></Layout>} />
           <Route path="/lubricantes" element={<Layout><Lubricantes /></Layout>} />

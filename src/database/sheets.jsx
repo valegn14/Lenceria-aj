@@ -28,7 +28,7 @@ async function injectGapiScript() {
     };
 
     const existingScript = document.querySelector('script[src*="apis.google.com/js/api.js"]');
-    
+
     if (existingScript) {
       // Script ya existe: verificar periódicamente
       checkGapi();
@@ -82,44 +82,12 @@ async function leerRango(range) {
   return response.result.values || [];
 }
 
-/**
+/*
  * Convierte URLs de Drive a links embed.
  */
 function convertirLinkDrive(url) {
   const match = url.match(/\/file\/d\/(.*?)\//);
   return match ? `https://drive.google.com/uc?export=view&id=${match[1]}` : url;
-}
-
-const HOJAS = [
-  { nombre: 'Hoja1', rango: 'Lubricantes!A:F' },
-  { nombre: 'Hoja2', rango: 'Juguetes!A:F' },
-  { nombre: 'Hoja3', rango: 'Lenceria!A:F' }
-];
-
-export async function cargarProductosDesdeSheets() { //Exporta una función asíncrona que obtendrá datos desde Google Sheets.
-  try {
-    let todosLosDatos = [];
-
-    for (const rango of HOJAS) {
-      const values = await leerRango(rango.rango);
-      if (values.length <= 1) continue;
-//slice ignorael encabezado de la hoja de datos
-      const datos = values.slice(1).map(row => ({
-        id: row[0] || '',
-        nombre: row[1] || '',
-        precio: row[2] || '',
-        rebaja: row[3] || '',
-        descripcion: row[4] || '',
-        imagen: convertirLinkDrive(row[5] || ''),
-      }));
-      todosLosDatos.push(...datos);
-    }
-    todosLosDatos.sort((a, b) => a.nombre.localeCompare(b.nombre));
-    return todosLosDatos;
-  } catch (error) { //si hay error, mostrar en consola
-    console.error("Error al cargar datos:", error);
-    return [];
-  }
 }
 
 // Funciones específicas de carga:
@@ -135,7 +103,6 @@ export async function cargarDatosJuegoDesdeSheets() {
     throw error;
   }
 }
-
 export async function cargarCombosDesdeSheets() {
   try {
     const values = await leerRango('Combos!A:E');
@@ -154,6 +121,38 @@ export async function cargarCombosDesdeSheets() {
   }
 }
 
+const HOJAS = [
+  { nombre: 'Hoja1', rango: 'Lubricantes!A:G' },
+  { nombre: 'Hoja2', rango: 'Juguetes!A:G' },
+  { nombre: 'Hoja3', rango: 'Lenceria!A:G' }
+];
+export async function cargarProductosDesdeSheets() { //Exporta una función asíncrona que obtendrá datos desde Google Sheets.
+  try {
+    let todosLosDatos = [];
+
+    for (const rango of HOJAS) {
+      const values = await leerRango(rango.rango);
+      if (values.length <= 1) return [];
+      //slice ignorael encabezado de la hoja de datos
+      const datos = values.slice(1).map(row => ({
+        id: row[0] || '',
+        nombre: row[1] || '',
+        precio: row[2] || '',
+        rebaja: row[3] || '',
+        descripcion: row[4] || '',
+        imagen: convertirLinkDrive(row[5] || ''),
+        stock: Number(row[6]) || 0
+      }));
+      todosLosDatos.push(...datos);
+    }
+    todosLosDatos.sort((a, b) => a.nombre.localeCompare(b.nombre));
+    return todosLosDatos;
+  } catch (error) { //si hay error, mostrar en consola
+    console.log("Error al cargar datos:", error);
+    return [];
+  }
+}
+
 export async function cargarJuguetesDesdeSheets() {
   try {
     const values = await leerRango('Juguetes!A:G');
@@ -165,7 +164,7 @@ export async function cargarJuguetesDesdeSheets() {
       rebaja: row[3] || '',
       descripcion: row[4] || '',
       imagen: convertirLinkDrive(row[5] || ''),
-            stock: Number(row[6]) || 0 // Nueva columna Stock convertida a número
+      stock: Number(row[6]) || 0 // Nueva columna Stock convertida a número
 
     }));
   } catch (error) {
