@@ -53,6 +53,7 @@ const Domicilio = () => {
     }
     
     setErrors(newErrors);
+    // Object.keys(newErrors)-> devuelve un array con todos los newerrors,si error=0, retorna true
     return Object.keys(newErrors).length === 0;
   };
 
