@@ -60,15 +60,14 @@ const Visitanos = () => {
         </p>
         <Mapa />
         <a
-        href="https://www.google.com/maps/search/?api=1&query=5.0693383156345755,-75.51413961785336"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="bg-pink-600 text-white px-4 py-2 rounded-lg"
-      >
-        Ver ubicación en Google Maps
-      </a>
+          href="https://www.google.com/maps/search/?api=1&query=5.0693383156345755,-75.51413961785336"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="bg-pink-600 text-white px-4 py-2 rounded-lg"
+        >
+          Ver ubicación en Google Maps
+        </a>
       </div>
-      
     </div>
   );
 };
