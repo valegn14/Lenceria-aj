@@ -21,6 +21,8 @@ export default function Footer2() {
               <li><a href="/juguetes" className="hover:text-pink-300 text-sm lg:text-base transition-colors">Juguetes</a></li>
               <li><a href="/lubricantes" className="hover:text-pink-300 text-sm lg:text-base transition-colors">Lubricantes</a></li>
               <li><a href="/promociones" className="hover:text-pink-300 text-sm lg:text-base transition-colors">Promociones</a></li>
+                            <li><a href="/Visitanos" className="hover:text-pink-300 text-sm lg:text-base transition-colors">Visitanos</a></li>
+
             </ul>
           </div>
 
@@ -74,7 +76,6 @@ export default function Footer2() {
           <div className="text-center sm:text-left">
             <h2 className="text-lg lg:text-xl font-semibold mb-4 lg:mb-6">Contáctanos</h2>
             <ul className="space-y-3">
-              <li className="text-sm lg:text-base">Email: contacto@lenceriaaj.com</li>
               <li className="text-sm lg:text-base">Tel: +57 324 5859853</li>
               <li className="text-sm lg:text-base">Horario: Lun-Sáb 9:30AM-7PM</li>
             </ul>
