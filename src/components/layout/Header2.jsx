@@ -1,3 +1,4 @@
+
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import SolarOverview from "../solar/carrito";
@@ -28,7 +29,33 @@ function Brand() {
 
   );
 }
-
+const VisitIcon = () => (
+  <Link 
+    to="/Visitanos" 
+    className="hidden md:block p-2 text-pink-600 hover:text-pink-800 rounded-full transition-colors"
+    aria-label="Visítanos"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="w-6 h-6"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth="2"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+      />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+      />
+    </svg>
+  </Link>
+);
 const MenuIcon = ({ isOpen }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -100,7 +127,7 @@ const menuLinks = [
   { to: "/lenceria", label: "Lencería", icon: IconLenceria },
   { to: "/Promociones", label: "Promociones", icon: IconPromo },
   { to: "/Combos", label: "Combos", icon: IconCombos },
-  { to: "/Visitanos", label: "Visitanos", icon: IconV },
+  // { to: "/Visitanos", label: "Visitanos", icon: IconV }
 ];
 
 function SideMenu({ isOpen, onClose, onCartClick, cartCount }) {
@@ -228,12 +255,12 @@ export default function Header({ setSearchTerm, setShowMobileSearch }) {
   return (
     <>
       <header
-        className={`fixed w-full top-0 left-0 z-40 transition-all duration-300 ${scrolled
+        className={`fixed w-full  z-40 transition-all duration-300 ${scrolled
           ? "bg-white/95 backdrop-blur-md shadow-lg py-2"
           : "bg-gradient-to-r from-pink-50 to-purple-50 py-3 md:py-4"
           }`}
       >
-        <div className="container mx-auto px-4">
+        <div className="w-full px-4">
           <div className="flex items-center justify-between h-16">
             {/* Menú button - visible solo en móviles */}
             <button
@@ -281,6 +308,7 @@ export default function Header({ setSearchTerm, setShowMobileSearch }) {
             )}
             <div className="flex items-center space-x-2">
               {/* Search icon - mobile */}
+
               <div>
                 <SearchIcon onClick={() => {
                   setpage(!page);
@@ -288,6 +316,7 @@ export default function Header({ setSearchTerm, setShowMobileSearch }) {
                   setSearchTerm("");
                 }} />
               </div>
+                <VisitIcon />
 
               {/* Cart button */}
               <button
