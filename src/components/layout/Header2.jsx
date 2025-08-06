@@ -331,7 +331,6 @@ export default function Header({ setSearchTerm, setShowMobileSearch }) {
   );
 }
 
-
 // import { Link } from "react-router-dom";
 // import { useState, useEffect } from "react";
 // import SolarOverview from "../solar/SolarOverview";
