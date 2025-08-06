@@ -30,8 +30,8 @@ function Brand() {
   );
 }
 const VisitIcon = () => (
-  <Link 
-    to="/Visitanos" 
+  <Link
+    to="/Visitanos"
     className="hidden md:block p-2 text-pink-600 hover:text-pink-800 rounded-full transition-colors"
     aria-label="Visítanos"
   >
@@ -121,14 +121,19 @@ const CartIcon = ({ itemCount }) => (
   </div>
 );
 
-const menuLinks = [
+const primaryLinks = [
   { to: "/juguetes", label: "Juguetes", icon: IconJ },
   { to: "/lubricantes", label: "Lubricantes", icon: IconLubricantes },
   { to: "/lenceria", label: "Lencería", icon: IconLenceria },
+];
+
+const moreLinks = [
   { to: "/Promociones", label: "Promociones", icon: IconPromo },
   { to: "/Combos", label: "Combos", icon: IconCombos },
-  // { to: "/Visitanos", label: "Visitanos", icon: IconV }
+  // { to: "/Visitanos", label: "Visítanos", icon: IconV },
 ];
+
+const menuLinks = [...primaryLinks, ...moreLinks]
 
 function SideMenu({ isOpen, onClose, onCartClick, cartCount }) {
   useEffect(() => {
@@ -236,6 +241,7 @@ function SideMenu({ isOpen, onClose, onCartClick, cartCount }) {
 }
 
 export default function Header({ setSearchTerm, setShowMobileSearch }) {
+  const [moreOpen, setMoreOpen] = useState(false);
   const [page, setpage] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showCart, setShowCart] = useState(false);
@@ -256,12 +262,12 @@ export default function Header({ setSearchTerm, setShowMobileSearch }) {
     <>
       <header
         className={`fixed w-full  z-40 transition-all duration-300 ${scrolled
-          ? "bg-white/95 backdrop-blur-md shadow-lg py-2"
-          : "bg-gradient-to-r from-pink-50 to-purple-50 py-3 md:py-4"
+          ? "bg-pink-200 backdrop-blur-md shadow-lg py-2"
+          : "bg-gradient-to-r from-pink-300 to-purple-50 py-3 md:py-4"
           }`}
       >
         <div className="w-full px-4">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex items-center justify-between h-16 ">
             {/* Menú button - visible solo en móviles */}
             <button
               className="md:hidden focus:outline-none p-2 hover:bg-pink-100 rounded-full transition-colors"
@@ -277,26 +283,67 @@ export default function Header({ setSearchTerm, setShowMobileSearch }) {
                 <Brand />
               </div>
 
-              {/* Enlaces de navegación - solo en PC */}
-              <nav className="hidden md:flex items-center md:ml-16"> {/* Reducido margen izquierdo */}
-                <ul className="flex space-x-9"> {/* Aumentado espacio entre enlaces */}
-                  {menuLinks.map(({ to, label }) => (
-                      <li key={to}>
-                        <Link
-                          to={to}
-                          className="text-pink-600 hover:text-pink-800 font-medium text-sm uppercase tracking-wider transition-colors"
-                        >
-                          {label}
-                        </Link>
-                      </li>
-                    ))}
+              <nav className="hidden md:flex items-center md:ml-16">
+                <ul className="flex space-x-6 items-center">
+                  {/* Enlaces principales */}
+                  {primaryLinks.map(({ to, label }) => (
+                    <li key={to}>
+                      <Link
+                        to={to}
+                        className="text-pink-600 hover:text-pink-800 font-medium text-sm uppercase tracking-wider transition-colors"
+                      >
+                        {label}
+                      </Link>
+                    </li>
+
+                  ))}
+                  {moreLinks.map(({ to, label }) => (
+                    <li key={to} className="hidden lg:block">
+                      <Link
+                        to={to}
+                        className="text-pink-600 hover:text-pink-800 font-medium text-sm uppercase tracking-wider transition-colors"
+                      >
+                        {label}
+                      </Link>
+                    </li>
+                  ))}
+
+                  {/* Menú desplegable para los demás */}
+                  <li className="relative lg:hidden font-medium">
+                    <button
+                      onClick={() => setMoreOpen(!moreOpen)}
+                      className="text-pink-600 hover:text-pink-800 text-sm uppercase tracking-wider transition-colors flex items-center gap-1">
+                      Más
+                      <svg className="w-4 h-4 mt-0.5" fill="none" stroke="currentColor" strokeWidth="2"
+                        viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+
+                    {moreOpen && (
+                      <ul className="absolute top-full left-0 mt-2 w-40 bg-pink-100 rounded-lg shadow-lg z-10">
+                        {moreLinks.map(({ to, label }) => (
+                          <li key={to}>
+                            <Link
+                              to={to}
+                              className="block px-4 py-2 text-sm text-pink-600 hover:bg-pink-300 uppercase tracking-wider hover:text-pink-800 transition-colors"
+                              onClick={() => setMoreOpen(false)}
+                            >
+                              {label}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </li>
+                  <div className="invisible w-[80px]"></div>
                 </ul>
               </nav>
             </div>
             {/* ----------------------------------------------------------------------------- */}
             {/* buscador */}
             {page && (
-              <div className="hidden lg:block  py-2 ">
+              <div className="hidden md:block w-full md:mt-0">
                 <input
                   type="text"
                   placeholder="Buscar productos..."
@@ -316,7 +363,7 @@ export default function Header({ setSearchTerm, setShowMobileSearch }) {
                   setSearchTerm("");
                 }} />
               </div>
-                <VisitIcon />
+              <VisitIcon />
 
               {/* Cart button */}
               <button
