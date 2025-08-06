@@ -11,7 +11,7 @@ export default function Layout({ children }) {
     <div className="flex flex-col min-h-screen">
       <Header2 setSearchTerm={setSearchTerm}  setShowMobileSearch={setShowMobileSearch}/>
       {/* Añadí un contenedor con ancho máximo para evitar desbordamientos */}
-      <main className=" w-full flex-grow relative bg-main-bg bg-cover bg-center bg-no-repeat">
+      <main className="">
         <div className="w-full overflow-x-hidden">
           {/* inyectar el prop searchTerm directamente en el componente hijo */}
           {React.cloneElement(children, { searchTerm, showMobileSearch })}
