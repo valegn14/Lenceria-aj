@@ -32,7 +32,7 @@ function Brand() {
 const VisitIcon = () => (
   <Link 
     to="/Visitanos" 
-    className="p-2 text-pink-600 hover:text-pink-800 rounded-full transition-colors"
+    className="hidden md:block p-2 text-pink-600 hover:text-pink-800 rounded-full transition-colors"
     aria-label="Visítanos"
   >
     <svg
