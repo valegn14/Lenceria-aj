@@ -13,7 +13,7 @@ async function injectGapiScript() {
   }
 
   return new Promise((resolve, reject) => {
-    const MAX_RETRIES = 5;
+    const MAX_RETRIES = 25;
     let retries = 0;
 
     const checkGapi = () => {
@@ -45,18 +45,21 @@ async function injectGapiScript() {
   });
 }
 
-
 /**
  * Inicializa el cliente gapi con Sheets API.
  */
 async function initGapiClient() {
+  // 👉 Nos aseguramos de que el script esté listo ANTES de usar gapi.load
+  await injectGapiScript();
+
   await new Promise((resolve, reject) => {
-    window.gapi.load('client', { //cargar el módulo del cliente (Sheets API, etc).
+    window.gapi.load('client', {
       callback: resolve,
       onerror: () => reject(new Error('gapi.client no pudo inicializarse')),
     });
   });
-  await window.gapi.client.init({ //Inicializa el cliente con tu API Key
+
+  await window.gapi.client.init({
     apiKey: API_KEY,
     discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
   });
@@ -66,7 +69,7 @@ async function initGapiClient() {
  * Asegura que gapi y su cliente estén listos.
  */
 async function ensureGapiLoaded() {
-  await injectGapiScript();
+  // 👉 Ahora basta con llamar solo a initGapiClient
   await initGapiClient();
 }
 
@@ -81,6 +84,7 @@ async function leerRango(range) {
   });
   return response.result.values || [];
 }
+
 
 /*
  * Convierte URLs de Drive a links embed.
