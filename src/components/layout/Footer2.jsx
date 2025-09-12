@@ -48,10 +48,14 @@ export default function Footer2() {
                     <span className="text-gray-700">Credi</span>
                     <span className="text-gray-400">London</span>
                   </span>
-                  {/* <span className="text-[10px] tracking-widest text-blue-800 uppercase font-medium">
-          Todo a tu alcance
-        </span> */}
                 </div>
+                <div className="bg-white rounded-lg p-2 shadow-sm flex flex-col items-center">
+  <span className="text-base lg:text-lg font-semibold flex items-center gap-0.5">
+    <span className="text-blue-700">Addi</span>
+    {/* <span className="text-gray-400">Pay</span> */}
+  </span>
+</div>
+
               </div>
 
               {/* Tarjetas de crédito (solo texto) */}
