@@ -3,7 +3,8 @@ import React, { useEffect } from "react";
 function Mapa() {
   useEffect(() => {
     const script = document.createElement("script");
-    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyASPV_Kiudq4V1bk9GYZp6cALGZyPttIew&callback=initMap`;
+    //script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyASPV_Kiudq4V1bk9GYZp6cALGZyPttIew&callback=initMap`;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyC3-bzN7sKRvsT0f_xiBODLOx8jNBsGtEE&callback=initMap`;
     script.async = true;
     script.defer = true;
     document.body.appendChild(script);
