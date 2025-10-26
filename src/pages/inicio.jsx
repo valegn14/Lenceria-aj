@@ -115,26 +115,32 @@ const Inicio = ({ searchTerm, showMobileSearch }) => {
               alt="Banner de inicio"
               className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-            <div className="absolute bottom-6 left-6 right-6 text-white">
-              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-2 drop-shadow-lg">
-                Bienvenidos al Placer
-              </h1>
-              <p className="text-sm sm:text-base md:text-lg opacity-90 drop-shadow-md">
-                Descubre una experiencia única de sensualidad y elegancia
-              </p>
+
+
+
+
+
+
+<div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+<div className="absolute bottom-8 left-6 right-6 text-white">
+  <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-3xl font-normal mb-3 tracking-wider drop-shadow-2xl">
+    <span className="italic font-serif text-pink-200"> Bienvenidos al placer</span>
+  </h1>
+  {/* <p className="text-sm sm:text-lg md:text-xl opacity-90 drop-shadow-lg leading-tight font-light">
+    <span className="block mt-1 text-pink-100">Descubre una experiencia única de sensualidad y elegancia
+
+</span>
+  </p> */}
+</div>
             </div>
-          </div>
-        {/* </div> */}
-      </div>
+            </div>
+
 
        {/* Categorías */}
      <div className="px-4 sm:px-6 lg:px-8 mb-12">
        <div className="max-w-7xl mx-auto">
            <div className="text-center mb-8">
-             <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif font-light text-gray-800 mb-4">
-              Explora nuestras categorías
-             </h2>
+          
              <div className="w-24 h-1 bg-gradient-to-r from-pink-400 to-purple-500 mx-auto"></div>
            </div>
 
