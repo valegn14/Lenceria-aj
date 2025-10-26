@@ -256,7 +256,7 @@ const FiltroInicio = ({ onlyPromos = false, productos: propProductos, searchTerm
                                         }}
                                         className="md:hidden w-full py-2 sm:py-3 bg-pink-700 text-white text-center text-sm sm:text-base font-medium rounded-lg hover:bg-pink-800 transition duration-200"
                                     >
-                                        Agregar al carrito
+                                        Agregar
                                     </button>
                                 ) : (
                                     <button

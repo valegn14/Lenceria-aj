@@ -255,7 +255,7 @@ const Card = () => {
                       }}
                       className="md:hidden w-full py-2 bg-pink-700 text-white text-center text-sm font-medium rounded-lg hover:bg-pink-800 transition duration-200"
                     >
-                      Agregar al carrito
+                      Agregar
                     </button>
                   ) : (
                     <button
