@@ -256,23 +256,24 @@ const Lenceria = ({
   {producto.nombre.toUpperCase()}
 </h3>
 
+<div className="flex justify-between items-center mb-1">
+  <div className="flex items-center gap-2">
+    <p className="text-base font-bold text-pink-800">
+      ${Number(producto.precio)
+        .toLocaleString('es-CO', { minimumFractionDigits: 0 })}
+    </p>
+    {producto.rebaja && Number(producto.rebaja) > 0 && (
+      <p className="text-gray-400 line-through text-sm">
+        ${(
+          parseFloat(producto.precio) /
+          (1 - Number(producto.rebaja) / 100)
+        ).toLocaleString('es-CO', { minimumFractionDigits: 0 })}
+      </p>
+    )}
+  </div>
+</div>
 
-                <div className="flex justify-between items-center mb-1">
-                  <div className="flex items-center gap-2">
-                    <p className="text-base font-bold text-pink-800">
-                      ${producto.precio}
-                    </p>
-                    {producto.rebaja && Number(producto.rebaja) > 0 && (
-                      <p className="text-gray-400 line-through text-sm">
-                        $
-                        {(
-                          parseFloat(producto.precio) /
-                          (1 - Number(producto.rebaja) / 100)
-                        ).toFixed(0)}
-                      </p>
-                    )}
-                  </div>
-                </div>
+     
 
                 <p className="text-xs text-gray-600 line-clamp-2 leading-snug mb-2">
                   {producto.descripcion.length > 60 

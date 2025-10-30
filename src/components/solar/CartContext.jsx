@@ -43,13 +43,32 @@ export const CartProvider = ({ children }) => {
       )
     );
   };
+const calculateTotal = () => {
+  // Calcular total numéricamente
+  const total = cartItems.reduce((sum, item) => {
+    const numericPrice = Number(
+      String(item.precio)
+        .replace(/\./g, '')   // eliminar puntos de miles
+        .replace(/,/g, '.')   // convertir coma decimal a punto
+        .trim()
+    );
+    return sum + (numericPrice * item.quantity);
+  }, 0);
 
-  const calculateTotal = () => {
-    return cartItems.reduce(
-      (total, item) => total + (parseFloat(item.precio) * item.quantity),
-      0
-    ).toFixed(2);
-  };
+  // Formatear el número como pesos colombianos (con puntos de miles)
+  return total.toLocaleString('es-CO', {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  });
+};
+
+
+  // const calculateTotal = () => {
+  //   return cartItems.reduce(
+  //     (total, item) => total + (parseFloat(item.precio) * item.quantity),
+  //     0
+  //   );
+  // };
 
   return (
     <CartContext.Provider 
