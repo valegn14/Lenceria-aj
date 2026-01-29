@@ -1,6 +1,12 @@
 // sheets.jsx
-const API_KEY = 'AIzaSyBa9Ux9aaq9vUgjJ3Lf6THUxmTj-f5JWR4';
-const SHEET_ID = '1amL7XhJcrlQSg9nvwWuOGlYY9G1pfJuXTsTEezHUCRw';
+//const API_KEY = 'AIzaSyBa9Ux9aaq9vUgjJ3Lf6THUxmTj-f5JWR4';
+//const SHEET_ID = '1amL7XhJcrlQSg9nvwWuOGlYY9G1pfJuXTsTEezHUCRw';
+
+
+
+const API_KEY = 'AIzaSyDzg3YXJpvDjXJWuMAz2yJN9_E-ZFT3UTY';
+const SHEET_ID = '1vgHmgT1wNeUSK_hFaPJgDE19Vnwl2Tk9Czcv3WRR37Q';
+
 
 // ========== SISTEMA DE CACHÉ Y OPTIMIZACIÓN ==========
 const cache = {
@@ -391,6 +397,9 @@ export async function cargarPromocionesDesdeSheets(forceRefresh = false) {
     throw error;
   }
 }
+
+
+
 
 // ========== FUNCIONES ADICIONALES PARA MEJOR EXPERIENCIA ==========
 
