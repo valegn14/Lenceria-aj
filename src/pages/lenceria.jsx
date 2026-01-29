@@ -139,8 +139,8 @@ const Lenceria = ({
                 })
               }
             >
-              {/* Imagen - Más alta y ocupando todo el espacio */}
-              <div className="relative h-60 overflow-hidden bg-white">
+              {/* Imagen*/}
+              <div className="relative h-80 overflow-hidden bg-white">
                 <div className="relative h-full w-full">
                   <img
                     src={producto.imagen}
