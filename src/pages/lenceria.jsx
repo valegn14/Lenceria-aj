@@ -262,14 +262,16 @@ const Lenceria = ({
       ${Number(producto.precio)
         .toLocaleString('es-CO', { minimumFractionDigits: 0 })}
     </p>
-    {producto.rebaja && Number(producto.rebaja) > 0 && (
-      <p className="text-gray-400 line-through text-sm">
-        ${(
-          parseFloat(producto.precio) /
-          (1 - Number(producto.rebaja) / 100)
-        ).toLocaleString('es-CO', { minimumFractionDigits: 0 })}
-      </p>
-    )}
+ {producto.rebaja && Number(producto.rebaja) > 0 && (
+  <p className="text-gray-400 line-through text-sm">
+    $
+    {Math.round(
+      parseFloat(producto.precio) /
+      (1 - Number(producto.rebaja) / 100)
+    ).toLocaleString('es-CO')}
+  </p>
+)}
+
   </div>
 </div>
 

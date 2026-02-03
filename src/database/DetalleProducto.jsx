@@ -256,6 +256,9 @@ const handleAddToCart = () => {
                 </div>
               </div>
 
+
+
+
               {/* Description */}
               <div className="space-y-3">
                 <div className="w-12 h-px bg-gray-300"></div>

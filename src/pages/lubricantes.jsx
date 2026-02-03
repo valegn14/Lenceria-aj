@@ -227,10 +227,11 @@ const Lubricantes = ({ onlyPromos = false, productos: propProductos, searchTerm 
     </p>
     {producto.rebaja && Number(producto.rebaja) > 0 && (
       <p className="text-gray-400 line-through text-sm">
-        ${(
-          parseFloat(producto.precio) /
-          (1 - Number(producto.rebaja) / 100)
-        ).toLocaleString('es-CO', { minimumFractionDigits: 0 })}
+        $
+    {Math.round(
+      parseFloat(producto.precio) /
+      (1 - Number(producto.rebaja) / 100)
+    ).toLocaleString('es-CO')}
       </p>
     )}
   </div>
