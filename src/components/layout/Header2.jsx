@@ -12,6 +12,11 @@ import IconCombos from './combo.png';
 import IconLenceria from './lenceria.png';
 import IconLubricantes from './lubricante.png';
 import IconCart from './carrito.png';
+import IconSuplementos from './suplementos.png';
+import IconHigiene from './higiene.png';
+import IconVestido from './vestido.png';
+
+
 
 function Brand() {
   return (
@@ -129,9 +134,9 @@ const primaryLinks = [
 
 const moreLinks = [
   
-  { to: "/suplementos", label: "Suplementos" },
-  { to: "/higiene", label: "Higiene" },
-  { to: "/vestidos-de-bano", label: "Vestidos de Baño" },
+  { to: "/suplementos", label: "Suplementos", icon: IconSuplementos },
+  { to: "/higiene", label: "Higiene", icon: IconHigiene },
+  { to: "/vestidos-de-bano", label: "Vestidos de Baño" , icon: IconVestido },
     { to: "/Combos", label: "Combos", icon: IconCombos },
 
   { to: "/Promociones", label: "Promos", icon: IconPromo }
