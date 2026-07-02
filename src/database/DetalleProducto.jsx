@@ -385,22 +385,6 @@ const handleAddToCart = () => {
         </div>
       </div>
 
-      {/* Related Products Section */}
-      {/* <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-gray-100">
-        <div className="text-center space-y-2 mb-12">
-          <h3 className="text-lg font-light text-gray-900">PRODUCTOS RELACIONADOS</h3>
-          <div className="w-12 h-px bg-gray-300 mx-auto"></div>
-        </div>
-        
-        <div className="text-center">
-          <button
-            onClick={() => navigate("/")}
-            className="border border-gray-300 hover:border-gray-400 text-gray-700 px-8 py-3 font-medium transition-colors"
-          >
-            Descubrir más productos
-          </button>
-        </div>
-      </div> */}
     </div>
   );
 };

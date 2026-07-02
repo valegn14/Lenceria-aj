@@ -20,14 +20,17 @@ export default function Footer2() {
               <li><a href="/lenceria" className="hover:text-pink-300 text-sm lg:text-base transition-colors">Lencería</a></li>
               <li><a href="/juguetes" className="hover:text-pink-300 text-sm lg:text-base transition-colors">Juguetes</a></li>
               <li><a href="/lubricantes" className="hover:text-pink-300 text-sm lg:text-base transition-colors">Lubricantes</a></li>
+              <li><a href="/suplementos" className="hover:text-pink-300 text-sm lg:text-base transition-colors">Suplementos</a></li>
+              <li><a href="/higiene" className="hover:text-pink-300 text-sm lg:text-base transition-colors">Higiene</a></li>
+              <li><a href="/vestidos-de-bano" className="hover:text-pink-300 text-sm lg:text-base transition-colors">Vestidos de Baño</a></li>
               <li><a href="/promociones" className="hover:text-pink-300 text-sm lg:text-base transition-colors">Promociones</a></li>
-                            <li><a href="/Visitanos" className="hover:text-pink-300 text-sm lg:text-base transition-colors">Visitanos</a></li>
+              <li><a href="/Visitanos" className="hover:text-pink-300 text-sm lg:text-base transition-colors">Visitanos</a></li>
 
             </ul>
           </div>
 
           <div className="text-center sm:text-left">
-            <h2 className="text-lg lg:text-xl font-semibold mb-4 lg:mb-6">Medios de pago</h2>
+            <h2 className="text-lg lg:text-xl font-semibold mb-4 lg:mb-6">Medios de pago en tienda física</h2>
             <div className="space-y-4">
               {/* Efectivo, Sistecrédito, CrediLondon */}
               <div className="flex flex-wrap justify-center sm:justify-start gap-3 items-center">

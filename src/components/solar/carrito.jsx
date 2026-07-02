@@ -60,7 +60,6 @@ const generarMensajeWhatsApp = () => {
   transition
                 className="pointer-events-auto w-screen max-w-full sm:max-w-md lg:max-w-lg transform transition duration-500 ease-in-out data-closed:translate-x-full sm:duration-700"
 
-  // className="pointer-events-auto w-[90%] sm:w-full max-w-md sm:max-w-md lg:max-w-lg transform transition duration-500 ease-in-out data-closed:translate-x-full sm:duration-700"
 >
 
               <div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">

@@ -1,11 +1,9 @@
 'use client'
 import React, { useState } from "react";
-import { useParams, useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { useCart } from "../components/solar/CartContext";
 const Domicilio = () => {
-//   const router = useRouter();
-
   const { cartItems, cartTotal } = useCart();
   const [formData, setFormData] = useState({
     nombre: "",
@@ -256,78 +254,6 @@ const Domicilio = () => {
                 
                 <div className="space-y-6">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    {/* <div> */}
-                      {/* <label className="block text-sm font-medium text-gray-700 mb-2">
-                        ¿Cuándo deseas recibir tu pedido? *
-                      </label> */}
-                      
-                      {/* <div className="space-y-3"> */}
-                        {/* <div className="flex items-center"> */}
-                          {/* <input
-                            type="radio"
-                            id="inmediata"
-                            name="horaEntrega"
-                            value="inmediata"
-                            checked={formData.horaEntrega === "inmediata"}
-                            onChange={handleChange}
-                            className="h-4 w-4 text-pink-600 focus:ring-pink-500 border-gray-300"
-                          /> */}
-                          {/* <label htmlFor="inmediata" className="ml-3 block text-sm font-medium text-gray-700">
-                            Lo antes posible
-                          </label> */}
-                        {/* </div> */}
-                        
-                        {/* <div className="flex items-center"> */}
-                          {/* <input
-                            type="radio"
-                            id="programada"
-                            name="horaEntrega"
-                            value="programada"
-                            checked={formData.horaEntrega === "programada"}
-                            onChange={handleChange}
-                            className="h-4 w-4 text-pink-600 focus:ring-pink-500 border-gray-300"
-                          />
-                          <label htmlFor="programada" className="ml-3 block text-sm font-medium text-gray-700">
-                            Programar entrega
-                          </label> */}
-                        {/* </div>
-                      </div> */}
-                      
-                      {/* {formData.horaEntrega === "programada" && ( */}
-                        {/* // <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4"> */}
-                          {/* <div> */}
-                            {/* <label htmlFor="fechaEntrega" className="block text-sm font-medium text-gray-700 mb-1">
-                              Fecha *
-                            </label>
-                            <input
-                              type="date"
-                              id="fechaEntrega"
-                              name="fechaEntrega"
-                              value={formData.fechaEntrega}
-                              onChange={handleChange}
-                              min={new Date().toISOString().split('T')[0]}
-                              className={`w-full px-4 py-3 rounded-lg border ${errors.fechaEntrega ? 'border-red-500' : 'border-gray-300'} focus:ring-pink-500 focus:border-pink-500`}
-                            /> */}
-                            {/* {errors.fechaEntrega && <p className="mt-1 text-sm text-red-600">{errors.fechaEntrega}</p>}
-                          </div> */}
-                          
-                          {/* <div> */}
-                            {/* <label htmlFor="horaEspecifica" className="block text-sm font-medium text-gray-700 mb-1">
-                              Hora *
-                            </label>
-                            <input
-                              type="time"
-                              id="horaEspecifica"
-                              name="horaEspecifica"
-                              value={formData.horaEspecifica}
-                              onChange={handleChange}
-                              className={`w-full px-4 py-3 rounded-lg border ${errors.horaEspecifica ? 'border-red-500' : 'border-gray-300'} focus:ring-pink-500 focus:border-pink-500`}
-                            /> */}
-                            {/* {errors.horaEspecifica && <p className="mt-1 text-sm text-red-600">{errors.horaEspecifica}</p>}
-                          </div> */}
-                        {/* </div> */}
-                      {/* // )} */}
-                    {/* </div> */}
                     
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">

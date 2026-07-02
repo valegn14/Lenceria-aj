@@ -1,23 +1,21 @@
-// Layout.jsx
 import Footer2 from "./Footer2";
 import Header2 from "./Header2";
+import SearchOverlay from "../search/SearchOverlay";
 import React, { useState } from "react";
 
 export default function Layout({ children }) {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [showMobileSearch, setShowMobileSearch] = useState(true);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Header2 setSearchTerm={setSearchTerm}  setShowMobileSearch={setShowMobileSearch}/>
-      {/* Añadí un contenedor con ancho máximo para evitar desbordamientos */}
-      <main className="">
+      <Header2 onSearchOpen={() => setIsSearchOpen(true)} />
+      <main className="animate-fadeIn">
         <div className="w-full overflow-x-hidden">
-          {/* inyectar el prop searchTerm directamente en el componente hijo */}
-          {React.cloneElement(children, { searchTerm, showMobileSearch })}
+          {React.cloneElement(children)}
         </div>
       </main>
       <Footer2 />
+      <SearchOverlay isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </div>
   );
 }

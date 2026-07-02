@@ -5,10 +5,13 @@ import Layout from "./components/layout/Layout";
 import Promociones from "./pages/promociones";
 import Inicio from "./pages/inicio";
 import Juega from "./pages/juega";
-import FiltroInicio from "./pages/filtroInicio";
+
 import Juguetes from "./pages/juguetes";
 import Lenceria from "./pages/lenceria";
 import Lubricantes from "./pages/lubricantes";
+import Suplementos from "./pages/suplementos";
+import Higiene from "./pages/higiene";
+import VestidosBano from "./pages/vestidosBano";
 import Contacto from "./pages/contacto";
 import Combos from "./pages/Combos";
 import Visitanos from "./pages/visitanos";
@@ -32,6 +35,9 @@ function App() {
           <Route path="/juguetes" element={<Layout><Juguetes /></Layout>} />
           <Route path="/lenceria" element={<Layout><Lenceria /></Layout>} />
           <Route path="/lubricantes" element={<Layout><Lubricantes /></Layout>} />
+          <Route path="/suplementos" element={<Layout><Suplementos /></Layout>} />
+          <Route path="/higiene" element={<Layout><Higiene /></Layout>} />
+          <Route path="/vestidos-de-bano" element={<Layout><VestidosBano /></Layout>} />
           <Route path="/domicilio" element={<Layout><Domicilio /></Layout>} />
           <Route path="/:slug" element={<Layout><DetalleProducto /></Layout>} />
         </Routes>

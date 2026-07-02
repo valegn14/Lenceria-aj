@@ -128,9 +128,13 @@ const primaryLinks = [
 ];
 
 const moreLinks = [
-  { to: "/Promociones", label: "Promociones", icon: IconPromo },
-  { to: "/Combos", label: "Combos", icon: IconCombos },
-  // { to: "/Visitanos", label: "Visítanos", icon: IconV },
+  
+  { to: "/suplementos", label: "Suplementos" },
+  { to: "/higiene", label: "Higiene" },
+  { to: "/vestidos-de-bano", label: "Vestidos de Baño" },
+    { to: "/Combos", label: "Combos", icon: IconCombos },
+
+  { to: "/Promociones", label: "Promos", icon: IconPromo }
 ];
 
 const menuLinks = [...primaryLinks, ...moreLinks]
@@ -198,11 +202,15 @@ function SideMenu({ isOpen, onClose, onCartClick, cartCount }) {
                 onClick={onClose}
                 className="flex items-center py-4 px-4 hover:bg-pink-100 rounded-xl transition-all duration-200 group"
               >
-                <img
-                  src={icon}
-                  alt={label}
-                  className="w-7 h-7 mr-4 group-hover:scale-110 transition-transform"
-                />
+                  {icon ? (
+                    <img
+                      src={icon}
+                      alt={label}
+                      className="w-7 h-7 mr-4 group-hover:scale-110 transition-transform"
+                    />
+                  ) : (
+                    <span className="w-7 h-7 mr-4 flex items-center justify-center text-pink-400 text-lg">•</span>
+                  )}
                 <span className="font-medium text-lg tracking-wider group-hover:text-pink-700">
                   {label}
                 </span>
@@ -240,9 +248,8 @@ function SideMenu({ isOpen, onClose, onCartClick, cartCount }) {
   );
 }
 
-export default function Header({ setSearchTerm, setShowMobileSearch }) {
+export default function Header({ onSearchOpen }) {
   const [moreOpen, setMoreOpen] = useState(false);
-  const [page, setpage] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showCart, setShowCart] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -261,8 +268,8 @@ export default function Header({ setSearchTerm, setShowMobileSearch }) {
   return (
     <>
       <header
-        className={`fixed w-full  z-40 transition-all duration-300 ${scrolled
-          ? "bg-pink-200 backdrop-blur-md shadow-lg py-2"
+        className={`fixed w-full z-40 transition-all duration-500 ${scrolled
+          ? "bg-pink-200/80 backdrop-blur-xl shadow-lg py-2"
           : "bg-gradient-to-r from-pink-300 to-purple-50 py-3 md:py-4"
           }`}
       >
@@ -340,28 +347,9 @@ export default function Header({ setSearchTerm, setShowMobileSearch }) {
                 </ul>
               </nav>
             </div>
-            {/* ----------------------------------------------------------------------------- */}
-            {/* buscador */}
-            {page && (
-              <div className="hidden md:block w-full md:mt-0">
-                <input
-                  type="text"
-                  placeholder="Buscar productos..."
-                  className="w-full p-3 border border-pink-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  autoFocus
-                />
-              </div>
-            )}
             <div className="flex items-center space-x-2">
-              {/* Search icon - mobile */}
-
               <div>
-                <SearchIcon onClick={() => {
-                  setpage(!page);
-                  setShowMobileSearch(page);
-                  setSearchTerm("");
-                }} />
+                <SearchIcon onClick={onSearchOpen} />
               </div>
               <VisitIcon />
 
@@ -375,23 +363,10 @@ export default function Header({ setSearchTerm, setShowMobileSearch }) {
               </button>
             </div>
           </div>
-          {/* Mobile search - aparece al hacer click en la lupa */}
-          {page && (
-            <div className="md:hidden py-2">
-              <input
-                type="text"
-                placeholder="🔍 Buscar productos..."
-                className="w-full p-3 border border-pink-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-                onChange={(e) => setSearchTerm(e.target.value)}
-                autoFocus
-              />
-            </div>
-          )}
         </div>
       </header>
 
-      {/*  Spacer for fixed header */}
-      <div className={`h-16 ${page ? 'md:h-16' : 'md:h-20'} ${scrolled ? '!md:h-16' : ''}`}></div>
+      <div className="h-16 md:h-20"></div>
 
       {/* Side Menu */}
       <SideMenu

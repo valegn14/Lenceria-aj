@@ -63,13 +63,6 @@ const calculateTotal = () => {
 };
 
 
-  // const calculateTotal = () => {
-  //   return cartItems.reduce(
-  //     (total, item) => total + (parseFloat(item.precio) * item.quantity),
-  //     0
-  //   );
-  // };
-
   return (
     <CartContext.Provider 
       value={{ 
