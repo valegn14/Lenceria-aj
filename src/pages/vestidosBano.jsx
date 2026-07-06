@@ -5,7 +5,7 @@ const VestidosBano = ({ onlyPromos, productos, searchTerm, mostrarBotonVolver })
   <ProductGrid
     fetchFn={cargarVestidosBanoDesdeSheets}
     productos={productos}
-    loadingMessage="Descubriendo vestidos de baño..."
+    loadingMessage="Descubriendo Bronceadores..."
     searchTerm={searchTerm}
     onlyPromos={onlyPromos}
     showBackButton={mostrarBotonVolver !== false}

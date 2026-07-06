@@ -297,7 +297,7 @@ const Inicio = () => {
           )}
           <div className="mt-6 text-center">
             <Link to="/vestidos-de-bano" className="inline-block bg-pink-700 text-white px-6 py-2 rounded-full text-sm sm:text-base font-medium shadow-md hover:bg-pink-800 transition">
-              Ver más vestidos de baño
+              Ver más Bronceadores
             </Link>
           </div>
         </div>

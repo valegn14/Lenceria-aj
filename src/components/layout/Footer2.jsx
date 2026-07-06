@@ -22,7 +22,7 @@ export default function Footer2() {
               <li><a href="/lubricantes" className="hover:text-pink-300 text-sm lg:text-base transition-colors">Lubricantes</a></li>
               <li><a href="/suplementos" className="hover:text-pink-300 text-sm lg:text-base transition-colors">Suplementos</a></li>
               <li><a href="/higiene" className="hover:text-pink-300 text-sm lg:text-base transition-colors">Higiene</a></li>
-              <li><a href="/vestidos-de-bano" className="hover:text-pink-300 text-sm lg:text-base transition-colors">Vestidos de Baño</a></li>
+              <li><a href="/vestidos-de-bano" className="hover:text-pink-300 text-sm lg:text-base transition-colors">Bronceadores</a></li>
               <li><a href="/promociones" className="hover:text-pink-300 text-sm lg:text-base transition-colors">Promociones</a></li>
               <li><a href="/Visitanos" className="hover:text-pink-300 text-sm lg:text-base transition-colors">Visitanos</a></li>
 
