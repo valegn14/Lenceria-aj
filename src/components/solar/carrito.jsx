@@ -6,6 +6,12 @@ import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/re
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useCart } from './CartContext';
 
+const formatPrice = (value) => {
+  const num = Number(value);
+  if (isNaN(num)) return value;
+  return num.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+};
+
 export default function SolarOverview({ open, setOpen }) {
   const { 
     cartItems, 
@@ -19,7 +25,7 @@ export default function SolarOverview({ open, setOpen }) {
 const generarMensajeWhatsApp = () => {
   const lineas = [
     '🛍️ *Pedido para recoger en tienda*',
-    ...cartItems.map(item => `➡️ ${item.nombre} (${item.quantity}x) $${item.precio * item.quantity}`),
+    ...cartItems.map(item => `➡️ ${item.nombre} (${item.quantity}x) $${formatPrice(item.precio * item.quantity)}`),
     `*Total: $${cartTotal}*`,`Dirección: Carrera 20 #27-33`,
   ];
   
@@ -39,8 +45,8 @@ const generarMensajeWhatsApp = () => {
       mensaje += `%0A${index + 1}. ${item.nombre}`;
       if (item.selectedSize) mensaje += ` (Talla: ${item.selectedSize})`;
       mensaje += `%0A   Cantidad: ${item.quantity}`;
-      mensaje += `%0A   Precio unitario: $${item.precio}`;
-      mensaje += `%0A   Subtotal: $${item.precio * item.quantity}%0A`;
+      mensaje += `%0A   Precio unitario: $${formatPrice(item.precio)}`;
+      mensaje += `%0A   Subtotal: $${formatPrice(item.precio * item.quantity)}%0A`;
     });
     mensaje += `%0A*Total:* $${cartTotal}`;
     return `https://wa.me/573245859853?text=${mensaje}`;
@@ -141,14 +147,14 @@ const generarMensajeWhatsApp = () => {
                                     )}
                                   </div>
                                   <div className="flex items-start sm:ml-4">
-                                    <p className="text-lg sm:text-xl font-bold text-pink-600">${product.precio}</p>
+                                    <p className="text-lg sm:text-xl font-bold text-pink-600">${formatPrice(product.precio)}</p>
                                   </div>
                                 </div>
                                 
                                 {/* Subtotal móvil */}
                                 <div className="mt-2 sm:hidden">
                                   <p className="text-sm text-gray-600">
-                                    Subtotal: <span className="font-bold text-gray-900 text-base">${(product.precio * product.quantity).toFixed(2)}</span>
+                                    Subtotal: <span className="font-bold text-gray-900 text-base">${formatPrice(product.precio * product.quantity)}</span>
                                   </p>
                                 </div>
                               </div>
@@ -195,7 +201,7 @@ const generarMensajeWhatsApp = () => {
                                   {/* Subtotal desktop */}
                                   <div className="hidden sm:block">
                                     <p className="text-sm text-gray-600">
-                                      Subtotal: <span className="font-medium text-gray-900">${(product.precio * product.quantity).toFixed(2)}</span>
+                                      Subtotal: <span className="font-medium text-gray-900">${formatPrice(product.precio * product.quantity)}</span>
                                     </p>
                                   </div>
                                 </div>
