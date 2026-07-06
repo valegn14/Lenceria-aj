@@ -136,7 +136,7 @@ const moreLinks = [
   
   { to: "/suplementos", label: "Suplementos", icon: IconSuplementos },
   { to: "/higiene", label: "Higiene", icon: IconHigiene },
-  { to: "/vestidos-de-bano", label: "Bronceadores" , icon: IconVestido },
+  { to: "/bronceadores", label: "Bronceadores" , icon: IconVestido },
     { to: "/Combos", label: "Combos", icon: IconCombos },
 
   { to: "/Promociones", label: "Promos", icon: IconPromo }

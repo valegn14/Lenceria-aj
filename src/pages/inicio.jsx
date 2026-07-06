@@ -45,8 +45,8 @@ const categories = [
     color: "from-cyan-900/60 to-blue-900/60",
   },
   {
-    name: "Vestidos de Baño",
-    route: "/vestidos-de-bano",
+    name: "Bronceadores",
+    route: "/bronceadores",
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4d--vr_MZ9h1eFb2afJhM5_QVdKfChEotT0eGqgrZ3IgDl-71k1mS28dg&s=10",
     description: "Estilo que seduce",
     color: "from-sky-900/60 to-teal-900/60",
@@ -296,7 +296,7 @@ const Inicio = () => {
             <VestidosBano productos={productosVestidos} mostrarBotonVolver={false} searchTerm="" />
           )}
           <div className="mt-6 text-center">
-            <Link to="/vestidos-de-bano" className="inline-block bg-pink-700 text-white px-6 py-2 rounded-full text-sm sm:text-base font-medium shadow-md hover:bg-pink-800 transition">
+            <Link to="/bronceadores" className="inline-block bg-pink-700 text-white px-6 py-2 rounded-full text-sm sm:text-base font-medium shadow-md hover:bg-pink-800 transition">
               Ver más Bronceadores
             </Link>
           </div>
