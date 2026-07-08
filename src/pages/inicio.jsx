@@ -7,7 +7,7 @@ import Juguetes from "./juguetes";
 import Lubricantes from "./lubricantes";
 import Suplementos from "./suplementos";
 import Higiene from "./higiene";
-import VestidosBano from "./vestidosBano";
+import BronceadoresPage from "./vestidosBano";
 const categories = [
   {
     name: "Lencería",
@@ -96,26 +96,26 @@ const Inicio = () => {
   const [productosLubricantes, setProductosLubricantes] = useState([]);
   const [productosSuplementos, setProductosSuplementos] = useState([]);
   const [productosHigiene, setProductosHigiene]         = useState([]);
-  const [productosVestidos, setProductosVestidos]       = useState([]);
+  const [productosBronceadores, setProductosBronceadores]       = useState([]);
   const [loadingProductos, setLoadingProductos]         = useState(true);
 
   useEffect(() => {
     const cargar = async () => {
       try {
-        const [lice, juguetes, lubricantes, suplementos, higiene, vestidos] = await Promise.all([
+        const [lice, juguetes, lubricantes, suplementos, higiene, Bronceadores] = await Promise.all([
           cargarPrimerosProductos('Lenceria', 4),
           cargarPrimerosProductos('Juguetes', 4),
           cargarPrimerosProductos('Lubricantes', 4),
           cargarPrimerosProductos('Suplementos', 4),
           cargarPrimerosProductos('Higiene', 4),
-          cargarPrimerosProductos('Vestidos de Baño', 4),
+          cargarPrimerosProductos('Bronceadores', 4),
         ]);
         setProductosLenceria(lice);
         setProductosJuguetes(juguetes);
         setProductosLubricantes(lubricantes);
         setProductosSuplementos(suplementos);
         setProductosHigiene(higiene);
-        setProductosVestidos(vestidos);
+        setProductosBronceadores(Bronceadores);
       } catch (error) {
         console.error("Error al cargar productos:", error);
       } finally {
@@ -293,7 +293,7 @@ const Inicio = () => {
               {Array.from({ length: 4 }).map((_, i) => <ProductSkeleton key={i} />)}
             </div>
           ) : (
-            <VestidosBano productos={productosVestidos} mostrarBotonVolver={false} searchTerm="" />
+            <BronceadoresPage productos={productosBronceadores} mostrarBotonVolver={false} searchTerm="" />
           )}
           <div className="mt-6 text-center">
             <Link to="/bronceadores" className="inline-block bg-pink-700 text-white px-6 py-2 rounded-full text-sm sm:text-base font-medium shadow-md hover:bg-pink-800 transition">

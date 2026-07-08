@@ -13,7 +13,7 @@ const cache = {
   lubricantes: { data: null, timestamp: 0, ttl: 5 * 60 * 1000 },
   suplementos: { data: null, timestamp: 0, ttl: 5 * 60 * 1000 },
   higiene: { data: null, timestamp: 0, ttl: 5 * 60 * 1000 },
-  vestidosBano: { data: null, timestamp: 0, ttl: 5 * 60 * 1000 }
+  Bronceadores: { data: null, timestamp: 0, ttl: 5 * 60 * 1000 }
 };
 
 const loadingStates = new Map();
@@ -233,13 +233,13 @@ export async function cargarProductosDesdeSheets(forceRefresh = false) {
 
   const loadPromise = (async () => {
     try {
-      const [lubricantes, juguetes, lenceria, suplementos, higiene, vestidos] = await Promise.all([
+      const [lubricantes, juguetes, lenceria, suplementos, higiene, Bronceadores] = await Promise.all([
         leerRango('Lubricantes!A:H'),
         leerRango('Juguetes!A:H'),
         leerRango('Lenceria!A:H'),
         leerRango('Suplementos!A:H'),
         leerRango('Higiene!A:H'),
-        leerRango('Vestidos de Baño!A:H')
+        leerRango('Bronceadores!A:H')
       ]);
 
       const todosLosDatos = [
@@ -248,7 +248,7 @@ export async function cargarProductosDesdeSheets(forceRefresh = false) {
         ...procesarDatosProducto(lenceria),
         ...procesarDatosProducto(suplementos),
         ...procesarDatosProducto(higiene),
-        ...procesarDatosProducto(vestidos)
+        ...procesarDatosProducto(Bronceadores)
       ];
 
       todosLosDatos.sort((a, b) => a.nombre.localeCompare(b.nombre));
@@ -432,8 +432,8 @@ export async function cargarHigieneDesdeSheets(forceRefresh = false) {
   }
 }
 
-export async function cargarVestidosBanoDesdeSheets(forceRefresh = false) {
-  const cacheKey = 'vestidosBano';
+export async function cargarBronceadoresDesdeSheets(forceRefresh = false) {
+  const cacheKey = 'bronceadores';
 
   if (!forceRefresh) {
     const cached = getFromCache(cacheKey);
@@ -446,7 +446,7 @@ export async function cargarVestidosBanoDesdeSheets(forceRefresh = false) {
 
   try {
     const loadPromise = (async () => {
-      const values = await leerRango('Vestidos de Baño!A:H');
+      const values = await leerRango('Bronceadores!A:H');
       if (values.length <= 1) return [];
 
       const datos = procesarDatosProducto(values);
@@ -460,9 +460,13 @@ export async function cargarVestidosBanoDesdeSheets(forceRefresh = false) {
     return result;
   } catch (error) {
     loadingStates.delete(cacheKey);
-    console.error('Error al cargar Vestidos de Baño:', error);
+    console.error('Error al cargar Bronceadores:', error);
     throw error;
   }
+}
+
+export async function cargarVestidosBanoDesdeSheets(forceRefresh = false) {
+  return cargarBronceadoresDesdeSheets(forceRefresh);
 }
 
 export async function cargarPromocionesDesdeSheets(forceRefresh = false) {

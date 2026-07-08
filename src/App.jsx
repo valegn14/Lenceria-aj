@@ -11,7 +11,7 @@ import Lenceria from "./pages/lenceria";
 import Lubricantes from "./pages/lubricantes";
 import Suplementos from "./pages/suplementos";
 import Higiene from "./pages/higiene";
-import VestidosBano from "./pages/vestidosBano";
+import BronceadoresPage from "./pages/vestidosBano";
 import Contacto from "./pages/contacto";
 import Combos from "./pages/Combos";
 import Visitanos from "./pages/visitanos";
@@ -37,7 +37,7 @@ function App() {
           <Route path="/lubricantes" element={<Layout><Lubricantes /></Layout>} />
           <Route path="/suplementos" element={<Layout><Suplementos /></Layout>} />
           <Route path="/higiene" element={<Layout><Higiene /></Layout>} />
-          <Route path="/bronceadores" element={<Layout><VestidosBano /></Layout>} />
+          <Route path="/bronceadores" element={<Layout><BronceadoresPage /></Layout>} />
           <Route path="/domicilio" element={<Layout><Domicilio /></Layout>} />
           <Route path="/:slug" element={<Layout><DetalleProducto /></Layout>} />
         </Routes>

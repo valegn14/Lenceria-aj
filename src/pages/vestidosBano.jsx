@@ -1,9 +1,9 @@
-import { cargarVestidosBanoDesdeSheets } from "../database/sheets";
+import { cargarBronceadoresDesdeSheets } from "../database/sheets";
 import ProductGrid from "../components/ProductGrid";
 
-const VestidosBano = ({ onlyPromos, productos, searchTerm, mostrarBotonVolver }) => (
+const BronceadoresPage = ({ onlyPromos, productos, searchTerm, mostrarBotonVolver }) => (
   <ProductGrid
-    fetchFn={cargarVestidosBanoDesdeSheets}
+    fetchFn={cargarBronceadoresDesdeSheets}
     productos={productos}
     loadingMessage="Descubriendo Bronceadores..."
     searchTerm={searchTerm}
@@ -12,4 +12,4 @@ const VestidosBano = ({ onlyPromos, productos, searchTerm, mostrarBotonVolver })
   />
 );
 
-export default VestidosBano;
+export default BronceadoresPage;
