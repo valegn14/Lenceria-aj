@@ -208,15 +208,27 @@ const Card = () => {
 
                   <div className="flex justify-between items-center mb-1">
                     <div className="flex items-center gap-2">
-                      <p className="text-base font-bold text-pink-800">
-                        ${producto.precio}
-                      </p>
-                      {producto.rebaja && Number(producto.rebaja) > 0 && (
-                        <p className="text-gray-400 line-through text-sm">
-                          ${(parseFloat(producto.precio) / (1 - Number(producto.rebaja) / 100)).toFixed(0)}
-                        </p>
-                      )}
-                    </div>
+                        {(() => {
+                          const precioNum = Number(producto.precio) || 0;
+                          const precioFormateado = precioNum.toLocaleString('es-CO', { minimumFractionDigits: 0 });
+                          return (
+                            <p className="text-base font-bold text-pink-800">
+                              ${precioFormateado}
+                            </p>
+                          );
+                        })()}
+
+                        {producto.rebaja && Number(producto.rebaja) > 0 && (() => {
+                          const precioNum = Number(producto.precio) || 0;
+                          const original = Math.round(precioNum / (1 - Number(producto.rebaja) / 100));
+                          const originalFormateado = original.toLocaleString('es-CO');
+                          return (
+                            <p className="text-gray-400 line-through text-sm">
+                              ${originalFormateado}
+                            </p>
+                          );
+                        })()}
+                      </div>
                   </div>
 
                   <p className="text-xs text-gray-600 line-clamp-2 leading-snug mb-2">

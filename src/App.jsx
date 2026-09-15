@@ -34,6 +34,7 @@ function App() {
           <Route path="/Visitanos" element={<Layout><Visitanos /></Layout>} />
           <Route path="/juguetes" element={<Layout><Juguetes /></Layout>} />
           <Route path="/lenceria" element={<Layout><Lenceria /></Layout>} />
+          <Route path="/lenceria/:gender" element={<Layout><Lenceria /></Layout>} />
           <Route path="/lubricantes" element={<Layout><Lubricantes /></Layout>} />
           <Route path="/suplementos" element={<Layout><Suplementos /></Layout>} />
           <Route path="/higiene" element={<Layout><Higiene /></Layout>} />

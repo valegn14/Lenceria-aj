@@ -79,15 +79,15 @@ export const ProductCard = ({ producto, compact, onNavigate, onAddToCart }) => {
           <div className="flex items-center gap-2">
             <p className="text-base font-bold text-pink-800">
               {compact
-                ? `$${producto.precio}`
+                ? `$${Number(producto.precio).toLocaleString('es-CO', { minimumFractionDigits: 0 })}`
                 : `$${Number(producto.precio).toLocaleString('es-CO', { minimumFractionDigits: 0 })}`
               }
             </p>
             {producto.rebaja && Number(producto.rebaja) > 0 && (
               <p className="text-gray-400 line-through text-sm">
                 {compact
-                  ? `$${(parseFloat(producto.precio) / (1 - Number(producto.rebaja) / 100)).toFixed(0)}`
-                  : `$${Math.round(parseFloat(producto.precio) / (1 - Number(producto.rebaja) / 100)).toLocaleString('es-CO')}`
+                    ? `$${Math.round(parseFloat(producto.precio) / (1 - Number(producto.rebaja) / 100)).toLocaleString('es-CO')}`
+                    : `$${Math.round(parseFloat(producto.precio) / (1 - Number(producto.rebaja) / 100)).toLocaleString('es-CO')}`
                 }
               </p>
             )}

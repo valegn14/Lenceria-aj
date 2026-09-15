@@ -2,7 +2,8 @@ import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import banner from "../assets/pinteres3.png";
 import { cargarPrimerosProductos } from "../database/sheets";
-import Lenceria from "./lenceria";
+import ProductGrid from "../components/ProductGrid";
+import DecorativeHearts from "../components/DecorativeHearts";
 import Juguetes from "./juguetes";
 import Lubricantes from "./lubricantes";
 import Suplementos from "./suplementos";
@@ -92,6 +93,7 @@ const ProductSkeleton = () => (
 
 const Inicio = () => {
   const [productosLenceria, setProductosLenceria]       = useState([]);
+  const [productosLenceriaH, setProductosLenceriaH]     = useState([]);
   const [productosJuguetes, setProductosJuguetes]       = useState([]);
   const [productosLubricantes, setProductosLubricantes] = useState([]);
   const [productosSuplementos, setProductosSuplementos] = useState([]);
@@ -102,8 +104,9 @@ const Inicio = () => {
   useEffect(() => {
     const cargar = async () => {
       try {
-        const [lice, juguetes, lubricantes, suplementos, higiene, Bronceadores] = await Promise.all([
+        const [lice, lenceriaH, juguetes, lubricantes, suplementos, higiene, Bronceadores] = await Promise.all([
           cargarPrimerosProductos('Lenceria', 4),
+          cargarPrimerosProductos('LenceriaH', 4),
           cargarPrimerosProductos('Juguetes', 4),
           cargarPrimerosProductos('Lubricantes', 4),
           cargarPrimerosProductos('Suplementos', 4),
@@ -111,6 +114,7 @@ const Inicio = () => {
           cargarPrimerosProductos('Bronceadores', 4),
         ]);
         setProductosLenceria(lice);
+        setProductosLenceriaH(lenceriaH);
         setProductosJuguetes(juguetes);
         setProductosLubricantes(lubricantes);
         setProductosSuplementos(suplementos);
@@ -140,7 +144,9 @@ const Inicio = () => {
 
 
   return (
-    <div className="w-full bg-gradient-to-b from-pink-50 to-purple-50 min-h-screen">
+    <div className="w-full bg-gradient-to-b from-pink-50 to-purple-50 min-h-screen relative">
+      <DecorativeHearts fixed={false} />
+      <div className="relative z-10">
       {/* Hero Banner */}
 <div className="w-full mb-8">
         {/* <div className="max-w-7xl mx-auto"> */}
@@ -241,11 +247,24 @@ const Inicio = () => {
               {Array.from({ length: 4 }).map((_, i) => <ProductSkeleton key={i} />)}
             </div>
           ) : (
-            <Lenceria productos={productosLenceria} mostrarBotonVolver={false} searchTerm="" />
+            <ProductGrid productos={productosLenceria} showBackButton={false} />
           )}
           <div className="mt-6 text-center mb-10">
-            <Link to="/lenceria" className="inline-block bg-pink-600 text-white px-6 py-2 rounded-full text-sm sm:text-base font-medium shadow-md hover:bg-pink-700 transition">
-              Ver más lencería
+            <Link to="/lenceria/mujer" className="inline-block bg-pink-600 text-white px-6 py-2 rounded-full text-sm sm:text-base font-medium shadow-md hover:bg-pink-700 transition">
+              Ver más lencería femenina
+            </Link>
+          </div>
+
+          {loadingProductos ? (
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 lg:gap-6">
+              {Array.from({ length: 4 }).map((_, i) => <ProductSkeleton key={i} />)}
+            </div>
+          ) : (
+            <ProductGrid productos={productosLenceriaH} showBackButton={false} />
+          )}
+          <div className="mt-6 text-center mb-10">
+            <Link to="/lenceria/hombre" className="inline-block bg-pink-600 text-white px-6 py-2 rounded-full text-sm sm:text-base font-medium shadow-md hover:bg-pink-700 transition">
+              Ver más lencería masculina
             </Link>
           </div>
 
@@ -313,6 +332,7 @@ const Inicio = () => {
             ))}
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

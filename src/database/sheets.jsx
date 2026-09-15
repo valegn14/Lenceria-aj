@@ -10,6 +10,7 @@ const cache = {
   datosJuego: { data: null, timestamp: 0, ttl: 30 * 60 * 1000 },
   juguetes: { data: null, timestamp: 0, ttl: 5 * 60 * 1000 },
   lenceria: { data: null, timestamp: 0, ttl: 5 * 60 * 1000 },
+  lenceriaH: { data: null, timestamp: 0, ttl: 5 * 60 * 1000 },
   lubricantes: { data: null, timestamp: 0, ttl: 5 * 60 * 1000 },
   suplementos: { data: null, timestamp: 0, ttl: 5 * 60 * 1000 },
   higiene: { data: null, timestamp: 0, ttl: 5 * 60 * 1000 },
@@ -233,19 +234,21 @@ export async function cargarProductosDesdeSheets(forceRefresh = false) {
 
   const loadPromise = (async () => {
     try {
-      const [lubricantes, juguetes, lenceria, suplementos, higiene, Bronceadores] = await Promise.all([
+      const [lubricantes, juguetes, lenceria, lenceriaH, suplementos, higiene, Bronceadores] = await Promise.all([
         leerRango('Lubricantes!A:H'),
         leerRango('Juguetes!A:H'),
         leerRango('Lenceria!A:H'),
+        leerRango('LenceriaH!A:H'),
         leerRango('Suplementos!A:H'),
         leerRango('Higiene!A:H'),
         leerRango('Bronceadores!A:H')
       ]);
-
+ 
       const todosLosDatos = [
         ...procesarDatosProducto(lubricantes),
         ...procesarDatosProducto(juguetes),
         ...procesarDatosProducto(lenceria),
+        ...procesarDatosProducto(lenceriaH),
         ...procesarDatosProducto(suplementos),
         ...procesarDatosProducto(higiene),
         ...procesarDatosProducto(Bronceadores)
@@ -302,7 +305,7 @@ export async function cargarJuguetesDesdeSheets(forceRefresh = false) {
 
 export async function cargarLenceriaDesdeSheets(forceRefresh = false) {
   const cacheKey = 'lenceria';
-  
+   
   if (!forceRefresh) {
     const cached = getFromCache(cacheKey);
     if (cached) return cached;
@@ -314,9 +317,9 @@ export async function cargarLenceriaDesdeSheets(forceRefresh = false) {
 
   try {
     const loadPromise = (async () => {
-      const values = await leerRango('Lenceria!A:H'); // Cambiado a A:H
+      const values = await leerRango('Lenceria!A:H');
       if (values.length <= 1) return [];
-      
+       
       const datos = procesarDatosProducto(values);
       setToCache(cacheKey, datos);
       return datos;
@@ -329,6 +332,39 @@ export async function cargarLenceriaDesdeSheets(forceRefresh = false) {
   } catch (error) {
     loadingStates.delete(cacheKey);
     console.error('Error al cargar Lencería:', error);
+    throw error;
+  }
+}
+
+export async function cargarLenceriaHombreDesdeSheets(forceRefresh = false) {
+  const cacheKey = 'lenceriaH';
+   
+  if (!forceRefresh) {
+    const cached = getFromCache(cacheKey);
+    if (cached) return cached;
+  }
+
+  if (loadingStates.has(cacheKey)) {
+    return loadingStates.get(cacheKey);
+  }
+
+  try {
+    const loadPromise = (async () => {
+      const values = await leerRango('LenceriaH!A:H');
+      if (values.length <= 1) return [];
+       
+      const datos = procesarDatosProducto(values);
+      setToCache(cacheKey, datos);
+      return datos;
+    })();
+
+    loadingStates.set(cacheKey, loadPromise);
+    const result = await loadPromise;
+    loadingStates.delete(cacheKey);
+    return result;
+  } catch (error) {
+    loadingStates.delete(cacheKey);
+    console.error('Error al cargar Lencería Hombre:', error);
     throw error;
   }
 }

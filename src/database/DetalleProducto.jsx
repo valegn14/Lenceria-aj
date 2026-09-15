@@ -240,19 +240,34 @@ const handleAddToCart = () => {
                 
                 {/* Price Section */}
                 <div className="flex items-center gap-3">
-                  <span className="text-2xl lg:text-3xl font-medium text-gray-900">
-                    ${producto.precio}
-                  </span>
-                  {producto.rebaja && Number(producto.rebaja) > 0 && (
-                    <>
-                      <span className="text-lg text-gray-500 line-through">
-                        ${(parseFloat(producto.precio) / (1 - Number(producto.rebaja) / 100)).toFixed(0)}
+                  {(() => {
+                    const precioNum = Number(producto.precio) || 0;
+                    const precioFormateado = precioNum.toLocaleString('es-CO', { minimumFractionDigits: 0 });
+                    return (
+                      <span className="text-2xl lg:text-3xl font-medium text-gray-900">
+                        ${precioFormateado}
                       </span>
-                      <span className="text-sm text-red-600 font-medium">
-                        Ahorras ${((parseFloat(producto.precio) / (1 - Number(producto.rebaja) / 100)) - parseFloat(producto.precio)).toFixed(0)}
-                      </span>
-                    </>
-                  )}
+                    );
+                  })()}
+
+                  {producto.rebaja && Number(producto.rebaja) > 0 && (() => {
+                    const precioNum = Number(producto.precio) || 0;
+                    const original = Math.round(precioNum / (1 - Number(producto.rebaja) / 100));
+                    const ahorro = original - precioNum;
+                    const originalFormateado = original.toLocaleString('es-CO');
+                    const ahorroFormateado = ahorro.toLocaleString('es-CO');
+
+                    return (
+                      <>
+                        <span className="text-lg text-gray-500 line-through">
+                          ${originalFormateado}
+                        </span>
+                        <span className="text-sm text-red-600 font-medium">
+                          Ahorras ${ahorroFormateado}
+                        </span>
+                      </>
+                    );
+                  })()}
                 </div>
               </div>
 
@@ -329,7 +344,10 @@ const handleAddToCart = () => {
                   onClick={handleAddToCart}
                   className="w-full bg-black hover:bg-gray-800 text-white py-4 px-8 font-medium transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
                 >
-                  Agregar al carrito - ${(parseFloat(producto.precio) * quantity).toFixed(2)}
+                  {(() => {
+                    const total = Math.round((Number(producto.precio) || 0) * quantity);
+                    return `Agregar al carrito - $${total.toLocaleString('es-CO')}`;
+                  })()}
                 </button>
                 
                 <div className="grid grid-cols-2 gap-3">
