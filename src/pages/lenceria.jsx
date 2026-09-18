@@ -86,7 +86,7 @@ const Lenceria = ({ onlyPromos, productos, searchTerm }) => {
               <div className="flex gap-3">
                 <button
                   onClick={() => setActiveFilter("all")}
-                  className={`rounded-full px-4 py-2 text-sm font-medium transition ${
+                  className={`rounded-full px-5 py-2.5 text-base font-medium transition ${
                     activeFilter === "all"
                       ? "bg-pink-600 text-white"
                       : "bg-white text-pink-600 border border-pink-600 hover:bg-pink-600 hover:text-white"
@@ -97,7 +97,7 @@ const Lenceria = ({ onlyPromos, productos, searchTerm }) => {
 
                 <button
                   onClick={() => setActiveFilter("mujer")}
-                  className={`rounded-full px-4 py-2 text-sm font-medium transition ${
+                  className={`rounded-full px-5 py-2.5 text-base font-medium transition ${
                     activeFilter === "mujer"
                       ? "bg-pink-600 text-white"
                       : "bg-white text-pink-600 border border-pink-600 hover:bg-pink-600 hover:text-white"
@@ -108,7 +108,7 @@ const Lenceria = ({ onlyPromos, productos, searchTerm }) => {
 
                 <button
                   onClick={() => setActiveFilter("hombre")}
-                  className={`rounded-full px-4 py-2 text-sm font-medium transition ${
+                  className={`rounded-full px-5 py-2.5 text-base font-medium transition ${
                     activeFilter === "hombre"
                       ? "bg-pink-600 text-white"
                       : "bg-white text-pink-600 border border-pink-600 hover:bg-pink-600 hover:text-white"
