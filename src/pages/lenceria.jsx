@@ -49,7 +49,7 @@ const Lenceria = ({ onlyPromos, productos, searchTerm }) => {
 
     obtenerListas();
   }, []);
-const [bannerSrc] = useState('/assets/BANNER_LENCERIA.png');
+const [bannerSrc] = useState('/bannerlenceria.png');
 
   if (!selectedCategory) {
     const combined = [...mujerList, ...hombreList];
