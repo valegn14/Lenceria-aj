@@ -1,8 +1,8 @@
 
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import SolarOverview from "../solar/carrito";
-import logo from "/public/logo_lenceria.png";
+import logo from "/logo_lenceria.png";
 import { useCart } from "../solar/CartContext";
 
 import IconJ from "./juguete.png";
@@ -20,18 +20,16 @@ import IconVestido from './vestido.png';
 
 function Brand() {
   return (
-    <Link to="/" className="flex items-center space-x-2 flex-shrink-0">
+    <Link to="/" className="flex items-center gap-2 min-w-0 shrink-0">
       <img
         src={logo}
         alt="Logo Lencería AJ"
-        className="w-12 h-10 sm:w-14 sm:h-12 md:w-16 md:h-14 transition-transform hover:scale-105 drop-shadow-[0_2px_2px_rgba(0,0,0,0.1)]"
+        className="w-10 h-8 sm:w-12 sm:h-10 md:w-14 md:h-12 lg:w-16 lg:h-14 transition-transform hover:scale-105 drop-shadow-[0_2px_2px_rgba(0,0,0,0.1)]"
       />
-      <h1 className="text-sm sm:text-base md:text-lg font-bold tracking-wider text-pink-600 hover:text-pink-900 transition-colors">
+      <h1 className="text-[0.68rem] sm:text-sm md:text-base lg:text-lg font-bold tracking-wider text-pink-600 hover:text-pink-900 transition-colors whitespace-nowrap truncate max-w-[10rem] sm:max-w-none">
         LENCERÍA AJ
       </h1>
     </Link>
-
-
   );
 }
 const VisitIcon = () => (
@@ -172,7 +170,7 @@ function SideMenu({ isOpen, onClose, onCartClick, cartCount }) {
         onClick={onClose}
       />
       <div
-        className="fixed top-0 left-0 h-full w-80 sm:w-96 bg-gradient-to-b from-pink-50 to-purple-50 shadow-2xl transform transition-transform duration-300 ease-out overflow-y-auto"
+        className="fixed top-0 left-0 h-full w-[85vw] max-w-sm sm:w-96 bg-gradient-to-b from-pink-50 to-purple-50 shadow-2xl transform transition-transform duration-300 ease-out overflow-y-auto"
         style={{ transform: isOpen ? "translateX(0)" : "translateX(-100%)" }}
       >
         <div className="p-6 border-b border-pink-200 flex justify-between items-center bg-white/80 backdrop-blur-sm sticky top-0">
@@ -258,6 +256,7 @@ export default function Header({ onSearchOpen }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showCart, setShowCart] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const moreMenuRef = useRef(null);
 
   const { cartItems } = useCart();
   const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
@@ -270,19 +269,32 @@ export default function Header({ onSearchOpen }) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (!moreOpen) return;
+
+    const handleClickOutside = (event) => {
+      if (moreMenuRef.current && !moreMenuRef.current.contains(event.target)) {
+        setMoreOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [moreOpen]);
+
   return (
     <>
       <header
-        className={`fixed w-full z-40 transition-all duration-500 ${scrolled
+        className={`fixed w-full z-[100] transition-all duration-500 overflow-visible relative ${scrolled
           ? "bg-pink-200/80 backdrop-blur-xl shadow-lg py-2"
           : "bg-gradient-to-r from-pink-300 to-purple-50 py-3 md:py-4"
           }`}
       >
-        <div className="w-full px-4">
-          <div className="flex items-center justify-between h-16 ">
+        <div className="w-full px-2 sm:px-4">
+          <div className="flex items-center justify-between gap-2 h-16 min-w-0">
             {/* Menú button - visible solo en móviles */}
             <button
-              className="md:hidden focus:outline-none p-2 hover:bg-pink-100 rounded-full transition-colors"
+              className="md:hidden focus:outline-none p-2 hover:bg-pink-100 rounded-full transition-colors shrink-0"
               aria-label="Abrir menú"
               onClick={() => setIsMenuOpen(true)}
             >
@@ -290,13 +302,13 @@ export default function Header({ onSearchOpen }) {
             </button>
 
             {/* Logo y enlaces agrupados */}
-            <div className="flex items-center flex-1">
-              <div className="flex-shrink-0">
+            <div className="flex items-center flex-1 min-w-0">
+              <div className="flex-shrink-0 min-w-0">
                 <Brand />
               </div>
 
-              <nav className="hidden md:flex items-center md:ml-16">
-                <ul className="flex space-x-6 items-center">
+              <nav className="hidden md:flex items-center md:ml-6 lg:ml-10 min-w-0 overflow-visible">
+                <ul className="flex items-center gap-4 lg:gap-6 min-w-0 overflow-visible">
                   {/* Enlaces principales */}
                   {primaryLinks.map(({ to, label }) => (
                     <li key={to}>
@@ -310,7 +322,7 @@ export default function Header({ onSearchOpen }) {
 
                   ))}
                   {moreLinks.map(({ to, label }) => (
-                    <li key={to} className="hidden lg:block">
+                    <li key={to} className="hidden xl:block">
                       <Link
                         to={to}
                         className="text-pink-600 hover:text-pink-800 font-medium text-sm uppercase tracking-wider transition-colors"
@@ -321,7 +333,7 @@ export default function Header({ onSearchOpen }) {
                   ))}
 
                   {/* Menú desplegable para los demás */}
-                  <li className="relative lg:hidden font-medium">
+                  <li ref={moreMenuRef} className="relative xl:hidden font-medium">
                     <button
                       onClick={() => setMoreOpen(!moreOpen)}
                       className="text-pink-600 hover:text-pink-800 text-sm uppercase tracking-wider transition-colors flex items-center gap-1">
@@ -333,26 +345,28 @@ export default function Header({ onSearchOpen }) {
                     </button>
 
                     {moreOpen && (
-                      <ul className="absolute top-full left-0 mt-2 w-40 bg-pink-100 rounded-lg shadow-lg z-10">
-                        {moreLinks.map(({ to, label }) => (
-                          <li key={to}>
-                            <Link
-                              to={to}
-                              className="block px-4 py-2 text-sm text-pink-600 hover:bg-pink-300 uppercase tracking-wider hover:text-pink-800 transition-colors"
-                              onClick={() => setMoreOpen(false)}
-                            >
-                              {label}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
+                      <div className="absolute top-full left-0 mt-2 z-[110]">
+                        <ul className="min-w-44 bg-pink-100/95 backdrop-blur-sm rounded-xl shadow-2xl border border-pink-200 overflow-hidden">
+                          {moreLinks.map(({ to, label }) => (
+                            <li key={to} className="border-b border-pink-200 last:border-b-0">
+                              <Link
+                                to={to}
+                                className="block px-4 py-3 text-sm text-pink-700 hover:bg-pink-200 uppercase tracking-wider hover:text-pink-900 transition-colors whitespace-nowrap"
+                                onClick={() => setMoreOpen(false)}
+                              >
+                                {label}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     )}
                   </li>
                   <div className="invisible w-[80px]"></div>
                 </ul>
               </nav>
             </div>
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center gap-1 sm:gap-2 shrink-0">
               <div>
                 <SearchIcon onClick={onSearchOpen} />
               </div>
@@ -370,8 +384,6 @@ export default function Header({ onSearchOpen }) {
           </div>
         </div>
       </header>
-
-      <div className="h-16 md:h-20"></div>
 
       {/* Side Menu */}
       <SideMenu

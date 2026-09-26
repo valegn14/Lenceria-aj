@@ -1,29 +1,35 @@
 import React from 'react';
 
-const hearts = [
-  { top: '4%', left: '4%', size: 14, rot: -12, color: '#E8B8C6', op: 0.22 },
-  { top: '12%', left: '16%', size: 10, rot: 6, color: '#DFA5B7', op: 0.2 },
-  { top: '8%', left: '36%', size: 16, rot: -4, color: '#F3A3C0', op: 0.25 },
-  { top: '6%', left: '60%', size: 12, rot: -8, color: '#E8B8C6', op: 0.2 },
-  { top: '18%', left: '48%', size: 12, rot: 8, color: '#DFA5B7', op: 0.2 },
-  { top: '24%', left: '10%', size: 10, rot: 14, color: '#F7C7D8', op: 0.18 },
-  { top: '28%', left: '36%', size: 12, rot: -18, color: '#E8B8C6', op: 0.2 },
-  { top: '34%', left: '60%', size: 18, rot: 6, color: '#DFA5B7', op: 0.18 },
-  { top: '44%', left: '18%', size: 9, rot: -12, color: '#F3A3C0', op: 0.22 },
-  { top: '50%', left: '45%', size: 14, rot: 14, color: '#DFA5B7', op: 0.2 },
-  { top: '58%', left: '75%', size: 11, rot: -8, color: '#E8B8C6', op: 0.18 },
-  { top: '66%', left: '28%', size: 13, rot: 5, color: '#F7C7D8', op: 0.18 },
-  { top: '74%', left: '58%', size: 16, rot: -20, color: '#F3A3C0', op: 0.23 },
-  { top: '82%', left: '82%', size: 10, rot: 10, color: '#DFA5B7', op: 0.19 },
-  { top: '88%', left: '12%', size: 12, rot: -6, color: '#E8B8C6', op: 0.18 },
-  { top: '92%', left: '42%', size: 9, rot: 8, color: '#F7C7D8', op: 0.17 },
-  { top: '20%', left: '80%', size: 10, rot: -14, color: '#F3A3C0', op: 0.2 },
-  { top: '40%', left: '80%', size: 12, rot: 12, color: '#DFA5B7', op: 0.2 },
-  { top: '60%', left: '6%', size: 11, rot: -10, color: '#F7C7D8', op: 0.19 },
-  { top: '72%', left: '52%', size: 13, rot: 4, color: '#F3A3C0', op: 0.21 },
-];
+const buildHearts = (count = 20) => {
+  const palette = ['#E8B8C6', '#DFA5B7', '#F3A3C0', '#F7C7D8'];
+  const positions = [
+    [4, 5], [12, 18], [18, 8], [28, 20], [38, 10], [48, 22], [58, 14], [68, 26],
+    [78, 12], [88, 20], [8, 36], [20, 45], [32, 34], [44, 42], [56, 38], [70, 46],
+    [82, 32], [90, 44], [12, 60], [26, 70], [40, 58], [54, 64], [68, 72], [82, 62],
+    [94, 68], [6, 82], [20, 88], [34, 82], [48, 90], [62, 84], [76, 90], [88, 80],
+    [15, 26], [52, 52], [72, 58], [46, 78], [28, 56]
+  ];
 
-export default function DecorativeHearts({ fixed = true }) {
+  return Array.from({ length: count }, (_, i) => {
+    const [left, top] = positions[i % positions.length];
+    const size = [9, 10, 12, 14, 16, 18][i % 6];
+    const rot = [-24, -12, -6, 6, 12, 18, 24][i % 7];
+    const color = palette[i % palette.length];
+    const op = [0.18, 0.2, 0.22, 0.24, 0.28][i % 5];
+
+    return {
+      top: `${top}%`,
+      left: `${left}%`,
+      size,
+      rot,
+      color,
+      op,
+    };
+  });
+};
+
+export default function DecorativeHearts({ fixed = true, count = 20 }) {
+  const hearts = buildHearts(count);
   const containerClass = fixed ? 'pointer-events-none fixed inset-0 z-0 overflow-hidden' : 'pointer-events-none absolute inset-0 z-0 overflow-hidden';
   return (
     <div aria-hidden="true" className={containerClass}>
@@ -43,9 +49,7 @@ export default function DecorativeHearts({ fixed = true }) {
             opacity: Math.max(0.34, Math.min(0.85, h.op + 0.34)),
             minWidth: h.size,
             minHeight: h.size,
-            // increase fill so hearts stand out on light backgrounds
             fillOpacity: Math.max(0.18, (h.op || 0.18) / 1.5),
-            // subtle shadow for contrast
             filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.06))',
           }}
           className="select-none"

@@ -53,11 +53,11 @@ export default function Footer2() {
                   </span>
                 </div>
                 <div className="bg-white rounded-lg p-2 shadow-sm flex flex-col items-center">
-  <span className="text-base lg:text-lg font-semibold flex items-center gap-0.5">
-    <span className="text-blue-700">Addi</span>
-    {/* <span className="text-gray-400">Pay</span> */}
-  </span>
-</div>
+                  <span className="text-base lg:text-lg font-semibold flex items-center gap-0.5">
+                    <span className="text-blue-700">Addi</span>
+                    {/* <span className="text-gray-400">Pay</span> */}
+                  </span>
+                </div>
 
               </div>
 

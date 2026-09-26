@@ -6,8 +6,15 @@ import {
   cargarLenceriaHombreDesdeSheets,
 } from "../database/sheets";
 import ProductGrid from "../components/ProductGrid";
+import DecorativeHearts from "../components/DecorativeHearts";
 
 const categoryMap = {
+  todo: {
+    title: "Toda la lencería",
+    description: "Explora nuestra colección completa de lencería femenina y masculina.",
+    fetchFn: null,
+    loadingMessage: "Cargando toda la lencería...",
+  },
   mujer: {
     title: "Lencería para Mujer",
     description: "Explora la colección femenina con la calidad y estilo que conoces.",
@@ -25,11 +32,18 @@ const categoryMap = {
 const Lenceria = ({ onlyPromos, productos, searchTerm }) => {
   const navigate = useNavigate();
   const { gender } = useParams();
-  const selectedCategory = categoryMap[gender?.toLowerCase()];
+  const normalizedGender = (gender || "todo").toLowerCase();
+  const selectedCategory = categoryMap[normalizedGender] || categoryMap.todo;
   const [mujerList, setMujerList] = useState([]);
   const [hombreList, setHombreList] = useState([]);
   const [loadingLists, setLoadingLists] = useState(true);
   const [activeFilter, setActiveFilter] = useState("all"); // 'all' | 'mujer' | 'hombre'
+
+  useEffect(() => {
+    const nextFilter =
+      normalizedGender === "mujer" ? "mujer" : normalizedGender === "hombre" ? "hombre" : "all";
+    setActiveFilter(nextFilter);
+  }, [normalizedGender]);
 
   useEffect(() => {
     const obtenerListas = async () => {
@@ -51,7 +65,7 @@ const Lenceria = ({ onlyPromos, productos, searchTerm }) => {
   }, []);
 const [bannerSrc] = useState('/bannerlenceria.png');
 
-  if (!selectedCategory) {
+  if (normalizedGender === "todo" || !categoryMap[normalizedGender]) {
     const combined = [...mujerList, ...hombreList];
     const displayed =
       activeFilter === "all"
@@ -63,6 +77,7 @@ const [bannerSrc] = useState('/bannerlenceria.png');
     return (
       <>
         <div className="relative left-1/2 right-1/2 w-screen -translate-x-1/2 overflow-hidden">
+          <DecorativeHearts fixed={false} count={36} />
           <div className="relative w-full h-40 sm:h-56 md:h-72 lg:h-96 overflow-hidden shadow-xl">
             <img
               src={bannerSrc}
@@ -79,12 +94,12 @@ const [bannerSrc] = useState('/bannerlenceria.png');
           </div>
         </div>
 
-        <div className="min-h-screen bg-white px-4 pb-8 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-white px-4 pb-8 sm:px-6 lg:px-8 relative">
           <div className="mx-auto max-w-7xl">
             <div className="mt-8 flex justify-center">
               <div className="flex gap-3">
                 <button
-                  onClick={() => setActiveFilter("all")}
+                  onClick={() => navigate("/lenceria/todo")}
                   className={`rounded-full px-5 py-2.5 text-base font-medium transition ${
                     activeFilter === "all"
                       ? "bg-pink-600 text-white"
@@ -95,7 +110,7 @@ const [bannerSrc] = useState('/bannerlenceria.png');
                 </button>
 
                 <button
-                  onClick={() => setActiveFilter("mujer")}
+                  onClick={() => navigate("/lenceria/mujer")}
                   className={`rounded-full px-5 py-2.5 text-base font-medium transition ${
                     activeFilter === "mujer"
                       ? "bg-pink-600 text-white"
@@ -106,7 +121,7 @@ const [bannerSrc] = useState('/bannerlenceria.png');
                 </button>
 
                 <button
-                  onClick={() => setActiveFilter("hombre")}
+                  onClick={() => navigate("/lenceria/hombre")}
                   className={`rounded-full px-5 py-2.5 text-base font-medium transition ${
                     activeFilter === "hombre"
                       ? "bg-pink-600 text-white"
@@ -137,8 +152,9 @@ const [bannerSrc] = useState('/bannerlenceria.png');
   }
 
   return (
-    <div className="min-h-screen bg-white px-4 py-8 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl">
+    <div className="min-h-screen bg-white px-4 py-8 sm:px-6 lg:px-8 relative overflow-hidden">
+      <DecorativeHearts fixed={false} count={36} />
+      <div className="mx-auto max-w-7xl relative z-10">
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <button
@@ -149,24 +165,26 @@ const [bannerSrc] = useState('/bannerlenceria.png');
             </button>
           </div>
           <div>
-            <h1 className="text-3xl font-semibold text-gray-900 sm:text-4xl">
+            <h1 className="text-3xl font-semibold text-pink-700 sm:text-4xl">
               {selectedCategory.title}
             </h1>
-            <p className="mt-2 text-sm text-gray-600 sm:text-base">
+            <p className="mt-2 text-sm text-pink-900/80 sm:text-base">
               {selectedCategory.description}
             </p>
           </div>
         </div>
       </div>
 
-      <ProductGrid
-        fetchFn={selectedCategory.fetchFn}
-        productos={productos}
-        loadingMessage={selectedCategory.loadingMessage}
-        searchTerm={searchTerm}
-        onlyPromos={onlyPromos}
-        showBackButton={false}
-      />
+      <div className="relative z-10">
+        <ProductGrid
+          fetchFn={selectedCategory.fetchFn}
+          productos={productos}
+          loadingMessage={selectedCategory.loadingMessage}
+          searchTerm={searchTerm}
+          onlyPromos={onlyPromos}
+          showBackButton={false}
+        />
+      </div>
     </div>
   );
 };

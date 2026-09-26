@@ -8,6 +8,8 @@ import Juguetes from "./juguetes";
 import Lubricantes from "./lubricantes";
 import Suplementos from "./suplementos";
 import Higiene from "./higiene";
+const lubricantesImg = "/lubric.png";
+
 import BronceadoresPage from "./vestidosBano";
 const categories = [
   {
@@ -27,7 +29,7 @@ const categories = [
   {
     name: "Lubricantes",
     route: "/lubricantes",
-    image: "https://senintimo.com/cdn/shop/files/Oscuro_1.jpg?v=1744314819&width=500",
+    image: lubricantesImg,
     description: "Suavidad que intensifica",
     color: "from-blue-900/60 to-teal-900/60",
   },
@@ -180,12 +182,12 @@ const Inicio = () => {
              <div className="w-24 h-1 bg-gradient-to-r from-pink-400 to-purple-500 mx-auto"></div>
            </div>
 
-          <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
+          <div className="flex flex-wrap justify-center gap-3 sm:gap-5 lg:gap-6">
             {categories.map((cat) => (
               <Link
                 to={cat.route}
                 key={cat.name}
-                className="w-[calc(50%-0.5rem)] sm:w-[calc(50%-0.75rem)] md:w-[calc(33.333%-0.75rem)] lg:w-[calc(25%-0.75rem)] xl:w-[calc(20%-0.75rem)] group relative overflow-hidden rounded-2xl shadow-lg transform transition-all duration-500 hover:shadow-2xl hover:-translate-y-2"
+                className="w-[calc(50%-0.375rem)] sm:w-[calc(50%-0.625rem)] md:w-[calc(33.333%-0.75rem)] lg:w-[calc(25%-0.75rem)] xl:w-[calc(20%-0.75rem)] min-w-[140px] group relative overflow-hidden rounded-2xl shadow-lg transform transition-all duration-500 hover:shadow-2xl hover:-translate-y-2"
 
               >
                 <div className="relative h-40 sm:h-56 lg:h-56 w-full">
