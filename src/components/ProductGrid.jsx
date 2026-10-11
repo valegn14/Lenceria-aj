@@ -18,8 +18,9 @@ const CheckIconSvg = ({ className = "h-6 w-6" }) => (
   </svg>
 );
 
-// Tarjeta de producto única: se usa en categorías, promociones, inicio y búsqueda
-export const ProductCard = ({ producto, onSelect }) => {
+// Tarjeta de producto única: se usa en categorías, promociones, inicio y búsqueda.
+// Con sinBorde (inicio) no lleva borde ni sombra: la imagen y el texto quedan sobre el fondo.
+export const ProductCard = ({ producto, onSelect, sinBorde = false }) => {
   const navigate = useNavigate();
   const { addToCart } = useCart();
   const [agregado, setAgregado] = useState(false);
@@ -46,16 +47,22 @@ export const ProductCard = ({ producto, onSelect }) => {
 
   return (
     <div
-      className={`group relative bg-white overflow-hidden rounded-xl border border-gray-200 transition-all duration-300 shadow-md hover:shadow-2xl hover:-translate-y-1.5 hover:border-pink-300 ${
+      className={`group relative ${
+        sinBorde
+          ? ""
+          : "bg-white overflow-hidden rounded-xl border border-gray-200 transition-all duration-300 shadow-md hover:shadow-2xl hover:-translate-y-1.5 hover:border-pink-300"
+      } ${
         agotado ? "opacity-90" : "cursor-pointer"
       }`}
       onClick={abrirDetalle}
     >
-      <div className="relative h-56 sm:h-72 lg:h-80 overflow-hidden bg-white">
+      <div className={`relative h-56 sm:h-72 lg:h-80 overflow-hidden bg-white ${sinBorde ? "rounded-md border border-gray-200 transition-colors group-hover:border-pink-300" : ""}`}>
         <img
           src={producto.imagen}
           alt={producto.nombre}
-          className={`w-full h-full object-cover ${agotado ? "grayscale-[30%]" : ""}`}
+          className={`w-full h-full object-cover ${agotado ? "grayscale-[30%]" : ""} ${
+            sinBorde ? "transition-transform duration-500 group-hover:scale-105" : ""
+          }`}
           loading="lazy"
         />
 
@@ -88,7 +95,7 @@ export const ProductCard = ({ producto, onSelect }) => {
         )}
       </div>
 
-      <div className="p-3">
+      <div className={sinBorde ? "pt-3" : "p-3"}>
         <h3 className="uppercase text-sm sm:text-base font-semibold text-gray-900 mb-1 line-clamp-2 leading-tight min-h-[2rem]">
           {producto.nombre}
         </h3>

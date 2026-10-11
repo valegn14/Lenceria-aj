@@ -2,20 +2,20 @@ import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import banner from "../assets/pinteres3.png";
 import { cargarPrimerosProductos } from "../database/sheets";
-import { ProductList } from "../components/ProductGrid";
+import SeccionDestacada from "../components/SeccionDestacada";
 import DecorativeHearts from "../components/DecorativeHearts";
 import Cargando from "../components/ui/Cargando";
 import { CATEGORIAS } from "../data/categorias";
 
 // Secciones de destacados, en el mismo orden que las categorías del menú
 const DESTACADOS = [
-  { hoja: "Lenceria", ruta: "/lenceria/mujer", texto: "Ver más lencería femenina" },
-  { hoja: "LenceriaH", ruta: "/lenceria/hombre", texto: "Ver más lencería masculina" },
-  { hoja: "Juguetes", ruta: "/juguetes", texto: "Ver más juguetes" },
-  { hoja: "Lubricantes", ruta: "/lubricantes", texto: "Ver más lubricantes" },
-  { hoja: "Suplementos", ruta: "/suplementos", texto: "Ver más suplementos" },
-  { hoja: "Higiene", ruta: "/higiene", texto: "Ver más higiene" },
-  { hoja: "Bronceadores", ruta: "/bronceadores", texto: "Ver más bronceadores" },
+  { hoja: "Lenceria", titulo: "Lencería femenina", ruta: "/lenceria/mujer", textoVerTodos: "Ver toda la lencería femenina" },
+  { hoja: "LenceriaH", titulo: "Lencería masculina", ruta: "/lenceria/hombre", textoVerTodos: "Ver toda la lencería masculina" },
+  { hoja: "Juguetes", titulo: "Juguetes", ruta: "/juguetes", textoVerTodos: "Ver todos los juguetes" },
+  { hoja: "Lubricantes", titulo: "Lubricantes", ruta: "/lubricantes", textoVerTodos: "Ver todos los lubricantes" },
+  { hoja: "Suplementos", titulo: "Suplementos", ruta: "/suplementos", textoVerTodos: "Ver todos los suplementos" },
+  { hoja: "Higiene", titulo: "Higiene", ruta: "/higiene", textoVerTodos: "Ver todo en higiene" },
+  { hoja: "Bronceadores", titulo: "Bronceadores", ruta: "/bronceadores", textoVerTodos: "Ver todos los bronceadores" },
 ];
 
 const InstagramEmbed = ({ html }) => {
@@ -153,27 +153,20 @@ const Inicio = () => {
       <div className="px-4 sm:px-6 lg:px-8 mb-16">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-8">
-            <h3 className="text-2xl sm:text-3xl md:text-4xl font-serif font-light text-gray-800 mb-4">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif font-light text-gray-800 mb-4">
               DESTACADOS
-            </h3>
+            </h2>
             <div className="w-24 h-1 bg-gradient-to-r from-pink-400 to-purple-500 mx-auto" />
           </div>
 
           {loadingProductos ? (
             <Cargando mensaje="Cargando destacados..." />
           ) : (
-            DESTACADOS.map(({ hoja, ruta, texto }) => (
-              <div key={hoja} className="mb-10">
-                <div className="py-8">
-                  <ProductList productos={destacados[hoja] || []} />
-                </div>
-                <div className="mt-6 text-center">
-                  <Link to={ruta} className="inline-block bg-pink-600 text-white px-6 py-2 rounded-full text-sm sm:text-base font-medium shadow-md hover:bg-pink-700 transition">
-                    {texto}
-                  </Link>
-                </div>
-              </div>
-            ))
+            <div className="space-y-6 sm:space-y-8">
+              {DESTACADOS.map(({ hoja, ...seccion }) => (
+                <SeccionDestacada key={hoja} {...seccion} productos={destacados[hoja]} />
+              ))}
+            </div>
           )}
         </div>
       </div>

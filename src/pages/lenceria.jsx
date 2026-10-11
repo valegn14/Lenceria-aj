@@ -31,6 +31,38 @@ const categoryMap = {
   },
 };
 
+const BANNER_SRC = "/bannerlenceria.png";
+
+// Filtros de color sobre la imagen del banner
+const FILTROS_BANNER = {
+  rosa: "bg-gradient-to-t from-[#D98FA5]/70 via-[#E8B8C6]/30 to-transparent",
+  azul: "bg-gradient-to-t from-blue-900/70 via-blue-700/45 to-sky-500/35",
+};
+
+// Banner de lencería: alto en "Toda la lencería" y más bajo en las subcategorías,
+// para que los productos aparezcan antes
+const BannerLenceria = ({ titulo, descripcion, compacto = false, filtro = "rosa" }) => (
+  <div className="relative left-1/2 right-1/2 w-screen -translate-x-1/2 overflow-hidden">
+    <DecorativeHearts fixed={false} count={36} />
+    <div className={`relative w-full overflow-hidden shadow-xl ${compacto ? "h-28 sm:h-36 md:h-40 lg:h-48" : "h-40 sm:h-56 md:h-72 lg:h-96"}`}>
+      <img
+        src={BANNER_SRC}
+        alt=""
+        className="w-full h-full object-cover transition-transform duration-700 hover:scale-105 min-w-full"
+      />
+      <div className={`absolute inset-0 ${FILTROS_BANNER[filtro]}`} />
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="text-center px-4">
+          <h1 className={`font-semibold text-white drop-shadow-lg ${compacto ? "text-2xl sm:text-3xl md:text-4xl" : "text-3xl sm:text-4xl md:text-5xl"}`}>
+            {titulo}
+          </h1>
+          <p className={`text-sm sm:text-base text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.55)] ${compacto ? "mt-1" : "mt-2"}`}>{descripcion}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
 const Lenceria = ({ onlyPromos, productos, searchTerm }) => {
   const navigate = useNavigate();
   const { gender } = useParams();
@@ -65,7 +97,6 @@ const Lenceria = ({ onlyPromos, productos, searchTerm }) => {
 
     obtenerListas();
   }, []);
-const [bannerSrc] = useState('/bannerlenceria.png');
 
   if (normalizedGender === "todo" || !categoryMap[normalizedGender]) {
     const combined = [...mujerList, ...hombreList];
@@ -78,23 +109,10 @@ const [bannerSrc] = useState('/bannerlenceria.png');
 
     return (
       <>
-        <div className="relative left-1/2 right-1/2 w-screen -translate-x-1/2 overflow-hidden">
-          <DecorativeHearts fixed={false} count={36} />
-          <div className="relative w-full h-40 sm:h-56 md:h-72 lg:h-96 overflow-hidden shadow-xl">
-            <img
-              src={bannerSrc}
-              alt="Banner lencería"
-              className="w-full h-full object-cover transition-transform duration-700 hover:scale-105 min-w-full"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#D98FA5]/70 via-[#E8B8C6]/30 to-transparent" />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center px-4">
-                <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-white drop-shadow-lg">Lencería</h1>
-                <p className="mt-2 text-sm sm:text-base text-[#FFF8FA]">Explora nuestra selección de lencería femenina y masculina.</p>
-              </div>
-            </div>
-          </div>
-        </div>
+        <BannerLenceria
+          titulo="Lencería"
+          descripcion="Explora nuestra selección de lencería femenina y masculina."
+        />
 
         <div className="min-h-screen bg-white px-4 pb-8 sm:px-6 lg:px-8 relative">
           <div className="mx-auto max-w-7xl">
@@ -154,35 +172,31 @@ const [bannerSrc] = useState('/bannerlenceria.png');
   }
 
   return (
-    <div className="min-h-screen bg-white px-4 py-8 sm:px-6 lg:px-8 relative overflow-hidden">
-      <DecorativeHearts fixed={false} count={36} />
-      <div className="mx-auto max-w-7xl relative z-10">
-        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <BotonVolver to="/lenceria" texto="Volver a lencería" className="" />
-          </div>
-          <div>
-            <h1 className="text-3xl font-semibold text-pink-700 sm:text-4xl">
-              {selectedCategory.title}
-            </h1>
-            <p className="mt-2 text-sm text-pink-900/80 sm:text-base">
-              {selectedCategory.description}
-            </p>
-          </div>
+    <>
+      <BannerLenceria
+        titulo={selectedCategory.title}
+        descripcion={selectedCategory.description}
+        compacto
+        filtro={normalizedGender === "hombre" ? "azul" : "rosa"}
+      />
+
+      <div className="min-h-screen bg-white px-4 pt-6 pb-8 sm:px-6 lg:px-8 relative overflow-hidden">
+        <div className="mx-auto max-w-7xl relative z-10">
+          <BotonVolver to="/lenceria" texto="Volver a lencería" className="" />
+        </div>
+
+        <div className="relative z-10">
+          <ProductGrid
+            fetchFn={selectedCategory.fetchFn}
+            productos={productos}
+            loadingMessage={selectedCategory.loadingMessage}
+            searchTerm={searchTerm}
+            onlyPromos={onlyPromos}
+            showBackButton={false}
+          />
         </div>
       </div>
-
-      <div className="relative z-10">
-        <ProductGrid
-          fetchFn={selectedCategory.fetchFn}
-          productos={productos}
-          loadingMessage={selectedCategory.loadingMessage}
-          searchTerm={searchTerm}
-          onlyPromos={onlyPromos}
-          showBackButton={false}
-        />
-      </div>
-    </div>
+    </>
   );
 };
 

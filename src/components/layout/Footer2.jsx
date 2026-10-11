@@ -125,7 +125,16 @@ export default function Footer2() {
       <div className="border-t border-pink-300/20 pt-6 text-center text-white/80 text-sm">
         <div className="container mx-auto px-4">
           <p>¿Quieres tu catálogo digital?</p>
-          <p className="mt-2 text-xs">Contáctanos 3113630754</p>
+          <p className="mt-2 text-xs">
+            <a
+              href={`https://wa.me/573113630754?text=${encodeURIComponent("Hola, vi tu trabajo y me gustaría cotizar contigo")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline-offset-2 hover:text-white hover:underline transition-colors"
+            >
+              Contáctanos 3113630754
+            </a>
+          </p>
         </div>
       </div>
     </footer>
