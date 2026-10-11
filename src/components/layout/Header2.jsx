@@ -1,389 +1,129 @@
-
-import { Link } from "react-router-dom";
-import { useState, useEffect, useRef } from "react";
+import { useCallback, useRef, useState } from "react";
 import SolarOverview from "../solar/carrito";
-import logo from "/logo_lenceria.png";
 import { useCart } from "../solar/CartContext";
-import { CATEGORIAS, RUTA_VISITANOS } from "../../data/categorias";
-
-import IconJ from "./juguete.png";
-import IconV from './ubicacion.png';
-import IconPromo from './promo.png';
-import IconCombos from './combo.png';
-import IconLenceria from './lenceria.png';
-import IconLubricantes from './lubricante.png';
 import IconoCarrito from "../ui/IconoCarrito";
-import IconSuplementos from './suplementos.png';
-import IconHigiene from './higiene.png';
-import IconVestido from './vestido.png';
+import Marca from "./header/Marca";
+import Buscador from "./header/Buscador";
+import { FranjaPromo, PildoraPromo, usePromoHeader } from "./header/Promo";
+import { EnlaceUbicacion } from "./header/Ubicacion";
+import { MenuCategoriasEscritorio, MenuCategoriasMovil } from "./header/MenuCategorias";
+import MenuLateral, { ID_MENU_LATERAL } from "./header/MenuLateral";
 
+/*
+  Distribución (CSS grid con áreas):
+  · Celular (< 768):   [menú | logo | carrito]  /  [buscador a todo el ancho]  /  [categorías con scroll]
+  · Tablet (768-1023): [menú | logo | buscador | carrito]  /  [categorías con scroll]
+  · Escritorio (1024+):[logo | buscador | promo]  /  [ubicación | categorías | carrito]
+  La franja de promo (celular/tablet) va encima. El header no es fijo: se va con el scroll.
+*/
+const CLASES_GRID = [
+  "grid items-center gap-x-2 gap-y-2 md:gap-x-4 lg:gap-x-6",
+  "grid-cols-[auto_1fr_auto] [grid-template-areas:'menu_logo_acciones'_'buscador_buscador_buscador'_'cats_cats_cats']",
+  "md:grid-cols-[auto_auto_1fr_auto] md:[grid-template-areas:'menu_logo_buscador_acciones'_'cats_cats_cats_cats']",
+  "lg:grid-cols-[200px_1fr_auto] lg:[grid-template-areas:'logo_buscador_promo'_'ubicacion_cats_acciones']",
+].join(" ");
 
+const claseIconoBoton =
+  "relative inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-header-icono transition-colors hover:bg-white/40 hover:text-header-texto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-header-acento";
 
-function Brand() {
+function BotonCarrito({ cantidad, onClick }) {
   return (
-    <Link to="/" className="flex items-center gap-2 min-w-0 shrink-0">
-      <img
-        src={logo}
-        alt="Logo Lencería AJ"
-        className="w-10 h-8 sm:w-12 sm:h-10 md:w-14 md:h-12 lg:w-16 lg:h-14 transition-transform hover:scale-105 drop-shadow-[0_2px_2px_rgba(0,0,0,0.1)]"
-      />
-      <h1 className="text-[0.68rem] sm:text-sm md:text-base lg:text-lg font-bold tracking-wider text-pink-600 hover:text-pink-900 transition-colors whitespace-nowrap truncate max-w-[10rem] sm:max-w-none">
-        LENCERÍA AJ
-      </h1>
-    </Link>
-  );
-}
-const VisitIcon = () => (
-  <Link
-    to={RUTA_VISITANOS}
-    className="p-2 text-pink-600 hover:text-pink-800 rounded-full transition-colors"
-    aria-label="Visítanos"
-  >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="w-6 h-6"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      strokeWidth="2"
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={cantidad > 0 ? `Abrir carrito, ${cantidad} ${cantidad === 1 ? "producto" : "productos"}` : "Abrir carrito"}
+      className={claseIconoBoton}
     >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-      />
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-      />
-    </svg>
-  </Link>
-);
-const MenuIcon = ({ isOpen }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    className="w-8 h-8 text-pink-600"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-  >
-    {isOpen ? (
-      <path d="M6 18L18 6M6 6l12 12" />
-    ) : (
-      <path d="M3 12h18M3 6h18M3 18h18" />
-    )}
-  </svg>
-);
-
-const SearchIcon = ({ onClick }) => (
-  <button
-    onClick={onClick}
-    className="p-2 text-pink-600 hover:text-pink-800 rounded-full transition-colors"
-    aria-label="Buscar"
-  >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="w-6 h-6"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      strokeWidth="2"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-      />
-    </svg>
-  </button>
-);
-
-const CartIcon = ({ itemCount }) => (
-  <div className="relative">
-    <IconoCarrito className="w-8 text-pink-600 hover:text-pink-800 transition-colors" />
-    {itemCount > 0 && (
-      <span className="absolute -top-3 -right-3 bg-pink-600 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center font-bold ">
-        {itemCount > 99 ? '99+' : itemCount}
-      </span>
-    )}
-  </div>
-);
-
-const ICONOS_CATEGORIA = {
-  lenceria: IconLenceria,
-  juguetes: IconJ,
-  lubricantes: IconLubricantes,
-  suplementos: IconSuplementos,
-  higiene: IconHigiene,
-  bronceadores: IconVestido,
-  combos: IconCombos,
-  promociones: IconPromo,
-};
-
-// Mismo orden y rutas que el inicio y el footer (src/data/categorias.js)
-const menuLinks = CATEGORIAS.map(({ key, nombre, ruta }) => ({
-  to: ruta,
-  label: nombre,
-  icon: ICONOS_CATEGORIA[key],
-}));
-
-const primaryLinks = menuLinks.slice(0, 3);
-const moreLinks = menuLinks.slice(3);
-
-function SideMenu({ isOpen, onClose, onCartClick, cartCount }) {
-  useEffect(() => {
-    const handleKey = (e) => {
-      if (e.key === "Escape" && isOpen) onClose();
-    };
-
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-
-    window.addEventListener("keydown", handleKey);
-    return () => {
-      window.removeEventListener("keydown", handleKey);
-      document.body.style.overflow = 'unset';
-    };
-  }, [isOpen, onClose]);
-
-  if (!isOpen) return null;
-
-  return (
-    <div className="fixed inset-0 z-50">
-      <div
-        className="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm transition-opacity duration-300"
-        onClick={onClose}
-      />
-      <div
-        className="fixed top-0 left-0 h-full w-[85vw] max-w-sm sm:w-96 bg-gradient-to-b from-pink-50 to-purple-50 shadow-2xl transform transition-transform duration-300 ease-out overflow-y-auto"
-        style={{ transform: isOpen ? "translateX(0)" : "translateX(-100%)" }}
-      >
-        <div className="p-6 border-b border-pink-200 flex justify-between items-center bg-white/80 backdrop-blur-sm sticky top-0">
-          <Brand />
-          <button
-            onClick={onClose}
-            className="p-2 text-pink-600 hover:text-pink-800 hover:bg-pink-100 rounded-full transition-colors"
-            aria-label="Cerrar menú"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
-        </div>
-
-        <ul className="py-6 px-4 text-gray-700">
-          {menuLinks.map(({ to, label, icon }) => (
-            <li key={label} className="mb-2">
-              <Link
-                to={to}
-                onClick={onClose}
-                className="flex items-center py-4 px-4 hover:bg-pink-100 rounded-xl transition-all duration-200 group"
-              >
-                  {icon ? (
-                    <img
-                      src={icon}
-                      alt={label}
-                      className="w-7 h-7 mr-4 group-hover:scale-110 transition-transform"
-                    />
-                  ) : (
-                    <span className="w-7 h-7 mr-4 flex items-center justify-center text-pink-400 text-lg">•</span>
-                  )}
-                <span className="font-medium text-lg tracking-wider group-hover:text-pink-700">
-                  {label}
-                </span>
-              </Link>
-            </li>
-          ))}
-
-          <li className="mt-8 border-t border-pink-200 pt-6">
-            <button
-              onClick={() => {
-                onCartClick();
-                onClose();
-              }}
-              className="flex items-center w-full py-4 px-4 hover:bg-pink-100 rounded-xl transition-all duration-200 group"
-            >
-              <span className="w-7 h-7 mr-4 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <IconoCarrito className="w-7 text-pink-600" />
-              </span>
-
-              <span className="font-medium text-lg tracking-wider group-hover:text-pink-700 flex-1 text-left">
-                Carrito
-              </span>
-              {cartCount > 0 && (
-                <span className="bg-pink-600 text-white text-sm rounded-full w-8 h-8 flex items-center justify-center font-bold">
-                  {cartCount > 99 ? '99+' : cartCount}
-                </span>
-              )}
-            </button>
-          </li>
-        </ul>
-      </div>
-    </div>
+      <IconoCarrito className="w-8" />
+      {cantidad > 0 && (
+        <span
+          aria-hidden="true"
+          className="absolute -right-0.5 top-0 flex h-5 min-w-5 items-center justify-center rounded-full bg-header-acento px-1 text-xs font-bold text-white"
+        >
+          {cantidad > 99 ? "99+" : cantidad}
+        </span>
+      )}
+    </button>
   );
 }
 
-export default function Header({ onSearchOpen }) {
-  const [moreOpen, setMoreOpen] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [showCart, setShowCart] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const moreMenuRef = useRef(null);
+export default function Header() {
+  const [menuAbierto, setMenuAbierto] = useState(false);
+  const [carritoAbierto, setCarritoAbierto] = useState(false);
+  const botonMenuRef = useRef(null);
+  const promo = usePromoHeader();
 
   const { cartItems } = useCart();
-  const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+  const cantidadCarrito = cartItems.reduce((total, item) => total + item.quantity, 0);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+  const cerrarMenu = useCallback(() => {
+    setMenuAbierto(false);
+    botonMenuRef.current?.focus();
   }, []);
-
-  useEffect(() => {
-    if (!moreOpen) return;
-
-    const handleClickOutside = (event) => {
-      if (moreMenuRef.current && !moreMenuRef.current.contains(event.target)) {
-        setMoreOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [moreOpen]);
 
   return (
     <>
-      <header
-        className={`fixed w-full z-[100] transition-all duration-500 overflow-visible relative ${scrolled
-          ? "bg-pink-200/80 backdrop-blur-xl shadow-lg py-2"
-          : "bg-gradient-to-r from-pink-300 to-purple-50 py-3 md:py-4"
-          }`}
-      >
-        <div className="w-full px-2 sm:px-4">
-          <div className="flex items-center justify-between gap-2 h-16 min-w-0">
-            {/* Menú button - visible solo en móviles */}
-            <button
-              className="md:hidden focus:outline-none p-2 hover:bg-pink-100 rounded-full transition-colors shrink-0"
-              aria-label="Abrir menú"
-              onClick={() => setIsMenuOpen(true)}
-            >
-              <MenuIcon isOpen={isMenuOpen} />
-            </button>
+      <header className="relative z-40 bg-gradient-to-r from-header-desde to-header-hasta shadow-sm">
+        {/* Promo: franja delgada en celular y tablet */}
+        <div className="lg:hidden">
+          <FranjaPromo promo={promo} />
+        </div>
 
-            {/* Logo y enlaces agrupados */}
-            <div className="flex items-center flex-1 min-w-0">
-              <div className="flex-shrink-0 min-w-0">
-                <Brand />
-              </div>
+        <div className={`relative mx-auto max-w-screen-2xl px-4 py-2 lg:px-6 lg:py-3 ${CLASES_GRID}`}>
+          {/* Menú hamburguesa (celular y tablet) */}
+          <button
+            ref={botonMenuRef}
+            type="button"
+            onClick={() => setMenuAbierto(true)}
+            aria-label="Abrir menú"
+            aria-expanded={menuAbierto}
+            aria-controls={ID_MENU_LATERAL}
+            className={`${claseIconoBoton} [grid-area:menu] -ml-2 lg:hidden`}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" aria-hidden="true">
+              <path d="M3 12h18M3 6h18M3 18h18" />
+            </svg>
+          </button>
 
-              <nav className="hidden md:flex items-center md:ml-6 lg:ml-10 min-w-0 overflow-visible">
-                <ul className="flex items-center gap-4 lg:gap-6 min-w-0 overflow-visible">
-                  {/* Enlaces principales */}
-                  {primaryLinks.map(({ to, label }) => (
-                    <li key={to}>
-                      <Link
-                        to={to}
-                        className="text-pink-600 hover:text-pink-800 font-medium text-sm uppercase tracking-wider transition-colors"
-                      >
-                        {label}
-                      </Link>
-                    </li>
+          <div className="[grid-area:logo] min-w-0">
+            <Marca />
+          </div>
 
-                  ))}
-                  {moreLinks.map(({ to, label }) => (
-                    <li key={to} className="hidden xl:block">
-                      <Link
-                        to={to}
-                        className="text-pink-600 hover:text-pink-800 font-medium text-sm uppercase tracking-wider transition-colors"
-                      >
-                        {label}
-                      </Link>
-                    </li>
-                  ))}
+          {/* Buscador: protagonista y siempre visible */}
+          <Buscador className="[grid-area:buscador] min-w-0" />
 
-                  {/* Menú desplegable para los demás */}
-                  <li ref={moreMenuRef} className="relative xl:hidden font-medium">
-                    <button
-                      onClick={() => setMoreOpen(!moreOpen)}
-                      className="text-pink-600 hover:text-pink-800 text-sm uppercase tracking-wider transition-colors flex items-center gap-1">
-                      Más
-                      <svg className="w-4 h-4 mt-0.5" fill="none" stroke="currentColor" strokeWidth="2"
-                        viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </button>
+          {/* Promo: píldora en escritorio */}
+          <PildoraPromo
+            promo={promo}
+            className="[grid-area:promo] hidden lg:flex w-[360px] xl:w-[440px] 2xl:w-[475px]"
+          />
 
-                    {moreOpen && (
-                      <div className="absolute top-full left-0 mt-2 z-[110]">
-                        <ul className="min-w-44 bg-pink-100/95 backdrop-blur-sm rounded-xl shadow-2xl border border-pink-200 overflow-hidden">
-                          {moreLinks.map(({ to, label }) => (
-                            <li key={to} className="border-b border-pink-200 last:border-b-0">
-                              <Link
-                                to={to}
-                                className="block px-4 py-3 text-sm text-pink-700 hover:bg-pink-200 uppercase tracking-wider hover:text-pink-900 transition-colors whitespace-nowrap"
-                                onClick={() => setMoreOpen(false)}
-                              >
-                                {label}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                  </li>
-                  <div className="invisible w-[80px]"></div>
-                </ul>
-              </nav>
-            </div>
-            <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-              <div>
-                <SearchIcon onClick={onSearchOpen} />
-              </div>
-              <VisitIcon />
+          {/* Ubicación de la tienda física (escritorio) */}
+          <div className="[grid-area:ubicacion] hidden lg:block min-w-0">
+            <EnlaceUbicacion />
+          </div>
 
-              {/* Cart button */}
-              <button
-                onClick={() => setShowCart(true)}
-                aria-label="Abrir carrito"
-                className="p-2 hover:bg-pink-100 rounded-full transition-colors"
-              >
-                <CartIcon itemCount={cartCount} />
-              </button>
-            </div>
+          {/* Categorías */}
+          <div className="[grid-area:cats] min-w-0">
+            <MenuCategoriasMovil className="-mx-4 lg:hidden" />
+            <MenuCategoriasEscritorio className="hidden lg:block" />
+          </div>
+
+          {/* Carrito */}
+          <div className="[grid-area:acciones] flex items-center justify-self-end">
+            <BotonCarrito cantidad={cantidadCarrito} onClick={() => setCarritoAbierto(true)} />
           </div>
         </div>
       </header>
 
-      {/* Side Menu */}
-      <SideMenu
-        isOpen={isMenuOpen}
-        onClose={() => setIsMenuOpen(false)}
-        onCartClick={() => setShowCart(true)}
-        cartCount={cartCount}
+      <MenuLateral
+        abierto={menuAbierto}
+        onCerrar={cerrarMenu}
+        cartCount={cantidadCarrito}
+        onAbrirCarrito={() => setCarritoAbierto(true)}
       />
 
-      {/* Cart */}
-      {showCart && <SolarOverview open={showCart} setOpen={setShowCart} />}
+      {carritoAbierto && <SolarOverview open={carritoAbierto} setOpen={setCarritoAbierto} />}
     </>
   );
 }

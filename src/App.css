@@ -2,4 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ===== Colores del header =====
+   Se usan en Tailwind como: bg-header-desde, text-header-texto, etc. (ver tailwind.config.js)
+   Contraste revisado (WCAG AA) sobre el fondo más oscuro del degradado (#f9a8d4). */
+:root {
+  --header-fondo-desde: #f9a8d4;   /* pink-300: inicio del degradado del header */
+  --header-fondo-hasta: #faf5ff;   /* purple-50: final del degradado */
+  --header-texto: #831843;         /* pink-900: texto de categorías y ubicación (5.3:1) */
+  --header-marca: #9d174d;         /* pink-800: nombre de la tienda (texto grande, 4.3:1) */
+  --header-icono: #be185d;         /* pink-700: íconos y hover (3.3:1, mínimo para íconos) */
+  --header-acento: #db2777;        /* pink-600: badge del carrito y borde del buscador al enfocar */
+  --header-promo-fondo: #fce7f3;   /* pink-100: píldora de promoción en escritorio */
+  --header-franja-fondo: #be185d;  /* pink-700: franja de promoción en celular (texto blanco 6:1) */
+}
 
+/* Oculta la barra de scroll sin quitar el desplazamiento (categorías en celular) */
+.sin-scrollbar {
+  scrollbar-width: none;
+}
+.sin-scrollbar::-webkit-scrollbar {
+  display: none;
+}

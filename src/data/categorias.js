@@ -5,6 +5,12 @@ export const CATEGORIAS = [
     key: "lenceria",
     nombre: "Lencería",
     ruta: "/lenceria",
+    // Las subcategorías aparecen con chevron/desplegable en el header y en el menú lateral
+    subcategorias: [
+      { nombre: "Toda la lencería", ruta: "/lenceria/todo" },
+      { nombre: "Lencería mujer", ruta: "/lenceria/mujer" },
+      { nombre: "Lencería hombre", ruta: "/lenceria/hombre" },
+    ],
     imagen: "https://i.pinimg.com/736x/3e/9a/21/3e9a213fba360f4fefbe8b85e4f1be24.jpg",
     descripcion: "Elegancia que despierta los sentidos",
     color: "from-rose-900/60 to-pink-900/60",
