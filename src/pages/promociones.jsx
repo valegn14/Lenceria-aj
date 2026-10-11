@@ -1,31 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import Card from "../database/cards";
+import ProductGrid from "../components/ProductGrid";
+import BotonVolver from "../components/ui/BotonVolver";
+import { cargarPromocionesDesdeSheets } from "../database/sheets";
 
 const Promociones = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   return (
     <div className="w-full py-12 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto">
-        <button
-          onClick={() => navigate("/")}
-          className="flex items-center text-pink-600 hover:text-pink-800 mb-6 transition-colors"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-          Volver
-        </button>
+        <BotonVolver to="/" />
 
         {/* Contador de ofertas */}
         <div className="bg-gradient-to-r from-rose-100 to-pink-100 rounded-xl p-6 mb-12 border border-rose-200 shadow-sm max-w-4xl mx-auto">
@@ -53,7 +35,13 @@ const Promociones = () => {
         <div className="relative">
           <div className="absolute top-0 left-0 w-full h-32  z-0"></div>
           <div className="relative z-10">
-            <Card />
+            <ProductGrid
+              fetchFn={cargarPromocionesDesdeSheets}
+              loadingMessage="Cargando promociones..."
+              showBackButton={false}
+              productosPorPagina={8}
+              mensajeVacio="No hay promociones activas en este momento."
+            />
           </div>
           <div className="absolute bottom-0 left-0 w-full h-32 t z-0"></div>
         </div>

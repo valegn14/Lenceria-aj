@@ -1,10 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { cargarCombosDesdeSheets } from "../database/sheets";
 import { useCart } from "../components/solar/CartContext";
+import Cargando from "../components/ui/Cargando";
+import { formatearPrecio } from "../utils/productos";
 
 const Combos = () => {
   const [combos, setCombos] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [hoveredCombo, setHoveredCombo] = useState(null);
+  const [comboAgregado, setComboAgregado] = useState(null);
+  const timerRef = useRef(null);
   const { addToCart } = useCart();
 
   useEffect(() => {
@@ -14,53 +19,39 @@ const Combos = () => {
         setCombos(datos);
       } catch (error) {
         console.error("Error al cargar combos:", error);
+      } finally {
+        setLoading(false);
       }
     }
     cargarCombos();
+    return () => clearTimeout(timerRef.current);
   }, []);
 
   const handleAddToCart = (e, combo, comboIndex) => {
     e.stopPropagation();
-    
-    // Generar nombre y seleccionar imagen
-    const comboName = `Combo #${combo.id || (comboIndex + 1)}`;
-    const comboImage = combo.imagenes[0]; // Primera imagen del combo
 
     addToCart({
       ...combo,
       id: combo.id || `combo-${comboIndex}`, // Asegurar ID único
-      nombre: comboName,
-      imagen: comboImage,
+      nombre: `Combo #${combo.id || (comboIndex + 1)}`,
+      imagen: combo.imagenes[0], // Primera imagen del combo
       quantity: 1,
       isCombo: true,
     });
-    
-    // Feedback visual
-    const button = e.currentTarget;
-    button.classList.add('bg-green-500', 'hover:bg-green-600');
-    button.innerHTML = `
-      <span>¡Agregado!</span>
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-      </svg>
-    `;
-    
-    setTimeout(() => {
-      button.classList.remove('bg-green-500', 'hover:bg-green-600');
-      button.innerHTML = `
-        <span>Agregar al carrito</span>
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform" viewBox="0 0 20 20" fill="currentColor">
-          <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-        </svg>
-      `;
-    }, 2000);
+
+    // Feedback visual: el botón muestra "¡Agregado!" y vuelve a "Agregar"
+    setComboAgregado(comboIndex);
+    clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => setComboAgregado(null), 2000);
   };
+
+  if (loading) return <Cargando mensaje="Cargando combos..." />;
 
   return (
     <div className="min-h-screen bg-white py-12 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-5l font-bold text-rose-700 mb-4 tracking-wide">
+          <h2 className="text-3xl sm:text-5xl font-bold text-rose-700 mb-4 tracking-wide">
             Combos Imperdibles
           </h2>
           <div className="w-32 h-1 bg-gradient-to-r from-rose-400 to-fuchsia-500 mx-auto rounded-full"></div>
@@ -100,7 +91,7 @@ const Combos = () => {
                     )}
                   </div>
                   <div className="bg-pink-600 text-white font-bold py-2 px-4 rounded-full text-xl shadow-md">
-                    ${combo.precio}
+                    {formatearPrecio(combo.precio)}
                   </div>
                 </div>
                 
@@ -151,14 +142,29 @@ const Combos = () => {
                 </div>
                 
                 {/* Botón de acción */}
-                <button 
+                <button
                   onClick={(e) => handleAddToCart(e, combo, comboIndex)}
-                  className="w-full bg-gradient-to-r from-rose-500 to-fuchsia-500 hover:from-rose-600 hover:to-fuchsia-600 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-[1.02] shadow-md hover:shadow-lg flex items-center justify-center group"
+                  className={`w-full text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-[1.02] shadow-md hover:shadow-lg flex items-center justify-center group ${
+                    comboAgregado === comboIndex
+                      ? "bg-green-500 hover:bg-green-600"
+                      : "bg-gradient-to-r from-rose-500 to-fuchsia-500 hover:from-rose-600 hover:to-fuchsia-600"
+                  }`}
                 >
-                  <span>Agregar</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
+                  {comboAgregado === comboIndex ? (
+                    <>
+                      <span>¡Agregado!</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    </>
+                  ) : (
+                    <>
+                      <span>Agregar</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                      </svg>
+                    </>
+                  )}
                 </button>
               </div>
             </div>

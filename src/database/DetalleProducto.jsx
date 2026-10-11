@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { cargarProductosDesdeSheets } from '../database/sheets';
 import { useCart } from "../components/solar/CartContext";
+import Cargando from "../components/ui/Cargando";
+import BotonVolver from "../components/ui/BotonVolver";
+import { formatearPrecio, precioANumero, precioOriginal, tieneRebaja } from "../utils/productos";
 
 const DetalleProducto = () => {
   const navigate = useNavigate();
@@ -90,14 +93,7 @@ const handleAddToCart = () => {
 
   // Estados de carga y error
   if (loading) {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pink-500 mx-auto mb-4"></div>
-          <p className="text-gray-600">Cargando producto...</p>
-        </div>
-      </div>
-    );
+    return <Cargando mensaje="Cargando producto..." className="min-h-screen" />;
   }
 
   if (error || !producto) {
@@ -120,15 +116,7 @@ const handleAddToCart = () => {
     <div className="min-h-screen bg-white">
       {/* Back Button Minimalista */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
-        <button
-          onClick={() => navigate(-1)}
-          className="flex items-center text-gray-600 hover:text-gray-900 transition-colors group"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-          Volver
-        </button>
+        <BotonVolver className="" />
       </div>
 
       {/* Product Layout */}
@@ -165,7 +153,7 @@ const handleAddToCart = () => {
                 <div className="relative aspect-square w-full max-w-2xl mx-auto">
                   {!imageLoaded && (
                     <div className="absolute inset-0 flex items-center justify-center bg-gray-50">
-                      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-pink-500"></div>
+                      <div className="h-12 w-12 animate-spin rounded-full border-4 border-pink-200 border-t-pink-600" />
                     </div>
                   )}
                   
@@ -240,34 +228,20 @@ const handleAddToCart = () => {
                 
                 {/* Price Section */}
                 <div className="flex items-center gap-3">
-                  {(() => {
-                    const precioNum = Number(producto.precio) || 0;
-                    const precioFormateado = precioNum.toLocaleString('es-CO', { minimumFractionDigits: 0 });
-                    return (
-                      <span className="text-2xl lg:text-3xl font-medium text-gray-900">
-                        ${precioFormateado}
+                  <span className="text-2xl lg:text-3xl font-medium text-gray-900">
+                    {formatearPrecio(producto.precio)}
+                  </span>
+
+                  {tieneRebaja(producto) && (
+                    <>
+                      <span className="text-lg text-gray-500 line-through">
+                        {formatearPrecio(precioOriginal(producto))}
                       </span>
-                    );
-                  })()}
-
-                  {producto.rebaja && Number(producto.rebaja) > 0 && (() => {
-                    const precioNum = Number(producto.precio) || 0;
-                    const original = Math.round(precioNum / (1 - Number(producto.rebaja) / 100));
-                    const ahorro = original - precioNum;
-                    const originalFormateado = original.toLocaleString('es-CO');
-                    const ahorroFormateado = ahorro.toLocaleString('es-CO');
-
-                    return (
-                      <>
-                        <span className="text-lg text-gray-500 line-through">
-                          ${originalFormateado}
-                        </span>
-                        <span className="text-sm text-red-600 font-medium">
-                          Ahorras ${ahorroFormateado}
-                        </span>
-                      </>
-                    );
-                  })()}
+                      <span className="text-sm text-red-600 font-medium">
+                        Ahorras {formatearPrecio(precioOriginal(producto) - precioANumero(producto.precio))}
+                      </span>
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -344,10 +318,7 @@ const handleAddToCart = () => {
                   onClick={handleAddToCart}
                   className="w-full bg-black hover:bg-gray-800 text-white py-4 px-8 font-medium transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
                 >
-                  {(() => {
-                    const total = Math.round((Number(producto.precio) || 0) * quantity);
-                    return `Agregar al carrito - $${total.toLocaleString('es-CO')}`;
-                  })()}
+                  {`Agregar al carrito - ${formatearPrecio(precioANumero(producto.precio) * quantity)}`}
                 </button>
                 
                 <div className="grid grid-cols-2 gap-3">

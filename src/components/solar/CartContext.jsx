@@ -1,9 +1,30 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import { formatearPrecio, precioANumero } from '../../utils/productos';
 
 const CartContext = createContext();
+const CART_STORAGE_KEY = 'carrito';
+
+// Recupera el carrito guardado para que no se pierda al recargar la página
+const cargarCarritoGuardado = () => {
+  try {
+    const guardado = localStorage.getItem(CART_STORAGE_KEY);
+    const items = guardado ? JSON.parse(guardado) : [];
+    return Array.isArray(items) ? items : [];
+  } catch {
+    return [];
+  }
+};
 
 export const CartProvider = ({ children }) => {
-  const [cartItems, setCartItems] = useState([]);
+  const [cartItems, setCartItems] = useState(cargarCarritoGuardado);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
+    } catch {
+      // Sin almacenamiento disponible (modo privado, etc.): el carrito sigue en memoria
+    }
+  }, [cartItems]);
 
   const addToCart = (product) => {
     setCartItems(prevItems => {
@@ -16,7 +37,7 @@ export const CartProvider = ({ children }) => {
         // Si existe, incrementar la cantidad
         return prevItems.map(item =>
           item.id === product.id && item.selectedSize === product.selectedSize
-            ? { ...item, quantity: item.quantity + 1 }
+            ? { ...item, quantity: item.quantity + (product.quantity || 1) }
             : item
         );
       } else {
@@ -43,24 +64,11 @@ export const CartProvider = ({ children }) => {
       )
     );
   };
-const calculateTotal = () => {
-  // Calcular total numéricamente
-  const total = cartItems.reduce((sum, item) => {
-    const numericPrice = Number(
-      String(item.precio)
-        .replace(/\./g, '')   // eliminar puntos de miles
-        .replace(/,/g, '.')   // convertir coma decimal a punto
-        .trim()
+  // Total ya formateado con separador de miles, ej: "$35.000"
+  const calculateTotal = () =>
+    formatearPrecio(
+      cartItems.reduce((sum, item) => sum + precioANumero(item.precio) * item.quantity, 0)
     );
-    return sum + (numericPrice * item.quantity);
-  }, 0);
-
-  // Formatear el número como pesos colombianos (con puntos de miles)
-  return total.toLocaleString('es-CO', {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0
-  });
-};
 
 
   return (

@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import SolarOverview from "../solar/carrito";
 import logo from "/logo_lenceria.png";
 import { useCart } from "../solar/CartContext";
+import { CATEGORIAS, RUTA_VISITANOS } from "../../data/categorias";
 
 import IconJ from "./juguete.png";
 import IconV from './ubicacion.png';
@@ -11,7 +12,7 @@ import IconPromo from './promo.png';
 import IconCombos from './combo.png';
 import IconLenceria from './lenceria.png';
 import IconLubricantes from './lubricante.png';
-import IconCart from './carrito.png';
+import IconoCarrito from "../ui/IconoCarrito";
 import IconSuplementos from './suplementos.png';
 import IconHigiene from './higiene.png';
 import IconVestido from './vestido.png';
@@ -34,7 +35,7 @@ function Brand() {
 }
 const VisitIcon = () => (
   <Link
-    to="/Visitanos"
+    to={RUTA_VISITANOS}
     className="p-2 text-pink-600 hover:text-pink-800 rounded-full transition-colors"
     aria-label="Visítanos"
   >
@@ -102,45 +103,35 @@ const SearchIcon = ({ onClick }) => (
 
 const CartIcon = ({ itemCount }) => (
   <div className="relative">
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="w-7 h-7 text-pink-600 hover:text-pink-800 transition-colors"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      strokeWidth="2"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007z"
-      />
-    </svg>
+    <IconoCarrito className="w-8 text-pink-600 hover:text-pink-800 transition-colors" />
     {itemCount > 0 && (
-      <span className="absolute -top-2 -right-2 bg-pink-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center font-bold ">
+      <span className="absolute -top-3 -right-3 bg-pink-600 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center font-bold ">
         {itemCount > 99 ? '99+' : itemCount}
       </span>
     )}
   </div>
 );
 
-const primaryLinks = [
-  { to: "/juguetes", label: "Juguetes", icon: IconJ },
-  { to: "/lubricantes", label: "Lubricantes", icon: IconLubricantes },
-  { to: "/lenceria", label: "Lencería", icon: IconLenceria },
-];
+const ICONOS_CATEGORIA = {
+  lenceria: IconLenceria,
+  juguetes: IconJ,
+  lubricantes: IconLubricantes,
+  suplementos: IconSuplementos,
+  higiene: IconHigiene,
+  bronceadores: IconVestido,
+  combos: IconCombos,
+  promociones: IconPromo,
+};
 
-const moreLinks = [
-  
-  { to: "/suplementos", label: "Suplementos", icon: IconSuplementos },
-  { to: "/higiene", label: "Higiene", icon: IconHigiene },
-  { to: "/bronceadores", label: "Bronceadores" , icon: IconVestido },
-    { to: "/Combos", label: "Combos", icon: IconCombos },
+// Mismo orden y rutas que el inicio y el footer (src/data/categorias.js)
+const menuLinks = CATEGORIAS.map(({ key, nombre, ruta }) => ({
+  to: ruta,
+  label: nombre,
+  icon: ICONOS_CATEGORIA[key],
+}));
 
-  { to: "/Promociones", label: "Promos", icon: IconPromo }
-];
-
-const menuLinks = [...primaryLinks, ...moreLinks]
+const primaryLinks = menuLinks.slice(0, 3);
+const moreLinks = menuLinks.slice(3);
 
 function SideMenu({ isOpen, onClose, onCartClick, cartCount }) {
   useEffect(() => {
@@ -229,17 +220,15 @@ function SideMenu({ isOpen, onClose, onCartClick, cartCount }) {
               }}
               className="flex items-center w-full py-4 px-4 hover:bg-pink-100 rounded-xl transition-all duration-200 group"
             >
-              <img
-                src={IconCart}
-                alt="Carrito"
-                className="w-7 h-7 mr-4 group-hover:scale-110 transition-transform"
-              />
+              <span className="w-7 h-7 mr-4 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <IconoCarrito className="w-7 text-pink-600" />
+              </span>
 
               <span className="font-medium text-lg tracking-wider group-hover:text-pink-700 flex-1 text-left">
                 Carrito
               </span>
               {cartCount > 0 && (
-                <span className="bg-pink-500 text-white text-sm rounded-full w-8 h-8 flex items-center justify-center font-bold">
+                <span className="bg-pink-600 text-white text-sm rounded-full w-8 h-8 flex items-center justify-center font-bold">
                   {cartCount > 99 ? '99+' : cartCount}
                 </span>
               )}

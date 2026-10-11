@@ -7,6 +7,8 @@ import {
 } from "../database/sheets";
 import ProductGrid from "../components/ProductGrid";
 import DecorativeHearts from "../components/DecorativeHearts";
+import Cargando from "../components/ui/Cargando";
+import BotonVolver from "../components/ui/BotonVolver";
 
 const categoryMap = {
   todo: {
@@ -136,7 +138,7 @@ const [bannerSrc] = useState('/bannerlenceria.png');
 
           <div className="mt-8">
             {loadingLists ? (
-              <div className="text-center text-gray-500">Cargando productos...</div>
+              <Cargando mensaje={selectedCategory.loadingMessage} />
             ) : (
               <ProductGrid
                 productos={displayed}
@@ -157,12 +159,7 @@ const [bannerSrc] = useState('/bannerlenceria.png');
       <div className="mx-auto max-w-7xl relative z-10">
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <button
-              onClick={() => navigate("/lenceria")}
-              className="inline-flex items-center rounded-full border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition hover:border-gray-400 hover:bg-gray-50"
-            >
-              ← Volver a categorías
-            </button>
+            <BotonVolver to="/lenceria" texto="Volver a lencería" className="" />
           </div>
           <div>
             <h1 className="text-3xl font-semibold text-pink-700 sm:text-4xl">

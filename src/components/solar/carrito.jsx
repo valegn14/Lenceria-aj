@@ -5,12 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useCart } from './CartContext';
-
-const formatPrice = (value) => {
-  const num = Number(value);
-  if (isNaN(num)) return value;
-  return num.toLocaleString('es-CO', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
-};
+import IconoCarrito from '../ui/IconoCarrito';
+import { formatearPrecio, precioANumero } from '../../utils/productos';
+import { TIENDA, urlWhatsApp } from '../../data/tienda';
 
 export default function SolarOverview({ open, setOpen }) {
   const { 
@@ -22,34 +19,14 @@ export default function SolarOverview({ open, setOpen }) {
   } = useCart();
   const navigate = useNavigate();
 
-const generarMensajeWhatsApp = () => {
-  const lineas = [
-    '🛍️ *Pedido para recoger en tienda*',
-    ...cartItems.map(item => `➡️ ${item.nombre} (${item.quantity}x) $${formatPrice(item.precio * item.quantity)}`),
-    `*Total: $${cartTotal}*`,`Dirección: Carrera 20 #27-33`,
-  ];
-  
-  // Une con %0A y codifica el resto
-  const textoParaCodificar = lineas.join('\n');
-  const textoCodificado = encodeURIComponent(textoParaCodificar)
-    .replace(/%0A/g, '%0A') // Asegura que los saltos de línea se mantengan
-    .replace(/%20/g, ' ');   // Opcional: reemplaza espacios codificados por espacios normales
-
-  return `https://wa.me/573245859853?text=${textoCodificado}`;
-};
-
-
-  const generarMensajeWhatsApp2 = () => {
-    let mensaje = '🛒 *Hola quiero un domicilio:*%0A';
-    cartItems.forEach((item, index) => {
-      mensaje += `%0A${index + 1}. ${item.nombre}`;
-      if (item.selectedSize) mensaje += ` (Talla: ${item.selectedSize})`;
-      mensaje += `%0A   Cantidad: ${item.quantity}`;
-      mensaje += `%0A   Precio unitario: $${formatPrice(item.precio)}`;
-      mensaje += `%0A   Subtotal: $${formatPrice(item.precio * item.quantity)}%0A`;
-    });
-    mensaje += `%0A*Total:* $${cartTotal}`;
-    return `https://wa.me/573245859853?text=${mensaje}`;
+  const generarMensajeWhatsApp = () => {
+    const lineas = [
+      '🛍️ *Pedido para recoger en tienda*',
+      ...cartItems.map(item => `➡️ ${item.nombre} (${item.quantity}x) ${formatearPrecio(precioANumero(item.precio) * item.quantity)}`),
+      `*Total: ${cartTotal}*`,
+      `Dirección: ${TIENDA.direccion}`,
+    ];
+    return urlWhatsApp(lineas.join('\n'));
   };
 
   return (
@@ -100,9 +77,7 @@ const generarMensajeWhatsApp = () => {
                     {cartItems.length === 0 ? (
                       <div className="text-center py-16 sm:py-20">
                         <div className="mx-auto w-24 h-24 sm:w-28 sm:h-28 bg-pink-100 rounded-full flex items-center justify-center mb-6">
-                          <svg className="w-12 h-12 sm:w-14 sm:h-14 text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                          </svg>
+                          <IconoCarrito className="w-12 sm:w-14 text-pink-600" strokeWidth={8} />
                         </div>
                         <h3 className="text-xl sm:text-2xl font-medium text-gray-900 mb-3">Tu carrito está vacío</h3>
                         
@@ -147,14 +122,14 @@ const generarMensajeWhatsApp = () => {
                                     )}
                                   </div>
                                   <div className="flex items-start sm:ml-4">
-                                    <p className="text-lg sm:text-xl font-bold text-pink-600">${formatPrice(product.precio)}</p>
+                                    <p className="text-lg sm:text-xl font-bold text-pink-600">{formatearPrecio(product.precio)}</p>
                                   </div>
                                 </div>
                                 
                                 {/* Subtotal móvil */}
                                 <div className="mt-2 sm:hidden">
                                   <p className="text-sm text-gray-600">
-                                    Subtotal: <span className="font-bold text-gray-900 text-base">${formatPrice(product.precio * product.quantity)}</span>
+                                    Subtotal: <span className="font-bold text-gray-900 text-base">{formatearPrecio(precioANumero(product.precio) * product.quantity)}</span>
                                   </p>
                                 </div>
                               </div>
@@ -201,7 +176,7 @@ const generarMensajeWhatsApp = () => {
                                   {/* Subtotal desktop */}
                                   <div className="hidden sm:block">
                                     <p className="text-sm text-gray-600">
-                                      Subtotal: <span className="font-medium text-gray-900">${formatPrice(product.precio * product.quantity)}</span>
+                                      Subtotal: <span className="font-medium text-gray-900">{formatearPrecio(precioANumero(product.precio) * product.quantity)}</span>
                                     </p>
                                   </div>
                                 </div>
@@ -218,7 +193,7 @@ const generarMensajeWhatsApp = () => {
   <div className="border-t border-gray-200 px-4 sm:px-6 py-3 sm:py-8 bg-gray-50">
     <div className="flex justify-between items-center text-2xl sm:text-xl font-bold text-gray-900 mb-6">
       <p>Total</p>
-      <p className="text-pink-600">${cartTotal}</p>
+      <p className="text-pink-600">{cartTotal}</p>
     </div>
 
     {/* Botones horizontales */}

@@ -4,7 +4,6 @@ import "./App.css";
 import Layout from "./components/layout/Layout";
 import Promociones from "./pages/promociones";
 import Inicio from "./pages/inicio";
-import Juega from "./pages/juega";
 
 import Juguetes from "./pages/juguetes";
 import Lenceria from "./pages/lenceria";
@@ -29,9 +28,8 @@ function App() {
           <Route path="/" element={<Layout><Inicio /></Layout>} />
           <Route path="/promociones" element={<Layout><Promociones /></Layout>} />
           <Route path="/contacto" element={<Layout><Contacto /></Layout>} />
-          <Route path="/juega" element={<Layout><Juega /></Layout>} />
           <Route path="/combos" element={<Layout><Combos /></Layout>} />
-          <Route path="/Visitanos" element={<Layout><Visitanos /></Layout>} />
+          <Route path="/visitanos" element={<Layout><Visitanos /></Layout>} />
           <Route path="/juguetes" element={<Layout><Juguetes /></Layout>} />
           <Route path="/lenceria" element={<Layout><Lenceria /></Layout>} />
           <Route path="/lenceria/todo" element={<Layout><Lenceria /></Layout>} />

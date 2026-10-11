@@ -2,65 +2,20 @@ import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import banner from "../assets/pinteres3.png";
 import { cargarPrimerosProductos } from "../database/sheets";
-import ProductGrid from "../components/ProductGrid";
+import { ProductList } from "../components/ProductGrid";
 import DecorativeHearts from "../components/DecorativeHearts";
-import Juguetes from "./juguetes";
-import Lubricantes from "./lubricantes";
-import Suplementos from "./suplementos";
-import Higiene from "./higiene";
-const lubricantesImg = "/lubric.png";
+import Cargando from "../components/ui/Cargando";
+import { CATEGORIAS } from "../data/categorias";
 
-import BronceadoresPage from "./vestidosBano";
-const categories = [
-  {
-    name: "Lencería",
-    route: "/lenceria",
-    image: "https://i.pinimg.com/736x/3e/9a/21/3e9a213fba360f4fefbe8b85e4f1be24.jpg",
-    description: "Elegancia que despierta los sentidos",
-    color: "from-rose-900/60 to-pink-900/60",
-  },
-  {
-    name: "Juguetes",
-    route: "/juguetes",
-    image: "https://i.pinimg.com/736x/b9/88/17/b98817646c69337a78d32d0634585379.jpg",
-    description: "Placeres que sorprenden",
-    color: "from-purple-900/60 to-indigo-900/60",
-  },
-  {
-    name: "Lubricantes",
-    route: "/lubricantes",
-    image: lubricantesImg,
-    description: "Suavidad que intensifica",
-    color: "from-blue-900/60 to-teal-900/60",
-  },
-  {
-    name: "Suplementos",
-    route: "/suplementos",
-    image: "https://res.cloudinary.com/dpsgtzlst/image/upload/v1782994786/suplementos_fnvplp.png",
-    description: "Bienestar que potencia",
-    color: "from-green-900/60 to-emerald-900/60",
-  },
-  {
-    name: "Higiene",
-    route: "/higiene",
-    image: "https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=800",
-    description: "Cuidado personal esencial",
-    color: "from-cyan-900/60 to-blue-900/60",
-  },
-  {
-    name: "Bronceadores",
-    route: "/bronceadores",
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4d--vr_MZ9h1eFb2afJhM5_QVdKfChEotT0eGqgrZ3IgDl-71k1mS28dg&s=10",
-    description: "Estilo que seduce",
-    color: "from-sky-900/60 to-teal-900/60",
-  },
-  {
-    name: "Promociones",
-    route: "/promociones",
-    image: "https://images.unsplash.com/photo-1556228720-195a672e8a03?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    description: "Oportunidades que excitan",
-    color: "from-amber-900/60 to-orange-900/60",
-  },
+// Secciones de destacados, en el mismo orden que las categorías del menú
+const DESTACADOS = [
+  { hoja: "Lenceria", ruta: "/lenceria/mujer", texto: "Ver más lencería femenina" },
+  { hoja: "LenceriaH", ruta: "/lenceria/hombre", texto: "Ver más lencería masculina" },
+  { hoja: "Juguetes", ruta: "/juguetes", texto: "Ver más juguetes" },
+  { hoja: "Lubricantes", ruta: "/lubricantes", texto: "Ver más lubricantes" },
+  { hoja: "Suplementos", ruta: "/suplementos", texto: "Ver más suplementos" },
+  { hoja: "Higiene", ruta: "/higiene", texto: "Ver más higiene" },
+  { hoja: "Bronceadores", ruta: "/bronceadores", texto: "Ver más bronceadores" },
 ];
 
 const InstagramEmbed = ({ html }) => {
@@ -82,46 +37,19 @@ const InstagramEmbed = ({ html }) => {
   );
 };
 
-const ProductSkeleton = () => (
-  <div className="bg-white rounded-xl border border-gray-200 overflow-hidden animate-pulse">
-    <div className="h-80 bg-gray-200" />
-    <div className="p-3 space-y-2">
-      <div className="h-4 bg-gray-200 rounded w-3/4" />
-      <div className="h-4 bg-gray-200 rounded w-1/2" />
-      <div className="h-3 bg-gray-200 rounded w-full" />
-    </div>
-  </div>
-);
-
 const Inicio = () => {
-  const [productosLenceria, setProductosLenceria]       = useState([]);
-  const [productosLenceriaH, setProductosLenceriaH]     = useState([]);
-  const [productosJuguetes, setProductosJuguetes]       = useState([]);
-  const [productosLubricantes, setProductosLubricantes] = useState([]);
-  const [productosSuplementos, setProductosSuplementos] = useState([]);
-  const [productosHigiene, setProductosHigiene]         = useState([]);
-  const [productosBronceadores, setProductosBronceadores]       = useState([]);
-  const [loadingProductos, setLoadingProductos]         = useState(true);
+  const [destacados, setDestacados] = useState({});
+  const [loadingProductos, setLoadingProductos] = useState(true);
 
   useEffect(() => {
     const cargar = async () => {
       try {
-        const [lice, lenceriaH, juguetes, lubricantes, suplementos, higiene, Bronceadores] = await Promise.all([
-          cargarPrimerosProductos('Lenceria', 4),
-          cargarPrimerosProductos('LenceriaH', 4),
-          cargarPrimerosProductos('Juguetes', 4),
-          cargarPrimerosProductos('Lubricantes', 4),
-          cargarPrimerosProductos('Suplementos', 4),
-          cargarPrimerosProductos('Higiene', 4),
-          cargarPrimerosProductos('Bronceadores', 4),
-        ]);
-        setProductosLenceria(lice);
-        setProductosLenceriaH(lenceriaH);
-        setProductosJuguetes(juguetes);
-        setProductosLubricantes(lubricantes);
-        setProductosSuplementos(suplementos);
-        setProductosHigiene(higiene);
-        setProductosBronceadores(Bronceadores);
+        const resultados = await Promise.all(
+          DESTACADOS.map(({ hoja }) => cargarPrimerosProductos(hoja, 4))
+        );
+        setDestacados(
+          Object.fromEntries(DESTACADOS.map(({ hoja }, i) => [hoja, resultados[i]]))
+        );
       } catch (error) {
         console.error("Error al cargar productos:", error);
       } finally {
@@ -183,17 +111,17 @@ const Inicio = () => {
            </div>
 
           <div className="flex flex-wrap justify-center gap-3 sm:gap-5 lg:gap-6">
-            {categories.map((cat) => (
+            {CATEGORIAS.map((cat) => (
               <Link
-                to={cat.route}
-                key={cat.name}
+                to={cat.ruta}
+                key={cat.key}
                 className="w-[calc(50%-0.375rem)] sm:w-[calc(50%-0.625rem)] md:w-[calc(33.333%-0.75rem)] lg:w-[calc(25%-0.75rem)] xl:w-[calc(20%-0.75rem)] min-w-[140px] group relative overflow-hidden rounded-2xl shadow-lg transform transition-all duration-500 hover:shadow-2xl hover:-translate-y-2"
 
               >
                 <div className="relative h-40 sm:h-56 lg:h-56 w-full">
                   <img
-                    src={cat.image}
-                    alt={cat.name}
+                    src={cat.imagen}
+                    alt={cat.nombre}
                     className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
                   />
                   <div className={`absolute inset-0 bg-gradient-to-b ${cat.color} opacity-70 group-hover:opacity-80 transition-opacity duration-500`}></div>
@@ -204,10 +132,10 @@ const Inicio = () => {
 
                 <div className="absolute inset-0 flex flex-col justify-end p-6 text-white">
                   <h3 className="text-lg sm:text-xl font-serif font-light mb-2 transform transition-transform duration-500 group-hover:translate-y-0">
-                    {cat.name}
+                    {cat.nombre}
                   </h3>
                   <p className="text-xs sm:text-sm font-light opacity-0 max-h-0 overflow-hidden transition-all duration-500 group-hover:opacity-100 group-hover:max-h-20">
-                    {cat.description}
+                    {cat.descripcion}
                   </p>
                   <div className="mt-3 flex items-center opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-x-4 group-hover:translate-x-0">
                     <span className="text-sm mr-2">Explorar</span>
@@ -232,95 +160,21 @@ const Inicio = () => {
           </div>
 
           {loadingProductos ? (
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 lg:gap-6">
-              {Array.from({ length: 4 }).map((_, i) => <ProductSkeleton key={i} />)}
-            </div>
+            <Cargando mensaje="Cargando destacados..." />
           ) : (
-            <Juguetes productos={productosJuguetes} mostrarBotonVolver={false} searchTerm="" />
+            DESTACADOS.map(({ hoja, ruta, texto }) => (
+              <div key={hoja} className="mb-10">
+                <div className="py-8">
+                  <ProductList productos={destacados[hoja] || []} />
+                </div>
+                <div className="mt-6 text-center">
+                  <Link to={ruta} className="inline-block bg-pink-600 text-white px-6 py-2 rounded-full text-sm sm:text-base font-medium shadow-md hover:bg-pink-700 transition">
+                    {texto}
+                  </Link>
+                </div>
+              </div>
+            ))
           )}
-          <div className="mt-6 text-center mb-10">
-            <Link to="/juguetes" className="inline-block bg-pink-500 text-white px-6 py-2 rounded-full text-sm sm:text-base font-medium shadow-md hover:bg-pink-600 transition">
-              Ver más juguetes
-            </Link>
-          </div>
-
-          {loadingProductos ? (
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 lg:gap-6">
-              {Array.from({ length: 4 }).map((_, i) => <ProductSkeleton key={i} />)}
-            </div>
-          ) : (
-            <ProductGrid productos={productosLenceria} showBackButton={false} />
-          )}
-          <div className="mt-6 text-center mb-10">
-            <Link to="/lenceria/mujer" className="inline-block bg-pink-600 text-white px-6 py-2 rounded-full text-sm sm:text-base font-medium shadow-md hover:bg-pink-700 transition">
-              Ver más lencería femenina
-            </Link>
-          </div>
-
-          {loadingProductos ? (
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 lg:gap-6">
-              {Array.from({ length: 4 }).map((_, i) => <ProductSkeleton key={i} />)}
-            </div>
-          ) : (
-            <ProductGrid productos={productosLenceriaH} showBackButton={false} />
-          )}
-          <div className="mt-6 text-center mb-10">
-            <Link to="/lenceria/hombre" className="inline-block bg-pink-600 text-white px-6 py-2 rounded-full text-sm sm:text-base font-medium shadow-md hover:bg-pink-700 transition">
-              Ver más lencería masculina
-            </Link>
-          </div>
-
-          {loadingProductos ? (
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 lg:gap-6">
-              {Array.from({ length: 4 }).map((_, i) => <ProductSkeleton key={i} />)}
-            </div>
-          ) : (
-            <Lubricantes productos={productosLubricantes} mostrarBotonVolver={false} searchTerm="" />
-          )}
-          <div className="mt-6 text-center mb-10">
-            <Link to="/lubricantes" className="inline-block bg-pink-700 text-white px-6 py-2 rounded-full text-sm sm:text-base font-medium shadow-md hover:bg-pink-800 transition">
-              Ver más lubricantes
-            </Link>
-          </div>
-
-          {loadingProductos ? (
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 lg:gap-6">
-              {Array.from({ length: 4 }).map((_, i) => <ProductSkeleton key={i} />)}
-            </div>
-          ) : (
-            <Suplementos productos={productosSuplementos} mostrarBotonVolver={false} searchTerm="" />
-          )}
-          <div className="mt-6 text-center mb-10">
-            <Link to="/suplementos" className="inline-block bg-pink-500 text-white px-6 py-2 rounded-full text-sm sm:text-base font-medium shadow-md hover:bg-pink-600 transition">
-              Ver más suplementos
-            </Link>
-          </div>
-
-          {loadingProductos ? (
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 lg:gap-6">
-              {Array.from({ length: 4 }).map((_, i) => <ProductSkeleton key={i} />)}
-            </div>
-          ) : (
-            <Higiene productos={productosHigiene} mostrarBotonVolver={false} searchTerm="" />
-          )}
-          <div className="mt-6 text-center mb-10">
-            <Link to="/higiene" className="inline-block bg-pink-600 text-white px-6 py-2 rounded-full text-sm sm:text-base font-medium shadow-md hover:bg-pink-700 transition">
-              Ver más higiene
-            </Link>
-          </div>
-
-          {loadingProductos ? (
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 lg:gap-6">
-              {Array.from({ length: 4 }).map((_, i) => <ProductSkeleton key={i} />)}
-            </div>
-          ) : (
-            <BronceadoresPage productos={productosBronceadores} mostrarBotonVolver={false} searchTerm="" />
-          )}
-          <div className="mt-6 text-center">
-            <Link to="/bronceadores" className="inline-block bg-pink-700 text-white px-6 py-2 rounded-full text-sm sm:text-base font-medium shadow-md hover:bg-pink-800 transition">
-              Ver más Bronceadores
-            </Link>
-          </div>
         </div>
       </div>
 

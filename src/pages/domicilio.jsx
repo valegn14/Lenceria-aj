@@ -1,8 +1,9 @@
 'use client'
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-
 import { useCart } from "../components/solar/CartContext";
+import BotonVolver from "../components/ui/BotonVolver";
+import { formatearPrecio, precioANumero } from "../utils/productos";
+import { TIENDA, urlWhatsApp } from "../data/tienda";
 const Domicilio = () => {
   const { cartItems, cartTotal } = useCart();
   const [formData, setFormData] = useState({
@@ -18,7 +19,6 @@ const Domicilio = () => {
     horaEspecifica: ""
   });
   const [errors, setErrors] = useState({});
-  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -83,14 +83,14 @@ const Domicilio = () => {
       mensaje += `\n${index + 1}. ${item.nombre}`;
       if (item.selectedSize) mensaje += ` (Talla: ${item.selectedSize})`;
       mensaje += `\n   Cantidad: ${item.quantity}`;
-      mensaje += `\n   Precio unitario: $${item.precio}`;
-      mensaje += `\n   Subtotal: $${item.precio * item.quantity}\n`;
+      mensaje += `\n   Precio unitario: ${formatearPrecio(item.precio)}`;
+      mensaje += `\n   Subtotal: ${formatearPrecio(precioANumero(item.precio) * item.quantity)}\n`;
     });
-    
-    // Total
-    mensaje += `\n*Total a pagar:* $${cartTotal}`;
 
-    return `https://wa.me/573245859853?text=${encodeURIComponent(mensaje)}`;
+    // Total
+    mensaje += `\n*Total a pagar:* ${cartTotal}`;
+
+    return urlWhatsApp(mensaje);
   };
 
   const handleSubmit = (e) => {
@@ -105,15 +105,7 @@ const Domicilio = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 to-purple-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
-     <button
-          onClick={() => navigate(-1)}
-          className="flex items-center text-pink-600 hover:text-pink-800 mb-6 transition-colors"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-          Volver
-        </button>
+        <BotonVolver />
         <div className="text-center mb-10">
  
           
@@ -322,15 +314,15 @@ const Domicilio = () => {
                           {item.quantity} x {item.nombre}
                           {item.selectedSize && ` (Talla: ${item.selectedSize})`}
                         </p>
-                        <p className="text-sm text-gray-600">${item.precio} c/u</p>
+                        <p className="text-sm text-gray-600">{formatearPrecio(item.precio)} c/u</p>
                       </div>
-                      <p className="font-medium text-gray-900">${(item.precio * item.quantity).toFixed(2)}</p>
+                      <p className="font-medium text-gray-900">{formatearPrecio(precioANumero(item.precio) * item.quantity)}</p>
                     </div>
                   ))}
                   
                   <div className="flex justify-between items-center pt-4 border-t border-gray-200">
                     <p className="text-lg font-bold text-gray-900">Total</p>
-                    <p className="text-xl font-bold text-pink-600">${cartTotal}</p>
+                    <p className="text-xl font-bold text-pink-600">{cartTotal}</p>
                   </div>
                 </div>
               </div>
@@ -356,8 +348,8 @@ const Domicilio = () => {
         </div>
         
         <div className="mt-8 text-center text-gray-600 text-sm">
-          <p>¿Necesitas ayuda? Llámanos al <a href="tel:+573245859853" className="text-pink-600 hover:underline">3245859853</a></p>
-          <p className="mt-1">Horario de atención: Lunes a Sábado 9am - 7pm</p>
+          <p>¿Necesitas ayuda? Llámanos al <a href={TIENDA.telefonoLink} className="text-pink-600 hover:underline">{TIENDA.telefono}</a></p>
+          <p className="mt-1">Horario de atención: {TIENDA.horario}</p>
         </div>
       </div>
     </div>

@@ -1,55 +1,55 @@
 const API_KEY = 'AIzaSyDzg3YXJpvDjXJWuMAz2yJN9_E-ZFT3UTY';
 const SHEET_ID = '1vgHmgT1wNeUSK_hFaPJgDE19Vnwl2Tk9Czcv3WRR37Q';
 
+// Pestañas de productos de la hoja. Todas usan las columnas:
+// Id | Nombre | Precio | rebaja | Descripción | Imagen | Stock | Imagen2
+const HOJAS_PRODUCTOS = [
+  'Lubricantes',
+  'Juguetes',
+  'Lenceria',
+  'LenceriaH',
+  'Suplementos',
+  'Higiene',
+  'Bronceadores',
+];
 
-// ========== SISTEMA DE CACHÉ Y OPTIMIZACIÓN ==========
-const cache = {
-  productos: { data: null, timestamp: 0, ttl: 5 * 60 * 1000 },
-  combos: { data: null, timestamp: 0, ttl: 10 * 60 * 1000 },
-  promociones: { data: null, timestamp: 0, ttl: 5 * 60 * 1000 },
-  datosJuego: { data: null, timestamp: 0, ttl: 30 * 60 * 1000 },
-  juguetes: { data: null, timestamp: 0, ttl: 5 * 60 * 1000 },
-  lenceria: { data: null, timestamp: 0, ttl: 5 * 60 * 1000 },
-  lenceriaH: { data: null, timestamp: 0, ttl: 5 * 60 * 1000 },
-  lubricantes: { data: null, timestamp: 0, ttl: 5 * 60 * 1000 },
-  suplementos: { data: null, timestamp: 0, ttl: 5 * 60 * 1000 },
-  higiene: { data: null, timestamp: 0, ttl: 5 * 60 * 1000 },
-  Bronceadores: { data: null, timestamp: 0, ttl: 5 * 60 * 1000 }
-};
+const TTL_POR_DEFECTO = 5 * 60 * 1000;
+const TTL_COMBOS = 10 * 60 * 1000;
 
-const loadingStates = new Map();
-const imageCache = new Map();
+// ========== CACHÉ ==========
+// Guarda cada resultado unos minutos y comparte la misma petición si llegan varias a la vez
+const cache = new Map();
+const cargasEnCurso = new Map();
 
-// Funciones de caché
-function getFromCache(key) {
-  const item = cache[key];
-  if (item && item.data && (Date.now() - item.timestamp) < item.ttl) {
-    return item.data;
+async function conCache(clave, cargar, { forceRefresh = false, ttl = TTL_POR_DEFECTO } = {}) {
+  const guardado = cache.get(clave);
+  if (!forceRefresh && guardado && Date.now() - guardado.timestamp < ttl) {
+    return guardado.data;
   }
-  return null;
-}
 
-function setToCache(key, data) {
-  cache[key] = {
-    data,
-    timestamp: Date.now(),
-    ttl: cache[key]?.ttl || 5 * 60 * 1000
-  };
+  if (cargasEnCurso.has(clave)) return cargasEnCurso.get(clave);
+
+  const promesa = (async () => {
+    try {
+      const data = await cargar();
+      cache.set(clave, { data, timestamp: Date.now() });
+      return data;
+    } finally {
+      cargasEnCurso.delete(clave);
+    }
+  })();
+
+  cargasEnCurso.set(clave, promesa);
+  return promesa;
 }
 
 // Función para limpiar caché (útil para forzar actualizaciones)
-export function limpiarCache(key = null) {
-  if (key) {
-    cache[key] = { data: null, timestamp: 0, ttl: cache[key]?.ttl };
-  } else {
-    Object.keys(cache).forEach(k => {
-      cache[k] = { data: null, timestamp: 0, ttl: cache[k].ttl };
-    });
-    imageCache.clear();
-  }
+export function limpiarCache(clave = null) {
+  if (clave) cache.delete(clave);
+  else cache.clear();
 }
 
-// ========== FUNCIONES BASE (SIN CAMBIOS) ==========
+// ========== CONEXIÓN CON GOOGLE SHEETS ==========
 async function injectGapiScript() {
   if (typeof window.gapi !== 'undefined' && typeof window.gapi.load === 'function') {
     return;
@@ -102,8 +102,16 @@ async function initGapiClient() {
   });
 }
 
-async function ensureGapiLoaded() {
-  await initGapiClient();
+// El cliente se inicializa una sola vez; si falla, se reintenta en la siguiente lectura
+let gapiListo = null;
+function ensureGapiLoaded() {
+  if (!gapiListo) {
+    gapiListo = initGapiClient().catch((error) => {
+      gapiListo = null;
+      throw error;
+    });
+  }
+  return gapiListo;
 }
 
 async function leerRango(range) {
@@ -115,435 +123,13 @@ async function leerRango(range) {
   return response.result.values || [];
 }
 
-// ========== FUNCIONES OPTIMIZADAS ==========
+// ========== CONVERSIÓN DE FILAS ==========
 function convertirLinkDrive(url) {
   if (!url) return '';
-  if (imageCache.has(url)) {
-    return imageCache.get(url);
-  }
-
   const match = url.match(/\/file\/d\/(.*?)\//);
-  const converted = match ? `https://drive.google.com/uc?export=view&id=${match[1]}` : url;
-  imageCache.set(url, converted);
-  return converted;
+  return match ? `https://drive.google.com/uc?export=view&id=${match[1]}` : url;
 }
 
-// Función auxiliar para procesar datos de productos CON soporte para imagen2
-function procesarDatosProducto(values) {
-  return values.slice(1).map(row => ({
-    id: row[0] || '',
-    nombre: row[1] || '',
-    precio: row[2] || '',
-    rebaja: row[3] || '',
-    descripcion: row[4] || '',
-    imagen: convertirLinkDrive(row[5] || ''),
-    stock: Number(row[6]) || 0,
-    imagen2: convertirLinkDrive(row[7] || '') // Nueva columna Imagen2
-  }));
-}
-
-// ========== FUNCIONES DE CARGA OPTIMIZADAS ==========
-export async function cargarDatosJuegoDesdeSheets(forceRefresh = false) {
-  const cacheKey = 'datosJuego';
-  
-  if (!forceRefresh) {
-    const cached = getFromCache(cacheKey);
-    if (cached) return cached;
-  }
-
-  if (loadingStates.has(cacheKey)) {
-    return loadingStates.get(cacheKey);
-  }
-
-  try {
-    const loadPromise = (async () => {
-      const values = await leerRango('Hoja 3!A:B');
-      if (values.length <= 1) return [];
-      
-      const datos = values.slice(1)
-        .map(row => ({ porcentaje: Number(row[0]) || 0, codigo: (row[1] || '').trim() }))
-        .filter(e => e.codigo !== '');
-      
-      setToCache(cacheKey, datos);
-      return datos;
-    })();
-
-    loadingStates.set(cacheKey, loadPromise);
-    const result = await loadPromise;
-    loadingStates.delete(cacheKey);
-    return result;
-  } catch (error) {
-    loadingStates.delete(cacheKey);
-    console.error('Error al cargar datos de juego:', error);
-    throw error;
-  }
-}
-
-export async function cargarCombosDesdeSheets(forceRefresh = false) {
-  const cacheKey = 'combos';
-  
-  if (!forceRefresh) {
-    const cached = getFromCache(cacheKey);
-    if (cached) return cached;
-  }
-
-  if (loadingStates.has(cacheKey)) {
-    return loadingStates.get(cacheKey);
-  }
-
-  try {
-    const loadPromise = (async () => {
-      const values = await leerRango('Combos!A:E');
-      if (values.length <= 1) return [];
-      
-      const map = {};
-      values.slice(1).forEach(row => {
-        const [id, nombre, precio, descr, img] = row;
-        if (!map[id]) map[id] = { id, productos: [], precio: precio || '', descripcion: descr || '', imagenes: [] };
-        if (nombre) map[id].productos.push(nombre);
-        if (img) map[id].imagenes.push(img);
-      });
-      
-      const combos = Object.values(map);
-      setToCache(cacheKey, combos);
-      return combos;
-    })();
-
-    loadingStates.set(cacheKey, loadPromise);
-    const result = await loadPromise;
-    loadingStates.delete(cacheKey);
-    return result;
-  } catch (error) {
-    loadingStates.delete(cacheKey);
-    console.error('Error al cargar combos:', error);
-    throw error;
-  }
-}
-
-export async function cargarProductosDesdeSheets(forceRefresh = false) {
-  const cacheKey = 'productos';
-  
-  if (!forceRefresh) {
-    const cached = getFromCache(cacheKey);
-    if (cached) return cached;
-  }
-
-  if (loadingStates.has(cacheKey)) {
-    return loadingStates.get(cacheKey);
-  }
-
-  const loadPromise = (async () => {
-    try {
-      const [lubricantes, juguetes, lenceria, lenceriaH, suplementos, higiene, Bronceadores] = await Promise.all([
-        leerRango('Lubricantes!A:H'),
-        leerRango('Juguetes!A:H'),
-        leerRango('Lenceria!A:H'),
-        leerRango('LenceriaH!A:H'),
-        leerRango('Suplementos!A:H'),
-        leerRango('Higiene!A:H'),
-        leerRango('Bronceadores!A:H')
-      ]);
- 
-      const todosLosDatos = [
-        ...procesarDatosProducto(lubricantes),
-        ...procesarDatosProducto(juguetes),
-        ...procesarDatosProducto(lenceria),
-        ...procesarDatosProducto(lenceriaH),
-        ...procesarDatosProducto(suplementos),
-        ...procesarDatosProducto(higiene),
-        ...procesarDatosProducto(Bronceadores)
-      ];
-
-      todosLosDatos.sort((a, b) => a.nombre.localeCompare(b.nombre));
-      setToCache(cacheKey, todosLosDatos);
-      return todosLosDatos;
-    } catch (error) {
-      console.error("Error al cargar productos:", error);
-      return [];
-    }
-  })();
-
-  loadingStates.set(cacheKey, loadPromise);
-  const result = await loadPromise;
-  loadingStates.delete(cacheKey);
-  return result;
-}
-
-// Funciones individuales optimizadas con caché
-export async function cargarJuguetesDesdeSheets(forceRefresh = false) {
-  const cacheKey = 'juguetes';
-  
-  if (!forceRefresh) {
-    const cached = getFromCache(cacheKey);
-    if (cached) return cached;
-  }
-
-  if (loadingStates.has(cacheKey)) {
-    return loadingStates.get(cacheKey);
-  }
-
-  try {
-    const loadPromise = (async () => {
-      const values = await leerRango('Juguetes!A:H'); // Cambiado a A:H
-      if (values.length <= 1) return [];
-      
-      const datos = procesarDatosProducto(values);
-      setToCache(cacheKey, datos);
-      return datos;
-    })();
-
-    loadingStates.set(cacheKey, loadPromise);
-    const result = await loadPromise;
-    loadingStates.delete(cacheKey);
-    return result;
-  } catch (error) {
-    loadingStates.delete(cacheKey);
-    console.error('Error al cargar Juguetes:', error);
-    throw error;
-  }
-}
-
-export async function cargarLenceriaDesdeSheets(forceRefresh = false) {
-  const cacheKey = 'lenceria';
-   
-  if (!forceRefresh) {
-    const cached = getFromCache(cacheKey);
-    if (cached) return cached;
-  }
-
-  if (loadingStates.has(cacheKey)) {
-    return loadingStates.get(cacheKey);
-  }
-
-  try {
-    const loadPromise = (async () => {
-      const values = await leerRango('Lenceria!A:H');
-      if (values.length <= 1) return [];
-       
-      const datos = procesarDatosProducto(values);
-      setToCache(cacheKey, datos);
-      return datos;
-    })();
-
-    loadingStates.set(cacheKey, loadPromise);
-    const result = await loadPromise;
-    loadingStates.delete(cacheKey);
-    return result;
-  } catch (error) {
-    loadingStates.delete(cacheKey);
-    console.error('Error al cargar Lencería:', error);
-    throw error;
-  }
-}
-
-export async function cargarLenceriaHombreDesdeSheets(forceRefresh = false) {
-  const cacheKey = 'lenceriaH';
-   
-  if (!forceRefresh) {
-    const cached = getFromCache(cacheKey);
-    if (cached) return cached;
-  }
-
-  if (loadingStates.has(cacheKey)) {
-    return loadingStates.get(cacheKey);
-  }
-
-  try {
-    const loadPromise = (async () => {
-      const values = await leerRango('LenceriaH!A:H');
-      if (values.length <= 1) return [];
-       
-      const datos = procesarDatosProducto(values);
-      setToCache(cacheKey, datos);
-      return datos;
-    })();
-
-    loadingStates.set(cacheKey, loadPromise);
-    const result = await loadPromise;
-    loadingStates.delete(cacheKey);
-    return result;
-  } catch (error) {
-    loadingStates.delete(cacheKey);
-    console.error('Error al cargar Lencería Hombre:', error);
-    throw error;
-  }
-}
-
-export async function cargarLubricantesDesdeSheets(forceRefresh = false) {
-  const cacheKey = 'lubricantes';
-  
-  if (!forceRefresh) {
-    const cached = getFromCache(cacheKey);
-    if (cached) return cached;
-  }
-
-  if (loadingStates.has(cacheKey)) {
-    return loadingStates.get(cacheKey);
-  }
-
-  try {
-    const loadPromise = (async () => {
-      const values = await leerRango('Lubricantes!A:H'); // Cambiado a A:H
-      if (values.length <= 1) return [];
-      
-      const datos = procesarDatosProducto(values);
-      setToCache(cacheKey, datos);
-      return datos;
-    })();
-
-    loadingStates.set(cacheKey, loadPromise);
-    const result = await loadPromise;
-    loadingStates.delete(cacheKey);
-    return result;
-  } catch (error) {
-    loadingStates.delete(cacheKey);
-    console.error('Error al cargar Lubricantes:', error);
-    throw error;
-  }
-}
-
-export async function cargarSuplementosDesdeSheets(forceRefresh = false) {
-  const cacheKey = 'suplementos';
-
-  if (!forceRefresh) {
-    const cached = getFromCache(cacheKey);
-    if (cached) return cached;
-  }
-
-  if (loadingStates.has(cacheKey)) {
-    return loadingStates.get(cacheKey);
-  }
-
-  try {
-    const loadPromise = (async () => {
-      const values = await leerRango('Suplementos!A:H');
-      if (values.length <= 1) return [];
-
-      const datos = procesarDatosProducto(values);
-      setToCache(cacheKey, datos);
-      return datos;
-    })();
-
-    loadingStates.set(cacheKey, loadPromise);
-    const result = await loadPromise;
-    loadingStates.delete(cacheKey);
-    return result;
-  } catch (error) {
-    loadingStates.delete(cacheKey);
-    console.error('Error al cargar Suplementos:', error);
-    throw error;
-  }
-}
-
-export async function cargarHigieneDesdeSheets(forceRefresh = false) {
-  const cacheKey = 'higiene';
-
-  if (!forceRefresh) {
-    const cached = getFromCache(cacheKey);
-    if (cached) return cached;
-  }
-
-  if (loadingStates.has(cacheKey)) {
-    return loadingStates.get(cacheKey);
-  }
-
-  try {
-    const loadPromise = (async () => {
-      const values = await leerRango('Higiene!A:H');
-      if (values.length <= 1) return [];
-
-      const datos = procesarDatosProducto(values);
-      setToCache(cacheKey, datos);
-      return datos;
-    })();
-
-    loadingStates.set(cacheKey, loadPromise);
-    const result = await loadPromise;
-    loadingStates.delete(cacheKey);
-    return result;
-  } catch (error) {
-    loadingStates.delete(cacheKey);
-    console.error('Error al cargar Higiene:', error);
-    throw error;
-  }
-}
-
-export async function cargarBronceadoresDesdeSheets(forceRefresh = false) {
-  const cacheKey = 'bronceadores';
-
-  if (!forceRefresh) {
-    const cached = getFromCache(cacheKey);
-    if (cached) return cached;
-  }
-
-  if (loadingStates.has(cacheKey)) {
-    return loadingStates.get(cacheKey);
-  }
-
-  try {
-    const loadPromise = (async () => {
-      const values = await leerRango('Bronceadores!A:H');
-      if (values.length <= 1) return [];
-
-      const datos = procesarDatosProducto(values);
-      setToCache(cacheKey, datos);
-      return datos;
-    })();
-
-    loadingStates.set(cacheKey, loadPromise);
-    const result = await loadPromise;
-    loadingStates.delete(cacheKey);
-    return result;
-  } catch (error) {
-    loadingStates.delete(cacheKey);
-    console.error('Error al cargar Bronceadores:', error);
-    throw error;
-  }
-}
-
-export async function cargarVestidosBanoDesdeSheets(forceRefresh = false) {
-  return cargarBronceadoresDesdeSheets(forceRefresh);
-}
-
-export async function cargarPromocionesDesdeSheets(forceRefresh = false) {
-  const cacheKey = 'promociones';
-  
-  if (!forceRefresh) {
-    const cached = getFromCache(cacheKey);
-    if (cached) return cached;
-  }
-
-  if (loadingStates.has(cacheKey)) {
-    return loadingStates.get(cacheKey);
-  }
-
-  try {
-    const loadPromise = (async () => {
-      // Usar la función principal de productos que ya está optimizada
-      const productos = await cargarProductosDesdeSheets(forceRefresh);
-      
-      // Filtrar productos con rebaja > 0
-      const promociones = productos.filter(producto => Number(producto.rebaja) > 0);
-      
-      setToCache(cacheKey, promociones);
-      return promociones;
-    })();
-
-    loadingStates.set(cacheKey, loadPromise);
-    const result = await loadPromise;
-    loadingStates.delete(cacheKey);
-    return result;
-  } catch (error) {
-    loadingStates.delete(cacheKey);
-    console.error('Error al cargar promociones:', error);
-    throw error;
-  }
-}
-
-
-
-
-// ========== FUNCIONES PARA CARGA RÁPIDA (SOLO PRIMEROS N) ==========
 function procesarFilaProducto(row) {
   return {
     id: row[0] || '',
@@ -557,50 +143,72 @@ function procesarFilaProducto(row) {
   };
 }
 
-export async function cargarPrimerosProductos(sheetName, limit = 4) {
-  const range = `${sheetName}!A2:H${limit + 1}`;
-  const values = await leerRango(range);
-  return values.map(procesarFilaProducto);
-}
-
-// ========== FUNCIONES ADICIONALES PARA MEJOR EXPERIENCIA ==========
-
-/**
- * Precarga los datos esenciales para mejor performance
- */
-export async function precargarDatosEsenciales() {
-  try {
-    await Promise.allSettled([
-      cargarProductosDesdeSheets(),
-      cargarCombosDesdeSheets()
-    ]);
-  } catch (error) {
-    console.log('Precarga de datos completada con errores menores:', error);
-  }
-}
-
-/**
- * Función para verificar si hay datos en caché
- */
-export function tieneDatosEnCache() {
-  return Object.keys(cache).some(key => cache[key].data !== null);
-}
-
-/**
- * Función específica para cargar productos con múltiples imágenes
- * Útil para componentes que necesitan específicamente productos con galería
- */
-export async function cargarProductosConGaleria(forceRefresh = false) {
-  const productos = await cargarProductosDesdeSheets(forceRefresh);
-  return productos.filter(producto => 
-    producto.imagen2 && producto.imagen2.trim() !== ''
+// ========== CARGA DE PRODUCTOS ==========
+// Lee una pestaña completa de productos (sin la fila de encabezados)
+export function cargarHoja(nombreHoja, forceRefresh = false) {
+  return conCache(
+    `hoja:${nombreHoja}`,
+    async () => {
+      const values = await leerRango(`${nombreHoja}!A:H`);
+      return values.slice(1).filter((row) => row[0] || row[1]).map(procesarFilaProducto);
+    },
+    { forceRefresh }
   );
 }
 
+export const cargarLubricantesDesdeSheets = (forceRefresh) => cargarHoja('Lubricantes', forceRefresh);
+export const cargarJuguetesDesdeSheets = (forceRefresh) => cargarHoja('Juguetes', forceRefresh);
+export const cargarLenceriaDesdeSheets = (forceRefresh) => cargarHoja('Lenceria', forceRefresh);
+export const cargarLenceriaHombreDesdeSheets = (forceRefresh) => cargarHoja('LenceriaH', forceRefresh);
+export const cargarSuplementosDesdeSheets = (forceRefresh) => cargarHoja('Suplementos', forceRefresh);
+export const cargarHigieneDesdeSheets = (forceRefresh) => cargarHoja('Higiene', forceRefresh);
+export const cargarBronceadoresDesdeSheets = (forceRefresh) => cargarHoja('Bronceadores', forceRefresh);
 
+// Todos los productos de todas las pestañas, ordenados por nombre (búsqueda y detalle)
+export async function cargarProductosDesdeSheets(forceRefresh = false) {
+  try {
+    const hojas = await Promise.all(HOJAS_PRODUCTOS.map((hoja) => cargarHoja(hoja, forceRefresh)));
+    return hojas.flat().sort((a, b) => a.nombre.localeCompare(b.nombre));
+  } catch (error) {
+    console.error('Error al cargar productos:', error);
+    return [];
+  }
+}
 
+// Las promociones son los productos con rebaja mayor a 0
+export async function cargarPromocionesDesdeSheets(forceRefresh = false) {
+  const productos = await cargarProductosDesdeSheets(forceRefresh);
+  return productos.filter((producto) => Number(producto.rebaja) > 0);
+}
 
+// Solo las primeras filas de una pestaña, para la sección de destacados del inicio
+export function cargarPrimerosProductos(nombreHoja, limit = 4) {
+  return conCache(`primeros:${nombreHoja}:${limit}`, async () => {
+    const values = await leerRango(`${nombreHoja}!A2:H${limit + 1}`);
+    return values.map(procesarFilaProducto);
+  });
+}
 
-
-
-
+// ========== COMBOS ==========
+// Columnas: Numero_combo | Producto_nombre | Precio_total | Descripcion | Imagen
+// Cada fila es un producto del combo; las filas con el mismo número forman un combo
+export function cargarCombosDesdeSheets(forceRefresh = false) {
+  return conCache(
+    'combos',
+    async () => {
+      const values = await leerRango('Combos!A:E');
+      const map = {};
+      values.slice(1).forEach(([id, nombre, precio, descr, img]) => {
+        if (!id) return;
+        if (!map[id]) map[id] = { id, productos: [], precio: '', descripcion: '', imagenes: [] };
+        // El precio y la descripción pueden venir en cualquier fila del combo
+        if (!map[id].precio && precio) map[id].precio = precio;
+        if (!map[id].descripcion && descr) map[id].descripcion = descr;
+        if (nombre) map[id].productos.push(nombre);
+        if (img) map[id].imagenes.push(convertirLinkDrive(img));
+      });
+      return Object.values(map);
+    },
+    { forceRefresh, ttl: TTL_COMBOS }
+  );
+}

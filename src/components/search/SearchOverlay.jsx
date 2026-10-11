@@ -1,22 +1,14 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { useCart } from "../solar/CartContext";
-import { ProductCard } from "../ProductGrid";
+import { ProductList } from "../ProductGrid";
+import Cargando from "../ui/Cargando";
 import { cargarProductosDesdeSheets } from "../../database/sheets";
-
-const normalizarTexto = (texto) =>
-  texto.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-
-const slugify = (id, nombre) =>
-  `${id}-${normalizarTexto(nombre).replace(/\s+/g, "-").replace(/[^\w-]+/g, "")}`;
+import { normalizarTexto } from "../../utils/productos";
 
 export default function SearchOverlay({ isOpen, onClose }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(false);
   const inputRef = useRef(null);
-  const navigate = useNavigate();
-  const { addToCart } = useCart();
 
   useEffect(() => {
     if (!isOpen) return;
@@ -56,26 +48,6 @@ export default function SearchOverlay({ isOpen, onClose }) {
   const filtrados = searchTerm.trim()
     ? productos.filter((p) => normalizarTexto(p.nombre).includes(normalizarTexto(searchTerm)))
     : [];
-
-  const handleNavigate = (producto) => {
-    window.scrollTo({ top: 0, behavior: "auto" });
-    navigate(`/${slugify(producto.id, producto.nombre)}`, { state: producto });
-    onClose();
-  };
-
-  const handleAddToCart = (producto, e) => {
-    addToCart({ ...producto, quantity: 1, selectedSize: producto.selectedSize || null });
-    const btn = e.currentTarget;
-    const orig = btn.innerHTML;
-    btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>`;
-    btn.classList.remove("bg-white", "text-pink-600", "border-pink-600", "hover:bg-pink-700", "hover:text-white");
-    btn.classList.add("bg-green-500", "text-white", "border-green-500");
-    setTimeout(() => {
-      btn.innerHTML = orig;
-      btn.classList.remove("bg-green-500", "text-white", "border-green-500");
-      btn.classList.add("bg-white", "text-pink-600", "border-pink-600", "hover:bg-pink-700", "hover:text-white");
-    }, 1500);
-  };
 
   return (
     <div className="fixed inset-0 z-30" role="dialog" aria-modal="true" aria-label="Búsqueda de productos">
@@ -123,10 +95,7 @@ export default function SearchOverlay({ isOpen, onClose }) {
 
           <div className="overflow-y-auto" style={{ maxHeight: "calc(90vh - 10rem)" }}>
             {loading ? (
-              <div className="flex flex-col items-center justify-center py-20 gap-4">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-fuchsia-500" />
-                <p className="text-gray-500 text-sm">Cargando productos...</p>
-              </div>
+              <Cargando className="" />
             ) : searchTerm.trim() && filtrados.length === 0 ? (
               <div className="text-center py-16 px-4">
                 <div className="mx-auto w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mb-4">
@@ -138,16 +107,8 @@ export default function SearchOverlay({ isOpen, onClose }) {
                 <p className="text-gray-400 text-sm mt-1">Prueba con otra palabra</p>
               </div>
             ) : searchTerm.trim() ? (
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 p-3 sm:p-4">
-                {filtrados.map((producto) => (
-                  <ProductCard
-                    key={producto.id}
-                    producto={producto}
-                    compact
-                    onNavigate={handleNavigate}
-                    onAddToCart={handleAddToCart}
-                  />
-                ))}
+              <div className="p-3 sm:p-4">
+                <ProductList productos={filtrados} onSelect={onClose} />
               </div>
             ) : (
               <div className="text-center py-20 px-4">
