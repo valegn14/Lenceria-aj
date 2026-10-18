@@ -11,6 +11,7 @@ import { CATEGORIAS } from "../data/categorias";
 const DESTACADOS = [
   { hoja: "Lenceria", titulo: "Lencería femenina", ruta: "/lenceria/mujer", textoVerTodos: "Ver toda la lencería femenina" },
   { hoja: "LenceriaH", titulo: "Lencería masculina", ruta: "/lenceria/hombre", textoVerTodos: "Ver toda la lencería masculina" },
+  { hoja: "Disfraces", titulo: "Disfraces", ruta: "/lenceria/disfraces", textoVerTodos: "Ver todos los disfraces" },
   { hoja: "Juguetes", titulo: "Juguetes", ruta: "/juguetes", textoVerTodos: "Ver todos los juguetes" },
   { hoja: "Lubricantes", titulo: "Lubricantes", ruta: "/lubricantes", textoVerTodos: "Ver todos los lubricantes" },
   { hoja: "Suplementos", titulo: "Suplementos", ruta: "/suplementos", textoVerTodos: "Ver todos los suplementos" },

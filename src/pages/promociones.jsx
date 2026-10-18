@@ -39,7 +39,6 @@ const Promociones = () => {
               fetchFn={cargarPromocionesDesdeSheets}
               loadingMessage="Cargando promociones..."
               showBackButton={false}
-              productosPorPagina={8}
               mensajeVacio="No hay promociones activas en este momento."
             />
           </div>

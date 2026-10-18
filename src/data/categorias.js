@@ -1,5 +1,19 @@
 // Única fuente de las categorías: el header, el inicio y el footer usan este orden y estas rutas
 
+export const LENCERIA_SUBCATEGORIAS = [
+  { nombre: "SetBasicos", hoja: "SetBasicos", ruta: "/lenceria/setbasicos" },
+  { nombre: "Corsets", hoja: "Corsets", ruta: "/lenceria/corsets" },
+  { nombre: "Bodys", hoja: "Bodys", ruta: "/lenceria/bodys" },
+  { nombre: "Pijamas", hoja: "Pijamas", ruta: "/lenceria/pijamas" },
+  { nombre: "Conjuntos", hoja: "Conjuntos", ruta: "/lenceria/conjuntos" },
+  { nombre: "Medias", hoja: "Medias", ruta: "/lenceria/medias" },
+  { nombre: "Pantys", hoja: "Pantys", ruta: "/lenceria/pantys" },
+  { nombre: "Babydolls", hoja: "Babydolls", ruta: "/lenceria/babydolls" },
+  { nombre: "Disfraces", hoja: "Disfraces", ruta: "/lenceria/disfraces" },
+  { nombre: "Mallas", hoja: "Mallas", ruta: "/lenceria/mallas" },
+  { nombre: "Tejidos", hoja: "Tejidos", ruta: "/lenceria/tejidos" },
+];
+
 export const CATEGORIAS = [
   {
     key: "lenceria",
@@ -7,9 +21,9 @@ export const CATEGORIAS = [
     ruta: "/lenceria",
     // Las subcategorías aparecen con chevron/desplegable en el header y en el menú lateral
     subcategorias: [
-      { nombre: "Toda la lencería", ruta: "/lenceria/todo" },
       { nombre: "Lencería mujer", ruta: "/lenceria/mujer" },
       { nombre: "Lencería hombre", ruta: "/lenceria/hombre" },
+      ...LENCERIA_SUBCATEGORIAS.map(({ nombre, ruta }) => ({ nombre, ruta })),
     ],
     imagen: "https://i.pinimg.com/736x/3e/9a/21/3e9a213fba360f4fefbe8b85e4f1be24.jpg",
     descripcion: "Elegancia que despierta los sentidos",

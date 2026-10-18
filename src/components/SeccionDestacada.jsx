@@ -22,7 +22,12 @@ export default function SeccionDestacada({ titulo, ruta, textoVerTodos, producto
     <section aria-labelledby={idTitulo} className="border border-white/70 bg-white/20 p-4 shadow-sm backdrop-blur-[2px] sm:p-6">
       <div className="mb-4 flex items-center justify-between gap-4">
         <h3 id={idTitulo} className="text-lg font-semibold text-gray-900 sm:text-xl">
-          {titulo}
+          <Link
+            to={ruta}
+            className="rounded-sm transition-colors hover:text-pink-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-500"
+          >
+            {titulo}
+          </Link>
         </h3>
         <Link
           to={ruta}

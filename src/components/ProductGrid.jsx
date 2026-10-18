@@ -145,26 +145,50 @@ export const ProductList = ({ productos, onSelect }) => (
 
 const Paginacion = ({ paginaActual, totalPaginas, onCambiar }) => {
   const claseFlecha = (deshabilitado) =>
-    `px-4 py-2 rounded-lg ${deshabilitado ? "bg-gray-200 cursor-not-allowed" : "bg-pink-600 hover:bg-pink-700 text-white"}`;
+    `inline-flex h-10 w-10 items-center justify-center rounded-lg border transition-colors ${
+      deshabilitado
+        ? "cursor-not-allowed border-gray-200 bg-gray-100 text-gray-300"
+        : "border-pink-600 bg-pink-600 text-white hover:border-pink-700 hover:bg-pink-700"
+    }`;
 
   return (
-    <div className="flex flex-wrap justify-center gap-2 mt-8 mb-4">
-      <button onClick={() => onCambiar(paginaActual - 1)} disabled={paginaActual === 1} className={claseFlecha(paginaActual === 1)}>
-        Anterior
+    <nav aria-label="Paginación de productos" className="mt-8 mb-4 flex flex-wrap items-center justify-center gap-3">
+      <button
+        type="button"
+        onClick={() => onCambiar(paginaActual - 1)}
+        disabled={paginaActual === 1}
+        aria-label="Página anterior"
+        className={claseFlecha(paginaActual === 1)}
+      >
+        <svg aria-hidden="true" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+          <path fillRule="evenodd" d="M12.707 15.707a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 111.414 1.414L8.414 10l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
+        </svg>
       </button>
       {Array.from({ length: totalPaginas }, (_, i) => i + 1).map((num) => (
         <button
+          type="button"
           key={num}
           onClick={() => onCambiar(num)}
-          className={`w-10 h-10 rounded-full ${paginaActual === num ? "bg-pink-600 text-white" : "bg-gray-200 hover:bg-gray-300"}`}
+          aria-current={paginaActual === num ? "page" : undefined}
+          className={`min-h-11 min-w-7 text-sm text-pink-800 transition-colors hover:text-pink-950 ${
+            paginaActual === num ? "font-semibold underline decoration-2 underline-offset-4" : ""
+          }`}
         >
           {num}
         </button>
       ))}
-      <button onClick={() => onCambiar(paginaActual + 1)} disabled={paginaActual === totalPaginas} className={claseFlecha(paginaActual === totalPaginas)}>
-        Siguiente
+      <button
+        type="button"
+        onClick={() => onCambiar(paginaActual + 1)}
+        disabled={paginaActual === totalPaginas}
+        aria-label="Página siguiente"
+        className={claseFlecha(paginaActual === totalPaginas)}
+      >
+        <svg aria-hidden="true" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+          <path fillRule="evenodd" d="M7.293 4.293a1 1 0 011.414 0l5 5a1 1 0 010 1.414l-5 5a1 1 0 11-1.414-1.414L11.586 10 7.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+        </svg>
       </button>
-    </div>
+    </nav>
   );
 };
 
@@ -175,7 +199,7 @@ const ProductGrid = ({
   searchTerm = "",
   onlyPromos = false,
   showBackButton = true,
-  productosPorPagina,
+  productosPorPagina = 30,
   mensajeVacio = "No encontramos lo que buscas. Prueba con otra palabra.",
 }) => {
   const [productos, setProductos] = useState([]);
@@ -185,28 +209,54 @@ const ProductGrid = ({
   const gridRef = useRef(null);
 
   useEffect(() => {
+    let vigente = true;
     const filtrarPromos = (data) => (onlyPromos ? data.filter(tieneRebaja) : data);
 
     if (propProductos) {
       setProductos(filtrarPromos(propProductos));
+      setError(null);
       setLoading(false);
-      return;
+      setPaginaActual(1);
+      return () => {
+        vigente = false;
+      };
     }
-    if (!fetchFn) return;
+    if (!fetchFn) {
+      setProductos([]);
+      setError(null);
+      setLoading(false);
+      return () => {
+        vigente = false;
+      };
+    }
+
+    setProductos([]);
+    setError(null);
+    setLoading(true);
+    setPaginaActual(1);
+
     const cargar = async () => {
       try {
         const data = await fetchFn();
-        setProductos(filtrarPromos(data));
+        if (vigente) setProductos(filtrarPromos(data));
       } catch {
-        setError("Error al cargar productos");
+        if (vigente) setError("Error al cargar productos");
       } finally {
-        setLoading(false);
+        if (vigente) setLoading(false);
       }
     };
     cargar();
+
+    return () => {
+      vigente = false;
+    };
   }, [fetchFn, onlyPromos, propProductos]);
 
   const term = normalizarTexto(searchTerm);
+  useEffect(() => {
+    setPaginaActual(1);
+  }, [term]);
+
   const productosFiltrados = term
     ? productos.filter((producto) => normalizarTexto(producto.nombre).includes(term))
     : productos;
@@ -245,7 +295,9 @@ const ProductGrid = ({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <p className="text-gray-500 text-lg sm:text-xl">{mensajeVacio}</p>
+          <p className="text-gray-500 text-lg sm:text-xl">
+            {searchTerm.trim() ? mensajeVacio : "Aún no hay productos disponibles en esta categoría."}
+          </p>
         </div>
       ) : (
         <>

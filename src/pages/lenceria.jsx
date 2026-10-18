@@ -1,21 +1,33 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useState } from "react";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   cargarLenceriaDesdeSheets,
   cargarLenceriaHombreDesdeSheets,
+  cargarHoja,
 } from "../database/sheets";
 import ProductGrid from "../components/ProductGrid";
 import DecorativeHearts from "../components/DecorativeHearts";
 import Cargando from "../components/ui/Cargando";
 import BotonVolver from "../components/ui/BotonVolver";
+import { LENCERIA_SUBCATEGORIAS } from "../data/categorias";
+
+const OPCIONES_LENCERIA = [
+  { nombre: "Lencería mujer", ruta: "/lenceria/mujer", categoria: "mujer" },
+  { nombre: "Lencería hombre", ruta: "/lenceria/hombre", categoria: "hombre" },
+  ...LENCERIA_SUBCATEGORIAS.map(({ nombre, ruta }) => ({
+    nombre,
+    ruta,
+    categoria: nombre.toLowerCase(),
+  })),
+];
 
 const categoryMap = {
   todo: {
-    title: "Toda la lencería",
-    description: "Explora nuestra colección completa de lencería femenina y masculina.",
+    title: "Lencería para Mujer",
+    description: "Explora nuestra colección de lencería femenina.",
     fetchFn: null,
-    loadingMessage: "Cargando toda la lencería...",
+    loadingMessage: "Descubriendo lencería femenina...",
   },
   mujer: {
     title: "Lencería para Mujer",
@@ -29,6 +41,20 @@ const categoryMap = {
     fetchFn: cargarLenceriaHombreDesdeSheets,
     loadingMessage: "Descubriendo lencería masculina...",
   },
+  ...Object.fromEntries(
+    LENCERIA_SUBCATEGORIAS.map(({ nombre, hoja }) => {
+      const slug = nombre.toLowerCase();
+      return [
+        slug,
+        {
+          title: nombre,
+          description: `Explora nuestra colección de ${nombre.toLowerCase()}.`,
+          fetchFn: () => cargarHoja(hoja),
+          loadingMessage: `Cargando ${nombre.toLowerCase()}...`,
+        },
+      ];
+    })
+  ),
 };
 
 const BANNER_SRC = "/bannerlenceria.png";
@@ -63,31 +89,72 @@ const BannerLenceria = ({ titulo, descripcion, compacto = false, filtro = "rosa"
   </div>
 );
 
-const Lenceria = ({ onlyPromos, productos, searchTerm }) => {
+const SelectorLenceria = ({ categoriaActiva, estiloLista = false }) => {
   const navigate = useNavigate();
+
+  return (
+    <nav
+      aria-label={estiloLista ? "Más categorías de lencería" : "Subcategorías de lencería"}
+      className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"
+    >
+      <ul className={`flex flex-wrap justify-center ${estiloLista ? "gap-x-5 gap-y-2" : "gap-3"}`}>
+        {OPCIONES_LENCERIA.map(({ nombre, ruta, categoria }) => {
+          const activa = categoria === categoriaActiva;
+          return (
+            <li key={ruta}>
+              <button
+                type="button"
+                onClick={() => navigate(ruta, { state: { scrollToProducts: true } })}
+                aria-current={activa ? "page" : undefined}
+                className={
+                  estiloLista
+                    ? `min-h-11 text-sm font-medium text-pink-800 transition hover:underline hover:underline-offset-4 ${
+                        activa ? "underline decoration-2 underline-offset-4" : ""
+                      }`
+                    : `rounded-full px-5 py-2.5 text-base font-medium transition ${
+                        activa
+                          ? "bg-pink-600 text-white"
+                          : "border border-pink-600 bg-white text-pink-600 hover:bg-pink-600 hover:text-white"
+                      }`
+                }
+              >
+                {nombre}
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
+  );
+};
+
+const Lenceria = ({ onlyPromos, productos, searchTerm }) => {
   const { gender } = useParams();
+  const location = useLocation();
+  const productosRef = useRef(null);
   const normalizedGender = (gender || "todo").toLowerCase();
   const selectedCategory = categoryMap[normalizedGender] || categoryMap.todo;
+  const isLanding = normalizedGender === "todo" || !categoryMap[normalizedGender];
   const [mujerList, setMujerList] = useState([]);
-  const [hombreList, setHombreList] = useState([]);
   const [loadingLists, setLoadingLists] = useState(true);
-  const [activeFilter, setActiveFilter] = useState("all"); // 'all' | 'mujer' | 'hombre'
 
   useEffect(() => {
-    const nextFilter =
-      normalizedGender === "mujer" ? "mujer" : normalizedGender === "hombre" ? "hombre" : "all";
-    setActiveFilter(nextFilter);
-  }, [normalizedGender]);
+    if (!location.state?.scrollToProducts || !productosRef.current) return undefined;
+
+    const frame = requestAnimationFrame(() => {
+      const top = productosRef.current.getBoundingClientRect().top + window.scrollY - 120;
+      window.scrollTo({ top, behavior: "smooth" });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [location.pathname, location.state]);
 
   useEffect(() => {
+    if (!isLanding) return;
     const obtenerListas = async () => {
+      setLoadingLists(true);
       try {
-        const [mujer, hombre] = await Promise.all([
-          cargarLenceriaDesdeSheets(),
-          cargarLenceriaHombreDesdeSheets(),
-        ]);
+        const mujer = await cargarLenceriaDesdeSheets();
         setMujerList(mujer || []);
-        setHombreList(hombre || []);
       } catch (error) {
         console.error("Error al cargar listas de lencería:", error);
       } finally {
@@ -96,17 +163,9 @@ const Lenceria = ({ onlyPromos, productos, searchTerm }) => {
     };
 
     obtenerListas();
-  }, []);
+  }, [isLanding]);
 
-  if (normalizedGender === "todo" || !categoryMap[normalizedGender]) {
-    const combined = [...mujerList, ...hombreList];
-    const displayed =
-      activeFilter === "all"
-        ? combined
-        : activeFilter === "mujer"
-        ? mujerList
-        : hombreList;
-
+  if (isLanding) {
     return (
       <>
         <BannerLenceria
@@ -115,43 +174,8 @@ const Lenceria = ({ onlyPromos, productos, searchTerm }) => {
         />
 
         <div className="min-h-screen bg-white px-4 pb-8 sm:px-6 lg:px-8 relative">
-          <div className="mx-auto max-w-7xl">
-            <div className="mt-8 flex justify-center">
-              <div className="flex gap-3">
-                <button
-                  onClick={() => navigate("/lenceria/todo")}
-                  className={`rounded-full px-5 py-2.5 text-base font-medium transition ${
-                    activeFilter === "all"
-                      ? "bg-pink-600 text-white"
-                      : "bg-white text-pink-600 border border-pink-600 hover:bg-pink-600 hover:text-white"
-                  }`}
-                >
-                  Ver toda la lencería
-                </button>
-
-                <button
-                  onClick={() => navigate("/lenceria/mujer")}
-                  className={`rounded-full px-5 py-2.5 text-base font-medium transition ${
-                    activeFilter === "mujer"
-                      ? "bg-pink-600 text-white"
-                      : "bg-white text-pink-600 border border-pink-600 hover:bg-pink-600 hover:text-white"
-                  }`}
-                >
-                  Lencería mujer
-                </button>
-
-                <button
-                  onClick={() => navigate("/lenceria/hombre")}
-                  className={`rounded-full px-5 py-2.5 text-base font-medium transition ${
-                    activeFilter === "hombre"
-                      ? "bg-pink-600 text-white"
-                      : "bg-white text-pink-600 border border-pink-600 hover:bg-pink-600 hover:text-white"
-                  }`}
-                >
-                  Lencería hombre
-                </button>
-              </div>
-            </div>
+          <div className="mt-8">
+            <SelectorLenceria categoriaActiva="mujer" />
           </div>
 
           <div className="mt-8">
@@ -159,7 +183,7 @@ const Lenceria = ({ onlyPromos, productos, searchTerm }) => {
               <Cargando mensaje={selectedCategory.loadingMessage} />
             ) : (
               <ProductGrid
-                productos={displayed}
+                productos={mujerList}
                 searchTerm={searchTerm}
                 onlyPromos={onlyPromos}
                 showBackButton={false}
@@ -182,11 +206,16 @@ const Lenceria = ({ onlyPromos, productos, searchTerm }) => {
 
       <div className="min-h-screen bg-white px-4 pt-6 pb-8 sm:px-6 lg:px-8 relative overflow-hidden">
         <div className="mx-auto max-w-7xl relative z-10">
-          <BotonVolver to="/lenceria" texto="Volver a lencería" className="" />
+          <BotonVolver to="/" texto="Volver al inicio" className="" />
         </div>
 
-        <div className="relative z-10">
+        <div className="mt-6">
+          <SelectorLenceria categoriaActiva={normalizedGender} />
+        </div>
+
+        <div ref={productosRef} className="relative z-10 scroll-mt-28">
           <ProductGrid
+            key={normalizedGender}
             fetchFn={selectedCategory.fetchFn}
             productos={productos}
             loadingMessage={selectedCategory.loadingMessage}
@@ -194,6 +223,13 @@ const Lenceria = ({ onlyPromos, productos, searchTerm }) => {
             onlyPromos={onlyPromos}
             showBackButton={false}
           />
+        </div>
+
+        <div className="mt-8 border-t border-pink-100 pt-5">
+          <h2 className="mb-3 text-center text-base font-semibold text-pink-800">
+            Explora más categorias
+          </h2>
+          <SelectorLenceria categoriaActiva={normalizedGender} estiloLista />
         </div>
       </div>
     </>

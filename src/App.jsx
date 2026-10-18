@@ -1,5 +1,5 @@
 // App.jsx
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Navigate, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Layout from "./components/layout/Layout";
 import Promociones from "./pages/promociones";
@@ -32,7 +32,7 @@ function App() {
           <Route path="/visitanos" element={<Layout><Visitanos /></Layout>} />
           <Route path="/juguetes" element={<Layout><Juguetes /></Layout>} />
           <Route path="/lenceria" element={<Layout><Lenceria /></Layout>} />
-          <Route path="/lenceria/todo" element={<Layout><Lenceria /></Layout>} />
+          <Route path="/lenceria/todo" element={<Navigate replace to="/lenceria" />} />
           <Route path="/lenceria/:gender" element={<Layout><Lenceria /></Layout>} />
           <Route path="/lubricantes" element={<Layout><Lubricantes /></Layout>} />
           <Route path="/suplementos" element={<Layout><Suplementos /></Layout>} />
