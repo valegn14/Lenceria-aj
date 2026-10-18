@@ -77,7 +77,7 @@ function Desplegable({ etiqueta, ruta, items, className = "" }) {
 
       {abierto && (
         <div className="absolute left-0 top-full z-50 pt-1">
-          <ul id={id} className="max-h-[calc(100vh-6rem)] min-w-52 overflow-y-auto overflow-x-hidden rounded-xl border border-pink-100 bg-white py-1 shadow-xl animate-slideDown">
+          <ul id={id} className="grid max-h-[calc(100vh-6rem)] min-w-[28rem] grid-cols-2 overflow-y-auto overflow-x-hidden rounded-xl border border-pink-100 bg-white py-1 shadow-xl animate-slideDown">
             {items.map(({ nombre, ruta: rutaItem, className: claseItem = "" }) => (
               <li key={rutaItem} className={claseItem}>
                 <NavLink
