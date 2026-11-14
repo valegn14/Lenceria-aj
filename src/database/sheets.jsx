@@ -5,7 +5,21 @@ const SHEET_ID = '1vgHmgT1wNeUSK_hFaPJgDE19Vnwl2Tk9Czcv3WRR37Q';
 // Id | Nombre | Precio | rebaja | Descripción | Imagen | Stock | Imagen2
 const HOJAS_PRODUCTOS = [
   'Lubricantes',
+  'Sabor_y_sensacion',
+  'Anales',
+  'Estrechantes',
+  'Feromonas',
+  'Masajes_corporales',
+  'Multiorgasmo',
+  'Retardantes',
   'Juguetes',
+  'Dildos',
+  'Anal',
+  'Masturbadores',
+  'Arnes',
+  'Fundas-Anillos',
+  'Juegos',
+  'BDSM',
   'Lenceria',
   'LenceriaH',
   'SetBasicos',
@@ -125,6 +139,9 @@ function ensureGapiLoaded() {
   return gapiListo;
 }
 
+// Nombre de la pestaña entre comillas simples, para que funcionen guiones y espacios (Fundas-Anillos)
+const rangoHoja = (nombreHoja, celdas) => `'${nombreHoja.replace(/'/g, "''")}'!${celdas}`;
+
 async function leerRango(range) {
   await ensureGapiLoaded();
   const response = await window.gapi.client.sheets.spreadsheets.values.get({
@@ -160,7 +177,7 @@ export function cargarHoja(nombreHoja, forceRefresh = false) {
   return conCache(
     `hoja:${nombreHoja}`,
     async () => {
-      const values = await leerRango(`${nombreHoja}!A:H`);
+      const values = await leerRango(rangoHoja(nombreHoja, 'A:H'));
       return values.slice(1).filter((row) => row[0] || row[1]).map(procesarFilaProducto);
     },
     { forceRefresh }
@@ -177,13 +194,16 @@ export const cargarBronceadoresDesdeSheets = (forceRefresh) => cargarHoja('Bronc
 
 // Todos los productos de todas las pestañas, ordenados por nombre (búsqueda y detalle)
 export async function cargarProductosDesdeSheets(forceRefresh = false) {
-  try {
-    const hojas = await Promise.all(HOJAS_PRODUCTOS.map((hoja) => cargarHoja(hoja, forceRefresh)));
-    return hojas.flat().sort((a, b) => a.nombre.localeCompare(b.nombre));
-  } catch (error) {
-    console.error('Error al cargar productos:', error);
-    return [];
-  }
+  // allSettled: si una pestaña falla, las demás se siguen mostrando
+  const resultados = await Promise.allSettled(
+    HOJAS_PRODUCTOS.map((hoja) => cargarHoja(hoja, forceRefresh))
+  );
+  const productos = [];
+  resultados.forEach((resultado, i) => {
+    if (resultado.status === 'fulfilled') productos.push(...resultado.value);
+    else console.error(`Error al cargar la hoja "${HOJAS_PRODUCTOS[i]}":`, resultado.reason);
+  });
+  return productos.sort((a, b) => a.nombre.localeCompare(b.nombre));
 }
 
 // Las promociones son los productos con rebaja mayor a 0
@@ -195,7 +215,7 @@ export async function cargarPromocionesDesdeSheets(forceRefresh = false) {
 // Solo las primeras filas de una pestaña, para la sección de destacados del inicio
 export function cargarPrimerosProductos(nombreHoja, limit = 4) {
   return conCache(`primeros:${nombreHoja}:${limit}`, async () => {
-    const values = await leerRango(`${nombreHoja}!A2:H${limit + 1}`);
+    const values = await leerRango(rangoHoja(nombreHoja, `A2:H${limit + 1}`));
     return values.map(procesarFilaProducto);
   });
 }

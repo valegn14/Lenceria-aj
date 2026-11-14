@@ -14,6 +14,26 @@ export const LENCERIA_SUBCATEGORIAS = [
   { nombre: "Tejidos", hoja: "Tejidos", ruta: "/lenceria/tejidos" },
 ];
 
+export const LUBRICANTES_SUBCATEGORIAS = [
+  { nombre: "Sabor y sensación", hoja: "Sabor_y_sensacion", ruta: "/lubricantes/sabor-y-sensacion" },
+  { nombre: "Anales", hoja: "Anales", ruta: "/lubricantes/anales" },
+  { nombre: "Estrechantes", hoja: "Estrechantes", ruta: "/lubricantes/estrechantes" },
+  { nombre: "Feromonas", hoja: "Feromonas", ruta: "/lubricantes/feromonas" },
+  { nombre: "Masajes corporales", hoja: "Masajes_corporales", ruta: "/lubricantes/masajes-corporales" },
+  { nombre: "Multiorgásmicos", hoja: "Multiorgasmo", ruta: "/lubricantes/multiorgasmicos" },
+  { nombre: "Retardantes", hoja: "Retardantes", ruta: "/lubricantes/retardantes" },
+];
+
+export const JUGUETES_SUBCATEGORIAS = [
+  { nombre: "Dildos", hoja: "Dildos", ruta: "/juguetes/dildos" },
+  { nombre: "Anal", hoja: "Anal", ruta: "/juguetes/anal" },
+  { nombre: "Masturbadores", hoja: "Masturbadores", ruta: "/juguetes/masturbadores" },
+  { nombre: "Arnés", hoja: "Arnes", ruta: "/juguetes/arnes" },
+  { nombre: "Fundas y anillos", hoja: "Fundas-Anillos", ruta: "/juguetes/fundas-anillos" },
+  { nombre: "Juegos", hoja: "Juegos", ruta: "/juguetes/juegos" },
+  { nombre: "BDSM", hoja: "BDSM", ruta: "/juguetes/bdsm" },
+];
+
 export const CATEGORIAS = [
   {
     key: "lenceria",
@@ -33,6 +53,10 @@ export const CATEGORIAS = [
     key: "juguetes",
     nombre: "Juguetes",
     ruta: "/juguetes",
+    subcategorias: [
+      { nombre: "Todos los juguetes", ruta: "/juguetes/todo" },
+      ...JUGUETES_SUBCATEGORIAS.map(({ nombre, ruta }) => ({ nombre, ruta })),
+    ],
     imagen: "https://i.pinimg.com/736x/b9/88/17/b98817646c69337a78d32d0634585379.jpg",
     descripcion: "Placeres que sorprenden",
     color: "from-purple-900/60 to-indigo-900/60",
@@ -41,6 +65,10 @@ export const CATEGORIAS = [
     key: "lubricantes",
     nombre: "Lubricantes",
     ruta: "/lubricantes",
+    subcategorias: [
+      { nombre: "Todos los lubricantes", ruta: "/lubricantes/todo" },
+      ...LUBRICANTES_SUBCATEGORIAS.map(({ nombre, ruta }) => ({ nombre, ruta })),
+    ],
     imagen: "/lubric.png",
     descripcion: "Suavidad que intensifica",
     color: "from-blue-900/60 to-teal-900/60",

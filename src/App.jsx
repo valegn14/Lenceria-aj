@@ -31,10 +31,14 @@ function App() {
           <Route path="/combos" element={<Layout><Combos /></Layout>} />
           <Route path="/visitanos" element={<Layout><Visitanos /></Layout>} />
           <Route path="/juguetes" element={<Layout><Juguetes /></Layout>} />
+          <Route path="/juguetes/todo" element={<Navigate replace to="/juguetes" />} />
+          <Route path="/juguetes/:sub" element={<Layout><Juguetes /></Layout>} />
           <Route path="/lenceria" element={<Layout><Lenceria /></Layout>} />
           <Route path="/lenceria/todo" element={<Navigate replace to="/lenceria" />} />
-          <Route path="/lenceria/:gender" element={<Layout><Lenceria /></Layout>} />
+          <Route path="/lenceria/:sub" element={<Layout><Lenceria /></Layout>} />
           <Route path="/lubricantes" element={<Layout><Lubricantes /></Layout>} />
+          <Route path="/lubricantes/todo" element={<Navigate replace to="/lubricantes" />} />
+          <Route path="/lubricantes/:sub" element={<Layout><Lubricantes /></Layout>} />
           <Route path="/suplementos" element={<Layout><Suplementos /></Layout>} />
           <Route path="/higiene" element={<Layout><Higiene /></Layout>} />
           <Route path="/bronceadores" element={<Layout><BronceadoresPage /></Layout>} />
