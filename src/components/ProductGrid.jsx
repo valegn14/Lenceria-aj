@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "./solar/CartContext";
@@ -7,10 +8,14 @@ import IconoCarrito from "./ui/IconoCarrito";
 import {
   formatearPrecio,
   normalizarTexto,
+  precioANumero,
   precioOriginal,
   rutaProducto,
   tieneRebaja,
 } from "../utils/productos";
+
+// Desde cuántas unidades en stock se muestra "Últimas unidades" en las ofertas
+export const POCAS_UNIDADES = 3;
 
 const CheckIconSvg = ({ className = "h-6 w-6" }) => (
   <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -20,7 +25,9 @@ const CheckIconSvg = ({ className = "h-6 w-6" }) => (
 
 // Tarjeta de producto única: se usa en categorías, promociones, inicio y búsqueda.
 // Con sinBorde (inicio) no lleva borde ni sombra: la imagen y el texto quedan sobre el fondo.
-export const ProductCard = ({ producto, onSelect, sinBorde = false }) => {
+// Con estiloOferta (página de promociones) la rebaja se ve como cinta, se muestra cuánto se ahorra
+// y se avisa cuando quedan pocas unidades.
+export const ProductCard = ({ producto, onSelect, sinBorde = false, estiloOferta = false }) => {
   const navigate = useNavigate();
   const { addToCart } = useCart();
   const [agregado, setAgregado] = useState(false);
@@ -74,9 +81,22 @@ export const ProductCard = ({ producto, onSelect, sinBorde = false }) => {
           </div>
         )}
 
-        {tieneRebaja(producto) && (
-          <div className="absolute top-2 left-2 bg-pink-500 text-white text-xs sm:text-sm font-bold px-2 py-1 rounded-full">
-            -{producto.rebaja}%
+        {tieneRebaja(producto) &&
+          (estiloOferta ? (
+            // Cinta de esquina más llamativa (solo en la página de promociones)
+            <div className="absolute top-0 left-0 z-10 flex items-baseline gap-1 rounded-br-2xl bg-gradient-to-r from-pink-600 to-rose-500 px-3 py-1.5 text-white shadow-md">
+              <span className="text-base sm:text-xl font-extrabold leading-none">-{producto.rebaja}%</span>
+              <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wide">off</span>
+            </div>
+          ) : (
+            <div className="absolute top-2 left-2 bg-pink-500 text-white text-xs sm:text-sm font-bold px-2 py-1 rounded-full">
+              -{producto.rebaja}%
+            </div>
+          ))}
+
+        {estiloOferta && !agotado && producto.stock <= POCAS_UNIDADES && (
+          <div className="absolute bottom-2 left-2 z-10 rounded-full bg-amber-500 px-2.5 py-0.5 text-[11px] sm:text-xs font-semibold text-white shadow">
+            Últimas unidades
           </div>
         )}
 
@@ -107,6 +127,12 @@ export const ProductCard = ({ producto, onSelect, sinBorde = false }) => {
           )}
         </div>
 
+        {estiloOferta && tieneRebaja(producto) && (
+          <p className="mb-1 text-xs sm:text-sm font-semibold text-emerald-700">
+            Ahorras {formatearPrecio(precioOriginal(producto) - precioANumero(producto.precio))}
+          </p>
+        )}
+
         <p className="text-xs text-gray-600 line-clamp-2 leading-snug mb-2">{producto.descripcion}</p>
 
         {agotado ? (
@@ -135,10 +161,10 @@ export const ProductCard = ({ producto, onSelect, sinBorde = false }) => {
   );
 };
 
-export const ProductList = ({ productos, onSelect }) => (
+export const ProductList = ({ productos, onSelect, estiloOferta = false }) => (
   <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 lg:gap-6">
     {productos.map((producto) => (
-      <ProductCard key={producto.id} producto={producto} onSelect={onSelect} />
+      <ProductCard key={producto.id} producto={producto} onSelect={onSelect} estiloOferta={estiloOferta} />
     ))}
   </div>
 );
@@ -201,6 +227,7 @@ const ProductGrid = ({
   showBackButton = true,
   productosPorPagina = 30,
   mensajeVacio = "No encontramos lo que buscas. Prueba con otra palabra.",
+  estiloOferta = false,
 }) => {
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(!propProductos);
@@ -301,7 +328,7 @@ const ProductGrid = ({
         </div>
       ) : (
         <>
-          <ProductList productos={visibles} />
+          <ProductList productos={visibles} estiloOferta={estiloOferta} />
           {totalPaginas > 1 && (
             <Paginacion paginaActual={pagina} totalPaginas={totalPaginas} onCambiar={cambiarPagina} />
           )}

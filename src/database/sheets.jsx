@@ -1,4 +1,6 @@
-const API_KEY = 'AIzaSyDzg3YXJpvDjXJWuMAz2yJN9_E-ZFT3UTY';
+import { precioANumero } from '../utils/productos';
+
+const API_KEY ='AIzaSyDzg3YXJpvDjXJWuMAz2yJN9_E-ZFT3UTY';
 const SHEET_ID = '1vgHmgT1wNeUSK_hFaPJgDE19Vnwl2Tk9Czcv3WRR37Q';
 
 // Pestañas de productos de la hoja. Todas usan las columnas:
@@ -158,12 +160,18 @@ function convertirLinkDrive(url) {
   return match ? `https://drive.google.com/uc?export=view&id=${match[1]}` : url;
 }
 
+// La columna Precio es el precio sin descuento y la columna rebaja es el porcentaje a descontar.
+// "precio" queda con el precio final (el que se cobra en el carrito) y "precioLista" con el de la hoja.
 function procesarFilaProducto(row) {
+  const precioLista = row[2] || '';
+  const rebaja = row[3] || '';
+  const porcentaje = Math.min(Number(rebaja) || 0, 100);
   return {
     id: row[0] || '',
     nombre: row[1] || '',
-    precio: row[2] || '',
-    rebaja: row[3] || '',
+    precio: porcentaje > 0 ? Math.round(precioANumero(precioLista) * (1 - porcentaje / 100)) : precioLista,
+    precioLista,
+    rebaja,
     descripcion: row[4] || '',
     imagen: convertirLinkDrive(row[5] || ''),
     stock: Number(row[6]) || 0,

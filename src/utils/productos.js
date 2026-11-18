@@ -19,9 +19,8 @@ export const formatearPrecio = (valor) =>
 
 export const tieneRebaja = (producto) => Number(producto?.rebaja) > 0;
 
-// El precio de la hoja ya es el precio final; se calcula el precio antes del descuento
-export const precioOriginal = (producto) =>
-  Math.round(precioANumero(producto.precio) / (1 - Number(producto.rebaja) / 100));
+// Precio tachado: el de la columna Precio de la hoja, antes de aplicar la rebaja
+export const precioOriginal = (producto) => precioANumero(producto.precioLista ?? producto.precio);
 
 export const rutaProducto = (producto) =>
   `/${producto.id}-${normalizarTexto(producto.nombre)

@@ -42,8 +42,15 @@ export default {
           '0%': { transform: 'translateX(-100%)' },
           '100%': { transform: 'translateX(0)' },
         },
+        // Carrusel del banner de promociones: la franja tiene las fotos dos veces,
+        // así que al mover la mitad vuelve a empezar sin que se note el salto
+        deslizarCarrusel: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
       },
       animation: {
+        deslizarCarrusel: 'deslizarCarrusel 30s linear infinite',
         slideDown: 'slideDown 0.2s ease-out',
         fadeIn: 'fadeIn 0.15s ease-out',
         entrarIzquierda: 'entrarIzquierda 0.25s ease-out',

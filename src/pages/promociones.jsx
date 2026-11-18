@@ -1,51 +1,61 @@
+import { useEffect, useMemo, useState } from "react";
 import ProductGrid from "../components/ProductGrid";
+import BannerPromociones from "../components/BannerPromociones";
 import BotonVolver from "../components/ui/BotonVolver";
+import Cargando from "../components/ui/Cargando";
 import { cargarPromocionesDesdeSheets } from "../database/sheets";
 
+// Fotos del carrusel del banner: las de las promociones con imagen, de mayor a menor descuento
+const imagenesBanner = (promos) =>
+  promos
+    .filter((producto) => producto.imagen)
+    .sort((a, b) => (Number(b.rebaja) || 0) - (Number(a.rebaja) || 0))
+    .map((producto) => producto.imagen);
+
+const descripcionBanner = (promos) => {
+  if (!promos.length) return "";
+  const maxima = Math.max(...promos.map((producto) => Number(producto.rebaja) || 0));
+  return `Hasta ${maxima}% OFF`;
+};
+
 const Promociones = () => {
+  const [promos, setPromos] = useState([]);
+  const [cargando, setCargando] = useState(true);
+
+  useEffect(() => {
+    let vigente = true;
+    cargarPromocionesDesdeSheets()
+      .then((data) => vigente && setPromos(data))
+      .catch((error) => console.error("Error al cargar promociones:", error))
+      .finally(() => vigente && setCargando(false));
+    return () => {
+      vigente = false;
+    };
+  }, []);
+
+  const imagenes = useMemo(() => imagenesBanner(promos), [promos]);
 
   return (
-    <div className="w-full py-12 px-4 sm:px-6">
-      <div className="max-w-7xl mx-auto">
-        <BotonVolver to="/" />
+    <>
+      {/* Banner pegado al header, como en lencería, con un carrusel de las fotos en promoción */}
+      <BannerPromociones imagenes={imagenes} titulo="Promociones" descripcion={descripcionBanner(promos)} />
 
-        {/* Contador de ofertas */}
-        <div className="bg-gradient-to-r from-rose-100 to-pink-100 rounded-xl p-6 mb-12 border border-rose-200 shadow-sm max-w-4xl mx-auto">
-          <div className="flex flex-col sm:flex-row items-center justify-between">
-            <div className="flex items-center mb-4 sm:mb-0">
-              <div className="bg-rose-500 rounded-full p-3 mr-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
-                </svg>
-              </div>
-              <div>
-                <h3 className="text-xl font-bold text-rose-800">Ofertas Activas</h3>
-                <p className="text-gray-600">Promociones disponibles por tiempo limitado</p>
-              </div>
-            </div>
-            <div className="bg-white rounded-xl px-6 py-3 shadow-inner border border-rose-200">
-              <div className="flex items-center">
-                <span className="text-lg font-bold text-gray-800">¡Aprovecha!</span>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div className="min-h-screen bg-white px-4 pt-6 pb-8 sm:px-6 lg:px-8 relative">
+        <div className="mx-auto max-w-7xl">
+          <BotonVolver to="/" texto="Volver al inicio" className="" />
 
-        {/* Sección de productos en promoción */}
-        <div className="relative">
-          <div className="absolute top-0 left-0 w-full h-32  z-0"></div>
-          <div className="relative z-10">
-            <ProductGrid
-              fetchFn={cargarPromocionesDesdeSheets}
-              loadingMessage="Cargando promociones..."
-              showBackButton={false}
-              mensajeVacio="No hay promociones activas en este momento."
-            />
-          </div>
-          <div className="absolute bottom-0 left-0 w-full h-32 t z-0"></div>
+          {cargando ? (
+            <Cargando mensaje="Cargando promociones..." />
+          ) : promos.length === 0 ? (
+            <p className="py-16 text-center text-lg text-gray-500 sm:text-xl">
+              No hay promociones activas en este momento.
+            </p>
+          ) : (
+            <ProductGrid productos={promos} showBackButton={false} estiloOferta />
+          )}
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
